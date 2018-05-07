@@ -7,12 +7,13 @@ import com.pile.image.Resources;
 import com.pile.entity.Entity;
 
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
 	public static final double SPEED = 5;
 	public static final double JUMP_HEIGHT = 10;
 
-	private boolean onGround;
+	private boolean onGround, flipped;
 
 	public Player(double x, double y) {
 		super(x, y);

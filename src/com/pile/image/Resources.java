@@ -18,21 +18,17 @@ public class Resources {
 	public static void load() throws Exception {
 		NodeList playerXML = getXML("assets/images/Spritesheets/spritesheet_characters.xml").getElementsByTagName("SubTexture");
 
-		Spritesheet player1Sheet = new Spritesheet(ImageIO.read(new File("assets/images/Spritesheets/spritesheet_characters.png")));
-		player1 = new SingleImage(player1Sheet.getImage(getCo(playerXML, "male_body.png")));
-//		player1 = new Animation(10);
-//		player1.addScene(player1Sheet.getImage(getCo(playerXML, "male_head.png")));
+		Spritesheet playerSheet = new Spritesheet(ImageIO.read(new File("assets/images/Spritesheets/spritesheet_characters.png")));
+		player1 = new SingleImage(playerSheet.getImage(getCo(playerXML, "male_body.png")));
 	}
 
 	public static int[] getCo(NodeList tree, String name) {
 		for (int i = 0; i < tree.getLength(); i++) {
 			Node node = tree.item(i);
-//			if (node.getNodeType() == Node.ELEMENT_NODE) {
 			Element n = (Element)node;
 			if (n.getAttribute("name").equals(name)) {
 				return new int[] {parseInt(n.getAttribute("x")), parseInt(n.getAttribute("y")), parseInt(n.getAttribute("width")), parseInt(n.getAttribute("height"))};
 			}
-//			}
 		}
 		return null;
 	}
