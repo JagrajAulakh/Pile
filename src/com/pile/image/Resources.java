@@ -13,14 +13,15 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class Resources {
+	public static double SCALE = 0.5;
 	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80);
-	public static SingleImage player1;
+	public static SingleImage player1, dirt;
 	public static void load() throws Exception {
 		NodeList playerXML = getXML("assets/images/Spritesheets/spritesheet_characters.xml").getElementsByTagName("SubTexture");
 
 		Spritesheet playerSheet = new Spritesheet(ImageIO.read(new File("assets/images/Spritesheets/spritesheet_characters.png")));
 		player1 = new SingleImage(playerSheet.getImage(getCo(playerXML, "male_body.png")));
-//		player1 = new SingleImage(ImageIO.read(new File("assets/images/")));
+		dirt = new SingleImage(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")));
 	}
 
 	public static int[] getCo(NodeList tree, String name) {
