@@ -20,6 +20,7 @@ public class Resources {
 
 		Spritesheet playerSheet = new Spritesheet(ImageIO.read(new File("assets/images/Spritesheets/spritesheet_characters.png")));
 		player1 = new SingleImage(playerSheet.getImage(getCo(playerXML, "male_body.png")));
+//		player1 = new SingleImage(ImageIO.read(new File("assets/images/")));
 	}
 
 	public static int[] getCo(NodeList tree, String name) {

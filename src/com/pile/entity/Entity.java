@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 public abstract class Entity {
 	protected double x, y, width, height, velX, velY, accX, accY;
 	protected ImageType image;
+	protected boolean onGround, flipped;
 
 	public Entity(double x, double y) {
 		this.x = x;

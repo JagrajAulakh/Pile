@@ -12,9 +12,12 @@ public class Button {
 	private int x, y, width, height;
 	private Color curColor, normColor, clickColor, hoverColor;
 
-	public Button(String text, int x, int y, Color col) {
-		this(text, x, y, WIDTH, HEIGHT, col, col, col);
+	public Button(String text, int x, int y, Color col) { this(text, x, y, WIDTH, HEIGHT, col, col, col); }
+
+	public Button(String text, int x, int y, Color normColor, Color clickColor, Color hoverColor) {
+		this(text, x, y, WIDTH, HEIGHT, normColor, clickColor, hoverColor);
 	}
+
 	public Button(String text, int x, int y, int width, int height, Color col) {
 		this(text, x, y, width, height, col, col, col);
 	}
@@ -30,8 +33,16 @@ public class Button {
 		this.height = s[1];
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	public void update() {
-		if (getX() < Input.mx && Input.mx < getX() + width) {
+		if (getX() < Input.mx && Input.mx < getX() + width && getY() < Input.my && Input.my < getY() + height) {
 			curColor = hoverColor;
 			if (Input.mb[0]) {
 				curColor = clickColor;

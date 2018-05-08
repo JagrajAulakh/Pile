@@ -11,9 +11,6 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			System.exit(0);
-		}
 		keys[e.getKeyCode()] = true;
 	}
 

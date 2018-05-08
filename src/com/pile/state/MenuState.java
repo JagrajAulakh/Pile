@@ -10,7 +10,7 @@ public class MenuState implements GameState {
 
 	public MenuState() {
 		this.bm = new ButtonManager();
-		bm.add(new Button("test", 100, 100, 100, 50, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255)));
+		bm.add(new Button("Test", 200, 200, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255)));
 	}
 
 	@Override
