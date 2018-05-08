@@ -1,4 +1,4 @@
-package com.pile.entity.player;
+package com.pile.entity;
 
 import com.pile.Game;
 import com.pile.Input;
@@ -17,22 +17,9 @@ public class Player extends Entity {
 	public Player(double x, double y) {
 		super(x, y);
 		image = Resources.player1;
-//		image = makeImage();
 		width = image.getImage().getWidth();
 		height = image.getImage().getHeight();
 		onGround = false;
-	}
-
-	public void makeImage() {
-		BufferedImage bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = bi.getGraphics();
-
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 100, 100);
-
-		g.dispose();
-
-//		return new SingleImage(bi);
 	}
 
 	@Override

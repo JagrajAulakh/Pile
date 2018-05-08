@@ -1,7 +1,6 @@
 package com.pile.state;
 
 import com.pile.entity.*;
-import com.pile.entity.player.*;
 
 import java.awt.*;
 
