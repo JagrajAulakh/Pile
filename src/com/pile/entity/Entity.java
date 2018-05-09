@@ -2,6 +2,7 @@ package com.pile.entity;
 
 import com.pile.image.ImageType;
 
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
@@ -16,6 +17,9 @@ public abstract class Entity {
 
 	public double getX() { return x; }
 	public double getY() { return y; }
+	public double getWidth() { return width; }
+	public double getHeight() { return height; }
+	public boolean isFlipped() { return flipped; }
 	public BufferedImage getImage() { return image.getImage(); }
 
 	public abstract void update();

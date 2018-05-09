@@ -13,11 +13,13 @@ public class Animation extends ImageType {
 	}
 
 	public void addScene(BufferedImage img) { scenes.add(img); }
+	public BufferedImage get(int index) { return scenes.get(index); }
 
 	@Override
 	public void tick() {
 		counter++;
 		if (counter > counterMax) {
+			System.out.println(counter);
 			counter = 0;
 			frame++;
 			if (frame >= scenes.size()) {

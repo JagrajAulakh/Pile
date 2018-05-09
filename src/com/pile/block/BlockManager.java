@@ -13,6 +13,10 @@ public class BlockManager {
 		this.blocks = new ArrayList<Block>();
 	}
 
+	public void add(Block b) {
+		blocks.add(b);
+	}
+
 	public void update() {
 		for (Block b:blocks) {
 			b.update();
@@ -21,7 +25,7 @@ public class BlockManager {
 
 	public void render(Graphics g) {
 		for (Block b:blocks) {
-//			g.drawImage();
+			g.drawImage(b.getImage(), (int)(b.getX() - camera.getOffsetX()), (int)(b.getY() - camera.getOffsetY()), null);
 		}
 	}
 }
