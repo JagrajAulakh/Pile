@@ -2,7 +2,6 @@ package com.pile.entity;
 
 import com.pile.GameCamera;
 import com.pile.image.Resources;
-import javafx.beans.property.ReadOnlySetProperty;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -29,7 +28,9 @@ public class EntityManager {
 	public void render(Graphics g) {
 		for (Entity e:entities) {
 			BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false):e.getImage();
-			g.drawImage(img, (int)(e.getX() - camera.getOffsetX()), (int)(e.getY() - camera.getOffsetY()), null);
+			double realX;
+			realX = (e.getX()+e.getWidth()/2) - (e.getImage().getWidth()/2);
+			g.drawImage(img, (int)(realX), (int)(e.getY() - camera.getOffsetY()), null);
 		}
 	}
 }

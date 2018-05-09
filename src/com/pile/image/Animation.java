@@ -6,10 +6,11 @@ import java.util.ArrayList;
 public class Animation extends ImageType {
 	private ArrayList<BufferedImage> scenes;
 	private int counter, counterMax, frame;
-	public Animation(int speed) {
+	public Animation(int delay) {
 		scenes = new ArrayList<BufferedImage>();
-		counter = frame = 0;
-		counterMax = speed;
+		counter = 0;
+		frame = 0;
+		counterMax = delay;
 	}
 
 	public void addScene(BufferedImage img) { scenes.add(img); }
@@ -18,8 +19,8 @@ public class Animation extends ImageType {
 	@Override
 	public void tick() {
 		counter++;
+		System.out.println(counter);
 		if (counter > counterMax) {
-			System.out.println(counter);
 			counter = 0;
 			frame++;
 			if (frame >= scenes.size()) {

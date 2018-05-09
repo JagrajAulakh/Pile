@@ -12,11 +12,9 @@ public class Player extends Entity {
 	public static final double SPEED = 5;
 	public static final double JUMP_HEIGHT = 10;
 
-	private ImageType currentImage;
-
 	public Player(double x, double y) {
 		super(x, y);
-		image = Resources.player1;
+		image = Resources.playerMaleWalking;
 		width = image.getImage().getWidth();
 		height = image.getImage().getHeight();
 		onGround = false;
@@ -67,7 +65,7 @@ public class Player extends Entity {
 		x += velX;
 		y += velY;
 
-		determineImage();
+//		determineImage();
 		image.tick();
 	}
 }

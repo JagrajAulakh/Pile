@@ -25,8 +25,8 @@ public class Resources {
 		Spritesheet playerSheet = new Spritesheet(ImageIO.read(new File("assets/images/Spritesheets/spritesheet_characters.png")));
 //		player1 = new SingleImage(scale(playerSheet.getImage(getCo(playerXML, "male_body.png")), SCALE));
 		player1 = new SingleImage(scale(ImageIO.read(new File("assets/images/char/male/maleWalk1.png")), SCALE*2));
-		playerMaleWalking = new Animation(50);
-		for (int i = 1; i <= 5; i++) {
+		playerMaleWalking = new Animation(2);
+		for (int i = 1; i <= 20; i++) {
 			playerMaleWalking.addScene(ImageIO.read(new File(String.format("assets/images/char/male/maleWalk%d.png", i))));
 		}
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
