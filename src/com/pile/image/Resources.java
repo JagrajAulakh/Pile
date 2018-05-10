@@ -1,18 +1,12 @@
 package com.pile.image;
 
-import com.sun.corba.se.impl.orbutil.graph.Graph;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-
 import javax.imageio.ImageIO;
-import javax.xml.parsers.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.Buffer;
 
 public class Resources {
 	public static double SCALE = 0.5;
@@ -20,10 +14,7 @@ public class Resources {
 	public static SingleImage player1, dirt;
 	public static Animation playerMaleWalking;
 	public static void load() throws Exception {
-		NodeList playerXML = getXML("assets/images/Spritesheets/spritesheet_characters.xml").getElementsByTagName("SubTexture");
 
-		Spritesheet playerSheet = new Spritesheet(ImageIO.read(new File("assets/images/Spritesheets/spritesheet_characters.png")));
-//		player1 = new SingleImage(scale(playerSheet.getImage(getCo(playerXML, "male_body.png")), SCALE));
 		player1 = new SingleImage(scale(ImageIO.read(new File("assets/images/char/male/maleWalk1.png")), SCALE*2));
 		playerMaleWalking = new Animation(2);
 		for (int i = 1; i <= 20; i++) {
@@ -31,36 +22,6 @@ public class Resources {
 		}
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
 	}
-
-	public static int[] getCo(NodeList tree, String name) {
-		for (int i = 0; i < tree.getLength(); i++) {
-			Node node = tree.item(i);
-			Element n = (Element)node;
-			if (n.getAttribute("name").equals(name)) {
-				return new int[] {parseInt(n.getAttribute("x")), parseInt(n.getAttribute("y")), parseInt(n.getAttribute("width")), parseInt(n.getAttribute("height"))};
-			}
-		}
-		return null;
-	}
-
-	private static Document getXML(String path) {
-		File file = new File(path);
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder;
-		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			return documentBuilder.parse(file);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public static int parseInt(String x) { return Integer.parseInt(x); }
 
 	public static int[] getSize(String text, Font f) {
 		Rectangle2D s = Resources.font1.deriveFont(Font.BOLD).getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true));
@@ -78,6 +39,7 @@ public class Resources {
 		return scale(image, (int)(image.getWidth()*factor), (int)(image.getHeight()*factor));
 	}
 	public static BufferedImage flip(BufferedImage original, boolean hz, boolean vt) {
+		if (!hz && !vt) { return original; }
 		int w = original.getWidth();
 		int h = original.getHeight();
 		BufferedImage flipped =new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -88,8 +50,6 @@ public class Resources {
 			g.drawImage(original, 0, 0, w, h, w, 0, 0, h, null);
 		} else if (vt) {
 			g.drawImage(original, 0,0,w,h, 0,h,w,0, null);
-		} else {
-			g.drawImage(original, 0, 0, null);
 		}
 		g.dispose();
 		return flipped;

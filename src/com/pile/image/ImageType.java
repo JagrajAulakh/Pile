@@ -5,4 +5,5 @@ import java.awt.image.BufferedImage;
 public abstract class ImageType {
 	public abstract void tick();
 	public abstract BufferedImage getImage();
+	public abstract void reset();
 }

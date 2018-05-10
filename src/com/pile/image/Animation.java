@@ -19,7 +19,6 @@ public class Animation extends ImageType {
 	@Override
 	public void tick() {
 		counter++;
-		System.out.println(counter);
 		if (counter > counterMax) {
 			counter = 0;
 			frame++;
@@ -27,6 +26,12 @@ public class Animation extends ImageType {
 				frame = 0;
 			}
 		}
+	}
+
+	@Override
+	public void reset() {
+		frame = 0;
+		counter = 0;
 	}
 
 	@Override

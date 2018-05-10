@@ -12,6 +12,9 @@ public class SingleImage extends ImageType {
 	public void tick() {}
 
 	@Override
+	public void reset() { }
+
+	@Override
 	public BufferedImage getImage() {
 		return image;
 	}

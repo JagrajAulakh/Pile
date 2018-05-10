@@ -2,6 +2,7 @@ package com.pile.state;
 
 import com.pile.Game;
 import com.pile.GameCamera;
+import com.pile.World;
 import com.pile.block.Block;
 import com.pile.block.BlockManager;
 import com.pile.block.Dirt;
@@ -19,7 +20,7 @@ public class PlayState implements GameState {
 		camera = new GameCamera();
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
-		entities.add(new Player(0, 0));
+		entities.add(new Player(World.WIDTH/2, 0));
 		blocks.add(new Dirt(500, 500));
 	}
 
