@@ -68,6 +68,16 @@ public class Player extends Entity {
 			velY = 0;
 			onGround = true;
 		}
+		if (y + height > World.HEIGHT) {
+			y = World.HEIGHT - height;
+			accY = 0;
+			velY = 0;
+			onGround = true;
+		} else if (y < 0) {
+			y = 0;
+			accY = 0;
+			velY = 0;
+		}
 		// Starting here is the X movement
 		accX -= velX * World.FRICTION;
 		velX += accX;
@@ -86,6 +96,6 @@ public class Player extends Entity {
 			image.reset();
 		}
 		image.tick();
-//		System.out.println(velX);
+//		System.out.println(x + " " + y);
 	}
 }

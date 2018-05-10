@@ -21,6 +21,7 @@ public class PlayState implements GameState {
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
 		entities.add(new Player(World.WIDTH/2, 0));
+		entities.add(new Enemy(World.WIDTH/2, 0));
 		blocks.add(new Dirt(500, 500));
 	}
 
