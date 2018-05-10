@@ -4,6 +4,7 @@ import com.pile.Game;
 import com.pile.World;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
+import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -33,8 +34,8 @@ public class Enemy extends Entity {
 			accY = velY = 0;
 			onGround = true;
 		}
-		if (y + height > World.HEIGHT) {
-			y = World.HEIGHT - height;
+		if (y + height > PlayState.world.getHeight()) {
+			y = PlayState.world.getHeight() - height;
 			velY = accY = 0;
 			onGround = true;
 		}
@@ -42,6 +43,5 @@ public class Enemy extends Entity {
 		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
-//		System.out.println(x + " " + y);
 	}
 }

@@ -4,7 +4,9 @@ import com.pile.entity.Entity;
 
 public class GameCamera {
 	private double offsetX, offsetY;
-	public GameCamera() {
+	private World world;
+	public GameCamera(World world) {
+		this.world = world;
 		offsetX = 0;
 		offsetY = 0;
 	}
@@ -17,15 +19,15 @@ public class GameCamera {
 		if (offsetX < 0) {
 			offsetX = 0;
 		}
-		if (offsetX + Game.WIDTH > World.WIDTH) {
-			offsetX = World.WIDTH - Game.WIDTH;
+		if (offsetX + Game.WIDTH > world.getWidth()) {
+			offsetX = world.getWidth()- Game.WIDTH;
 		}
 
 		if (offsetY < 0) {
 			offsetY = 0;
 		}
-		if (offsetY + Game.HEIGHT > World.HEIGHT) {
-			offsetY = World.HEIGHT - Game.HEIGHT;
+		if (offsetY + Game.HEIGHT > world.getHeight()) {
+			offsetY = world.getHeight()- Game.HEIGHT;
 		}
 	}
 }

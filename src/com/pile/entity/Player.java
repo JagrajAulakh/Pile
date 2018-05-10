@@ -5,6 +5,7 @@ import com.pile.Input;
 import com.pile.World;
 import com.pile.image.ImageType;
 import com.pile.image.Resources;
+import com.pile.state.PlayState;
 
 import java.awt.event.KeyEvent;
 
@@ -37,6 +38,9 @@ public class Player extends Entity {
 		}
 	}
 
+	private void collisions() {
+	}
+
 	@Override
 	public void update() {
 		accX = 0;
@@ -67,8 +71,8 @@ public class Player extends Entity {
 			accY = velY = 0;
 			onGround = true;
 		}
-		if (y + height > World.HEIGHT) {
-			y = World.HEIGHT - height;
+		if (y + height > PlayState.world.getWidth()) {
+			y = PlayState.world.getHeight() - height;
 			accY = velY = 0;
 			onGround = true;
 		} else if (y < 0) {
@@ -82,8 +86,8 @@ public class Player extends Entity {
 
 		if (x < 0) {
 			x = 0;
-		} else if (x + width > World.WIDTH) {
-			x = World.WIDTH - width;
+		} else if (x + width > PlayState.world.getWidth()) {
+			x = PlayState.world.getWidth() - width;
 		}
 
 		updateHitBox();
@@ -93,6 +97,5 @@ public class Player extends Entity {
 			image.reset();
 		}
 		image.tick();
-//		System.out.println(x + " " + y);
 	}
 }
