@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class EntityManager {
-	public static final int GRID_SIZE = 100;
+	public static final int GRID_SIZE = 200;
 	private ArrayList<Entity> entities;
 	private GameCamera camera;
 	private Player player;
@@ -39,15 +39,17 @@ public class EntityManager {
 //		}
 	}
 
+	public int getGridX(Entity e) { return (int)(e.getX()/(double)GRID_SIZE); }
+	public int getGridY(Entity e) { return (int)(e.getY()/(double)GRID_SIZE); }
+
 	private void sortGrid() {
 		for (Entity e:entities) {
-			int posX = (int)(e.getX()/World.WIDTH*GRID_SIZE);
-			int posY = (int)(e.getY()/World.HEIGHT*GRID_SIZE);
+			int posX = getGridX(e);
+			int posY = getGridY(e);
 			if (grid[posX][posY] == null) {
 				grid[posX][posY] = new LinkedList<Entity>();
 			}
 			grid[posX][posY].add(e);
-			System.out.println(posX + " " + posY);
 		}
 	}
 
@@ -58,6 +60,10 @@ public class EntityManager {
 			e.update();
 		}
 		camera.centerOn(player);
+		LinkedList l = grid[getGridX(player)][getGridY(player)];
+		if (l != null) {
+			System.out.println(l.size());
+		}
 	}
 	public void render(Graphics g) {
 		for (Entity e:entities) {
