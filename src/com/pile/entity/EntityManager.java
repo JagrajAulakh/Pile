@@ -16,7 +16,6 @@ public class EntityManager {
 	private GameCamera camera;
 	private Player player;
 
-
 	public EntityManager(GameCamera camera) {
 		this.camera = camera;
 		entities = new ArrayList<Entity>();
@@ -37,6 +36,10 @@ public class EntityManager {
 			e.update();
 		}
 		camera.centerOn(player);
+		LinkedList<Entity> l = PlayState.world.getEntitiesAtGridSpot(player);
+		if (l != null) {
+//			System.out.println(l.size());
+		}
 	}
 	public void render(Graphics g) {
 		for (Entity e:entities) {

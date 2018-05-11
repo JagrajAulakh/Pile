@@ -27,6 +27,16 @@ public abstract class Entity {
 		hitBox.setRect(x, y, width, height);
 	}
 	public BufferedImage getImage() { return image.getImage(); }
+	public boolean collides(Entity e) {
+		Rectangle2D enemyHit = e.getHitBox();
+		System.out.println(enemyHit + " " + hitBox);
+		return hitBox.intersects(enemyHit);
+	}
 
 	public abstract void update();
+
+	@Override
+	public String toString() {
+		return "PLAYER";
+	}
 }

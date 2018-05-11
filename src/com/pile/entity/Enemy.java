@@ -13,12 +13,13 @@ public class Enemy extends Entity {
 	public Enemy(double x, double y) {
 		super(x, y);
 		width = 50;
-		height = 150;
+		height = 172;
 		image = new SingleImage(new BufferedImage((int)width, (int)height, BufferedImage.TYPE_INT_ARGB));
 		Graphics g = image.getImage().createGraphics();
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, (int)width, (int)height);
 		g.dispose();
+		updateHitBox();
 	}
 
 	@Override
@@ -43,5 +44,6 @@ public class Enemy extends Entity {
 		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
+		updateHitBox();
 	}
 }

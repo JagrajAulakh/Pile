@@ -8,6 +8,7 @@ import com.pile.image.Resources;
 import com.pile.state.PlayState;
 
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 public class Player extends Entity {
 	public static final double SPEED = 4;
@@ -39,6 +40,16 @@ public class Player extends Entity {
 	}
 
 	private void collisions() {
+		LinkedList<Entity> l = PlayState.world.getEntitiesAtGridSpot(this);
+		if (l != null) {
+			for (Entity e:l) {
+				if (!(e instanceof Player)) {
+					if (collides(e)) {
+						// DO COLLISION STUFF HERE
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -91,6 +102,7 @@ public class Player extends Entity {
 		}
 
 		updateHitBox();
+		collisions();
 		prevImage = image;
 		determineImage();
 		if (prevImage != image) {

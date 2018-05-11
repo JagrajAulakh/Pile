@@ -28,6 +28,7 @@ public class World {
 		camera = new GameCamera(this);
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
+		clearGrid();
 		generateWorld();
 	}
 
@@ -38,13 +39,11 @@ public class World {
 		return height;
 	}
 
-	private void clearGrid() {
-		grid = new LinkedList[PlayState.world.getWidth()][PlayState.world.getHeight()];
-	}
+	private void clearGrid() { grid = new LinkedList[width][height]; }
 
 	public int getGridX(Entity e) { return (int)(e.getX()/(double)GRID_SIZE); }
 	public int getGridY(Entity e) { return (int)(e.getY()/(double)GRID_SIZE); }
-	public LinkedList getEntitiesAtGridSpot(Entity e) {
+	public LinkedList<Entity> getEntitiesAtGridSpot(Entity e) {
 		return grid[getGridX(e)][getGridY(e)];
 	}
 
