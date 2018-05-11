@@ -18,7 +18,6 @@ public class Player extends Entity {
 	public Player(double x, double y) {
 		super(x, y);
 		image = Resources.playerMaleWalking;
-//		width = image.getImage().getWidth();
 		width = 64;
 		height = image.getImage().getHeight();
 		updateHitBox();
@@ -39,16 +38,31 @@ public class Player extends Entity {
 		}
 	}
 
-	private void collisions() {
+	private void collisionY() {
+		if (y + height > PlayState.world.getWidth()) {
+			y = PlayState.world.getHeight() - height;
+			accY = velY = 0;
+			onGround = true;
+		} else if (y < 0) {
+			y = 0;
+			accY = velY = 0;
+		}
+	}
+	private void collisionX() {
 		LinkedList<Entity> l = PlayState.world.getEntitiesAtGridSpot(this);
 		if (l != null) {
 			for (Entity e:l) {
 				if (!(e instanceof Player)) {
 					if (collides(e)) {
-						// DO COLLISION STUFF HERE
+						System.out.println("HITTING DA ENEMY");
 					}
 				}
 			}
+		}
+		if (x < 0) {
+			x = 0;
+		} else if (x + width > PlayState.world.getWidth()) {
+			x = PlayState.world.getWidth() - width;
 		}
 	}
 
@@ -73,36 +87,18 @@ public class Player extends Entity {
 
 		// Starting here is the Y movement
 		onGround = false;
-
 		velY += accY;
 		y += velY;
+		collisionY();
 
-		if (y + height > Game.HEIGHT) {
-			y = Game.HEIGHT - height;
-			accY = velY = 0;
-			onGround = true;
-		}
-		if (y + height > PlayState.world.getWidth()) {
-			y = PlayState.world.getHeight() - height;
-			accY = velY = 0;
-			onGround = true;
-		} else if (y < 0) {
-			y = 0;
-			accY = velY = 0;
-		}
+
 		// Starting here is the X movement
 		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
-
-		if (x < 0) {
-			x = 0;
-		} else if (x + width > PlayState.world.getWidth()) {
-			x = PlayState.world.getWidth() - width;
-		}
+		collisionX();
 
 		updateHitBox();
-		collisions();
 		prevImage = image;
 		determineImage();
 		if (prevImage != image) {

@@ -1,5 +1,6 @@
 package com.pile;
 
+import com.pile.block.Block;
 import com.pile.block.BlockManager;
 import com.pile.block.Dirt;
 import com.pile.entity.Enemy;
@@ -39,7 +40,9 @@ public class World {
 		return height;
 	}
 
-	private void clearGrid() { grid = new LinkedList[width][height]; }
+	private void clearGrid() {
+		grid = new LinkedList[width][height];
+	}
 
 	public int getGridX(Entity e) { return (int)(e.getX()/(double)GRID_SIZE); }
 	public int getGridY(Entity e) { return (int)(e.getY()/(double)GRID_SIZE); }
@@ -61,7 +64,9 @@ public class World {
 	public void generateWorld() {
 		entities.add(new Player(width/2, 0));
 		entities.add(new Enemy(height/2, 0));
-		blocks.add(new Dirt(500, 500));
+		for (int i = 0; i < width; i+= Block.WIDTH) {
+			blocks.add(new Dirt(i, height-Block.HEIGHT));
+		}
 	}
 
 	public void update() {

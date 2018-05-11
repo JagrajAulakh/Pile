@@ -30,11 +30,6 @@ public class Enemy extends Entity {
 		onGround = false;
 		velY += accY;
 		y += velY;
-		if (y + height > Game.HEIGHT) {
-			y = Game.HEIGHT - height;
-			accY = velY = 0;
-			onGround = true;
-		}
 		if (y + height > PlayState.world.getHeight()) {
 			y = PlayState.world.getHeight() - height;
 			velY = accY = 0;

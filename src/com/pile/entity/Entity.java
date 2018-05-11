@@ -29,7 +29,6 @@ public abstract class Entity {
 	public BufferedImage getImage() { return image.getImage(); }
 	public boolean collides(Entity e) {
 		Rectangle2D enemyHit = e.getHitBox();
-		System.out.println(enemyHit + " " + hitBox);
 		return hitBox.intersects(enemyHit);
 	}
 

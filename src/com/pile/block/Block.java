@@ -9,6 +9,7 @@ public abstract class Block {
 	public static int HEIGHT = 64;
 	protected double x, y;
 	protected ImageType image;
+	protected boolean canCollide;
 
 	public Block(double x, double y, ImageType image) {
 		this.x = x;

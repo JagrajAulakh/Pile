@@ -27,7 +27,7 @@ public class GameCamera {
 			offsetY = 0;
 		}
 		if (offsetY + Game.HEIGHT > world.getHeight()) {
-			offsetY = world.getHeight()- Game.HEIGHT;
+			offsetY = world.getHeight() - Game.HEIGHT;
 		}
 	}
 }
