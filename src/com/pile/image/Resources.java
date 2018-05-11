@@ -11,14 +11,15 @@ import java.io.*;
 public class Resources {
 	public static double SCALE = 0.5;
 	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80);
-	public static SingleImage player1, dirt;
-	public static Animation playerMaleWalking;
+	public static SingleImage dirt;
+	public static Animation playerMaleWalking, playerFemaleWalking;
 	public static void load() throws Exception {
 
-		player1 = new SingleImage(scale(ImageIO.read(new File("assets/images/char/male/maleWalk1.png")), SCALE*2));
 		playerMaleWalking = new Animation(2);
-		for (int i = 1; i <= 20; i++) {
-			playerMaleWalking.addScene(ImageIO.read(new File(String.format("assets/images/char/male/maleWalk%d.png", i))));
+		playerFemaleWalking = new Animation(2);
+		for (int i = 0; i <= 19; i++) {
+			playerMaleWalking.addScene(ImageIO.read(new File(String.format("assets/images/char/male/%d.png", i))));
+			playerFemaleWalking.addScene(ImageIO.read(new File(String.format("assets/images/char/female/%d.png", i))));
 		}
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
 	}

@@ -34,6 +34,8 @@ public class Animation extends ImageType {
 		counter = 0;
 	}
 
+	public ImageType getFrame(int frame) { return new SingleImage(scenes.get(frame)); }
+
 	@Override
 	public BufferedImage getImage() {
 		return scenes.get(frame);
