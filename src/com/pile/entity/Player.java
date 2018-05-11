@@ -17,7 +17,7 @@ public class Player extends Entity {
 
 	public Player(double x, double y) {
 		super(x, y);
-		image = Resources.playerFemaleWalking;
+		image = Resources.playerMaleWalking;
 		width = 64;
 		height = image.getImage().getHeight();
 		updateHitBox();
@@ -29,12 +29,12 @@ public class Player extends Entity {
 	private void determineImage() {
 		if (onGround) {
 			if (Math.abs(velX) > 0.8) {
-				image = Resources.playerFemaleWalking;
+				image = Resources.playerMaleWalking;
 			} else {
-				image = Resources.playerFemaleWalking.getFrame(0);
+				image = Resources.playerMaleWalking.getFrame(0);
 			}
 		} else {
-			image = Resources.playerFemaleWalking.getFrame(0);
+			image = Resources.playerMaleWalking.getFrame(0);
 		}
 	}
 

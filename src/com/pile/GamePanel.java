@@ -11,13 +11,16 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		gsm = new GameStateManager();
 		gsm.push(new MenuState());
-		gsm.push(new PlayState());
+//		gsm.push(new PlayState());
 	}
 
 	public void refresh() {
 		if (gsm.currentState() instanceof MenuState) {
 			if (Input.keys[KeyEvent.VK_ENTER]) {
 				gsm.push(new PlayState());
+			}
+			if (Input.keys[KeyEvent.VK_ESCAPE]) {
+				System.exit(0);
 			}
 		} else if (gsm.currentState() instanceof PlayState) {
 			if (Input.keys[KeyEvent.VK_ESCAPE]) {

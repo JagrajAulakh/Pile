@@ -17,9 +17,9 @@ public class MenuState implements GameState {
 
 	@Override
 	public void update() {
-		if (Input.keys[KeyEvent.VK_ESCAPE]) {
-			System.exit(0);
-		}
+//		if (Input.keys[KeyEvent.VK_ESCAPE]) {
+//			System.exit(0);
+//		}
 		buttons.update();
 	}
 
