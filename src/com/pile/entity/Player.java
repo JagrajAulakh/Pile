@@ -1,6 +1,5 @@
 package com.pile.entity;
 
-import com.pile.Game;
 import com.pile.Input;
 import com.pile.World;
 import com.pile.image.ImageType;
