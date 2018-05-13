@@ -6,8 +6,7 @@ import com.pile.block.Dirt;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.EntityManager;
-import com.pile.entity.Player;
-import com.pile.state.PlayState;
+import com.pile.entity.player.Player;
 
 import java.awt.*;
 import java.util.LinkedList;

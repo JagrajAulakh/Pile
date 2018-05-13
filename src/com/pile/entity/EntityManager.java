@@ -1,6 +1,7 @@
 package com.pile.entity;
 
 import com.pile.GameCamera;
+import com.pile.entity.player.Player;
 import com.pile.image.Resources;
 import com.pile.state.PlayState;
 

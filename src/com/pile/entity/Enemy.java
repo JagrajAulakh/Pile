@@ -1,6 +1,5 @@
 package com.pile.entity;
 
-import com.pile.Game;
 import com.pile.World;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
@@ -26,6 +25,10 @@ public class Enemy extends Entity {
 	public void update() {
 		accY = World.GRAVITY;
 		accX = 0;
+
+		if ((int)(Math.random()*100) <= 10 && Math.abs(accX) < 0.1) {
+			accX = (accX > 0 ? (Math.random()*100 <= 50?-Math.random()*10:Math.random()*10) : (Math.random()*100 <= 50?Math.random()*10:-Math.random()*10));
+		}
 
 		onGround = false;
 		velY += accY;

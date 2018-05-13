@@ -11,7 +11,7 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		gsm = new GameStateManager();
 		gsm.push(new MenuState());
-//		gsm.push(new PlayState());
+		gsm.push(new PlayState());
 	}
 
 	public void refresh() {

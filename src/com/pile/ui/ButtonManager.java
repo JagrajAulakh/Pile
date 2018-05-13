@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class ButtonManager {
 	private ArrayList<Button> buttons;
+
 	public ButtonManager() {
 		buttons = new ArrayList<Button>();
 	}

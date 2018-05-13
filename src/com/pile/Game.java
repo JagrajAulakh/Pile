@@ -3,6 +3,7 @@ package com.pile;
 import com.pile.image.Resources;
 
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.awt.image.*;
 import javax.swing.*;
 

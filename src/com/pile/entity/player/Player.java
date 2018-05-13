@@ -1,7 +1,8 @@
-package com.pile.entity;
+package com.pile.entity.player;
 
 import com.pile.Input;
 import com.pile.World;
+import com.pile.entity.Entity;
 import com.pile.image.ImageType;
 import com.pile.image.Resources;
 import com.pile.state.PlayState;
