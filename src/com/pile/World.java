@@ -48,6 +48,24 @@ public class World {
 	public LinkedList<Entity> getEntitiesAtGridSpot(Entity e) {
 		return grid[getGridX(e)][getGridY(e)];
 	}
+	public LinkedList<Entity> getEntitiesAround(Entity e) {
+		LinkedList<Entity> list = new LinkedList<Entity>();
+		int gx = getGridX(e);
+		int gy = getGridY(e);
+		for (int x = gx-1; x <= gx + 1; x++) {
+			for (int y = gy-1; y <= gy + 1; y++) {
+				if (0 <= x && x <= width/GRID_SIZE && 0 <= y && y <= height/GRID_SIZE) {
+					LinkedList<Entity> l = grid[x][y];
+					if (l != null) {
+						for (Entity s:l) {
+							list.add(s);
+						}
+					}
+				}
+			}
+		}
+		return list;
+	}
 
 	private void sortGrid() {
 		for (Entity e:entities.getEntities()) {

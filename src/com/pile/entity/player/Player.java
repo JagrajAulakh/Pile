@@ -49,7 +49,7 @@ public class Player extends Entity {
 		}
 	}
 	private void collisionX() {
-		LinkedList<Entity> l = PlayState.world.getEntitiesAtGridSpot(this);
+		LinkedList<Entity> l = PlayState.world.getEntitiesAround(this);
 		if (l != null) {
 			for (Entity e:l) {
 				if (!(e instanceof Player)) {
