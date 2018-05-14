@@ -2,13 +2,11 @@ package com.pile.entity;
 
 import com.pile.GameCamera;
 import com.pile.image.Resources;
-import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class EntityManager {
 
@@ -36,10 +34,6 @@ public class EntityManager {
 			e.update();
 		}
 		camera.centerOn(player);
-		LinkedList<Entity> l = PlayState.world.getEntitiesAtGridSpot(player);
-		if (l != null) {
-//			System.out.println(l.size());
-		}
 	}
 	public void render(Graphics g) {
 		for (Entity e:entities) {
