@@ -4,8 +4,8 @@ import com.pile.image.Resources;
 
 import java.awt.image.BufferedImage;
 
-public class Arm extends BodyPart {
-	public Arm() {
-		super(Resources.parts.get("arm"));
+public class Head extends BodyPart {
+	public Head() {
+		super(Resources.parts.get("head"));
 	}
 }

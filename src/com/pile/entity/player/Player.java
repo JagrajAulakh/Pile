@@ -1,5 +1,6 @@
 package com.pile.entity.player;
 
+import com.pile.GameObject;
 import com.pile.Input;
 import com.pile.World;
 import com.pile.entity.Entity;
@@ -15,6 +16,8 @@ public class Player extends Entity {
 	public static final double JUMP_HEIGHT = 10;
 	private ImageType prevImage;
 
+	private BodyPart armL, armR, legL, legR, body, head;
+
 	public Player(double x, double y) {
 		super(x, y);
 		image = Resources.playerMaleWalking;
@@ -24,6 +27,12 @@ public class Player extends Entity {
 		onGround = false;
 		flipped = true;
 		prevImage = image;
+		armL = new Arm();
+		armR = new Arm();
+		legL = new Leg();
+		legR = new Leg();
+		body = new Body();
+		head = new Head();
 	}
 
 	private void determineImage() {
@@ -49,9 +58,9 @@ public class Player extends Entity {
 		}
 	}
 	private void collisionX() {
-		LinkedList<Entity> l = PlayState.world.getEntitiesAround(this);
+		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
 		if (l != null) {
-			for (Entity e:l) {
+			for (GameObject e:l) {
 				if (!(e instanceof Player)) {
 					if (collides(e)) {
 						System.out.println("HITTING DA ENEMY");

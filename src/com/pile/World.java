@@ -18,7 +18,7 @@ public class World {
 	private int width = 1000;
 	private int height = 1000;
 
-	private LinkedList<Entity>[][] grid;
+	private LinkedList<GameObject>[][] grid;
 
 	private EntityManager entities;
 	private BlockManager blocks;
@@ -45,23 +45,22 @@ public class World {
 
 	public int getGridX(double wx) { return (int)(wx/GRID_SIZE); }
 	public int getGridY(double wy) { return (int)(wy/GRID_SIZE); }
-	public int getGridX(Entity e) { return getGridX(e.getX()); }
-	public int getGridY(Entity e) { return getGridY(e.getY()); }
-	public int getGridX(Block b) { return getGridX(b.getX()); }
-	public int getGridY(Block b) { return getGridY(b.getY()); }
-	public LinkedList<Entity> getEntitiesAtGridSpot(Entity e) {
+	public int getGridX(GameObject e) { return getGridX(e.getX()); }
+	public int getGridY(GameObject e) { return getGridY(e.getY()); }
+
+	public LinkedList<GameObject> getGameObjectsAtGridSpot(GameObject e) {
 		return grid[getGridX(e)][getGridY(e)];
 	}
-	public LinkedList<Entity> getEntitiesAround(Entity e) {
-		LinkedList<Entity> list = new LinkedList<Entity>();
+	public LinkedList<GameObject> getObjectsAround(GameObject e) {
+		LinkedList<GameObject> list = new LinkedList<GameObject>();
 		int gx = getGridX(e);
 		int gy = getGridY(e);
 		for (int x = gx-1; x <= gx + 1; x++) {
 			for (int y = gy-1; y <= gy + 1; y++) {
 				if (0 <= x && x <= width/GRID_SIZE && 0 <= y && y <= height/GRID_SIZE) {
-					LinkedList<Entity> l = grid[x][y];
+					LinkedList<GameObject> l = grid[x][y];
 					if (l != null) {
-						for (Entity s:l) {
+						for (GameObject s:l) {
 							list.add(s);
 						}
 					}
@@ -80,7 +79,7 @@ public class World {
 			int posX = getGridX(e);
 			int posY = getGridY(e);
 			if (grid[posX][posY] == null) {
-				grid[posX][posY] = new LinkedList<Entity>();
+				grid[posX][posY] = new LinkedList<GameObject>();
 			}
 			grid[posX][posY].add(e);
 		}
