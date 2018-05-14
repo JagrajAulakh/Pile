@@ -43,8 +43,12 @@ public class World {
 		grid = new LinkedList[width][height];
 	}
 
-	public int getGridX(Entity e) { return (int)(e.getX()/(double)GRID_SIZE); }
-	public int getGridY(Entity e) { return (int)(e.getY()/(double)GRID_SIZE); }
+	public int getGridX(double wx) { return (int)(wx/GRID_SIZE); }
+	public int getGridY(double wy) { return (int)(wy/GRID_SIZE); }
+	public int getGridX(Entity e) { return getGridX(e.getX()); }
+	public int getGridY(Entity e) { return getGridY(e.getY()); }
+	public int getGridX(Block b) { return getGridX(b.getX()); }
+	public int getGridY(Block b) { return getGridY(b.getY()); }
 	public LinkedList<Entity> getEntitiesAtGridSpot(Entity e) {
 		return grid[getGridX(e)][getGridY(e)];
 	}
@@ -68,6 +72,10 @@ public class World {
 	}
 
 	private void sortGrid() {
+		for (Block b:blocks.getBlocks()) {
+			int posX = getGridX(b);
+			int posY = getGridY(b);
+		}
 		for (Entity e:entities.getEntities()) {
 			int posX = getGridX(e);
 			int posY = getGridY(e);

@@ -5,10 +5,7 @@ import com.pile.image.Resources;
 import java.awt.image.BufferedImage;
 
 public class Arm extends BodyPart {
-
-	private BufferedImage image;
-
 	public Arm() {
+		super(Resources.parts.get("arm"));
 	}
 }
-

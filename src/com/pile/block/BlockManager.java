@@ -17,6 +17,8 @@ public class BlockManager {
 		blocks.add(b);
 	}
 
+	public ArrayList<Block> getBlocks() { return blocks; }
+
 	public void update() {
 		for (Block b:blocks) {
 			b.update();

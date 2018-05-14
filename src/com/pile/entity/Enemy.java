@@ -26,9 +26,9 @@ public class Enemy extends Entity {
 		accY = World.GRAVITY;
 		accX = 0;
 
-		if ((int)(Math.random()*100) <= 10 && Math.abs(accX) < 0.1) {
-			accX = (accX > 0 ? (Math.random()*100 <= 50?-Math.random()*10:Math.random()*10) : (Math.random()*100 <= 50?Math.random()*10:-Math.random()*10));
-		}
+//		if ((int)(Math.random()*100) <= 10 && Math.abs(accX) < 0.1) {
+//			accX = (accX > 0 ? (Math.random()*100 <= 50?-Math.random()*10:Math.random()*10) : (Math.random()*100 <= 50?Math.random()*10:-Math.random()*10));
+//		}
 
 		onGround = false;
 		velY += accY;
