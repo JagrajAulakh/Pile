@@ -34,6 +34,7 @@ public class World {
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
 		clearGrid();
+		blockGrid = new LinkedList[width][height];
 	}
 
 	public int getWidth() {
