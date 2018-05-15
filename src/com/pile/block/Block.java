@@ -16,7 +16,9 @@ public abstract class Block extends GameObject {
 	public Block(double x, double y, ImageType image) {
 		super(x, y);
 		this.image = image;
+		this.canCollide = true;
 	}
 	public BufferedImage getImage() { return image.getImage(); }
+	public boolean canCollide() { return canCollide; }
 	public abstract void update();
 }

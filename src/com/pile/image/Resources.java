@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Resources {
 	public static double SCALE = 0.25;
 	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80);
-	public static SingleImage dirt, grass;
+	public static SingleImage dirt, grass, stone;
 	public static Animation playerMaleWalking, playerFemaleWalking;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale;
 	public static void load() throws IOException {
@@ -25,6 +25,7 @@ public class Resources {
 //		}
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
 		grass = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt_grass.png")), SCALE));
+		stone = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/stone.png")), SCALE));
 
 		partsMale = new HashMap<>();
 		partsMale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_head.png")));

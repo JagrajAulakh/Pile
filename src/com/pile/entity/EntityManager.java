@@ -45,7 +45,7 @@ public class EntityManager {
 		g.drawImage(img, (int)(realX), (int)(realY), null);
 		Rectangle2D box = e.getHitBox();
 		g.setColor(Color.BLUE);
-		g.drawRect((int)(e.getX() - camera.getOffsetX()), (int)(e.getY() - camera.getOffsetY()), (int)e.getWidth(), (int)e.getHeight());
+		g.drawRect((int)(box.getX() - camera.getOffsetX()), (int)(box.getY() - camera.getOffsetY()), (int)box.getWidth(), (int)box.getHeight());
 	}
 	public void render(Graphics g) {
 		for (Entity e:entities) {

@@ -1,9 +1,6 @@
 package com.pile;
 
-import com.pile.block.Block;
-import com.pile.block.BlockManager;
-import com.pile.block.Dirt;
-import com.pile.block.Grass;
+import com.pile.block.*;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.EntityManager;
@@ -16,10 +13,11 @@ public class World {
 	public static final double GRAVITY = 0.6;
 	public static final double FRICTION = 0.2;
 	public static final int GRID_SIZE = 200;
-	private int width = 2000;
+	private int width = 10000;
 	private int height = 1000;
 
 	private LinkedList<GameObject>[][] grid;
+	private LinkedList<GameObject>[][] blockGrid;
 
 	private EntityManager entities;
 	private BlockManager blocks;
@@ -51,8 +49,11 @@ public class World {
 	public int getGridY(GameObject e) { return getGridY(e.getY()); }
 
 	public LinkedList<GameObject> getGameObjectsAtGridSpot(int gx, int gy) { return grid[gx][gy]; }
-	public LinkedList<GameObject> getGameObjectsAtGridSpot(GameObject e) {
+	public LinkedList<GameObject> getGameObjectsAtSpot(GameObject e) {
 		return getGameObjectsAtGridSpot(getGridX(e.getX()), getGridY(e.getY()));
+	}
+	public LinkedList<GameObject> getGameObjectsAtSpot(double x, double y) {
+		return getGameObjectsAtGridSpot(getGridX(x), getGridX(y));
 	}
 	public LinkedList<GameObject> getObjectsAround(GameObject e) {
 		LinkedList<GameObject> list = new LinkedList<GameObject>();
@@ -63,9 +64,7 @@ public class World {
 				if (0 <= x && x <= width/GRID_SIZE && 0 <= y && y <= height/GRID_SIZE) {
 					LinkedList<GameObject> l = grid[x][y];
 					if (l != null) {
-						for (GameObject s:l) {
-							list.add(s);
-						}
+						list.addAll(l);
 					}
 				}
 			}
@@ -73,11 +72,15 @@ public class World {
 		return list;
 	}
 
-	private void sortGrid() {
+	private void sortBlocks() {
 		for (Block b:blocks.getBlocks()) {
 			int posX = getGridX(b);
 			int posY = getGridY(b);
 		}
+	}
+
+	private void sortGrid() {
+		grid = blockGrid;
 		for (Entity e:entities.getEntities()) {
 			int posX = getGridX(e);
 			int posY = getGridY(e);
@@ -90,13 +93,17 @@ public class World {
 
 	public void generateWorld() {
 		entities.add(new Player(width/2, 0));
-		int x = 2;
-		for (int i = -x; i <= x; i++) {
+		int tmp = 2;
+		for (int i = -tmp; i <= tmp; i++) {
 			entities.add(new Enemy(width/2 + i*150, 0));
 		}
-		for (int i = 0; i < width; i+= Block.WIDTH) {
-			blocks.add(new Dirt(i, height-Block.HEIGHT));
-			blocks.add(new Grass(i, height-Block.HEIGHT*2));
+
+		for (int x = 0; x < width; x += Block.WIDTH) {
+			blocks.add(new Dirt(x, height-Block.HEIGHT*11));
+			blocks.add(new Grass(x, height-Block.HEIGHT*12));
+			for (int y = 0; y <= 10; y += 1) {
+				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+			}
 		}
 
 	}

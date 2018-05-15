@@ -4,6 +4,7 @@ import com.pile.World;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
 import com.pile.state.PlayState;
+import com.pile.entity.player.Player;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
