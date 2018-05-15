@@ -5,6 +5,7 @@ import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.EntityManager;
 import com.pile.entity.player.Player;
+import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -12,10 +13,13 @@ import java.util.LinkedList;
 public class World {
 	public static final double GRAVITY = 0.6;
 	public static final double FRICTION = 0.2;
+	// Used for detecting collisions within 1 Grid Space of Entities
 	public static final int GRID_SIZE = 200;
-	private int width = 10000;
-	private int height = 1000;
+	// Todo Change W & H
+	private int width = 1000; // World Width
+	private int height = 1000; // World Height
 
+	// Grid of the World, used to determine where every GameObjects are
 	private LinkedList<GameObject>[][] grid;
 	private LinkedList<GameObject>[][] blockGrid;
 
