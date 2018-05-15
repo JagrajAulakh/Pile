@@ -1,9 +1,9 @@
 package com.pile.entity.player;
 
-import com.pile.image.Resources;
+import java.awt.image.BufferedImage;
 
 public class Body extends BodyPart {
-	public Body() {
-		super(Resources.parts.get("body"));
+	public Body(BufferedImage image) {
+		super(image);
 	}
 }

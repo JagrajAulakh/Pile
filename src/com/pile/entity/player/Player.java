@@ -17,50 +17,49 @@ import java.util.LinkedList;
 public class Player extends Entity {
 	public static final double SPEED = 4;
 	public static final double JUMP_HEIGHT = 10;
-	private ImageType prevImage;
 	private BodyPart arm, leg, body, head;
 	private double counter;
 
 	public Player(double x, double y) {
 		super(x, y);
-		image = Resources.playerMaleWalking;
+		head = new Head(Resources.partsFemale.get("head"));
+		body = new Body(Resources.partsFemale.get("body"));
+		arm = new Arm(Resources.partsFemale.get("arm"));
+		leg = new Leg(Resources.partsFemale.get("leg"));
+		image = drawImage(0, 0, 0, 0);
 		width = 64;
 		height = image.getImage().getHeight();
 		updateHitBox();
 		onGround = false;
 		flipped = true;
-		prevImage = image;
-		arm = new Arm();
-		leg = new Leg();
-		body = new Body();
-		head = new Head();
 	}
 
 	private SingleImage drawImage(double armL, double armR, double legL, double legR) {
 		BufferedImage img = new BufferedImage(96, 180, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
+		int headHeight = 64;
 		BufferedImage h = head.getImage();
 		BufferedImage b = body.getImage();
 		BufferedImage a = arm.getImage();
 		BufferedImage l = leg.getImage();
 
-		g.rotate(Math.toRadians(armR), img.getWidth()/2, h.getHeight()+8);
-		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, h.getHeight()+8, null);
-		g.rotate(Math.toRadians(-armR), img.getWidth()/2, h.getHeight()+8);
+		g.rotate(Math.toRadians(armR), img.getWidth()/2, headHeight + 8);
+		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 8, null);
+		g.rotate(Math.toRadians(-armR), img.getWidth()/2, headHeight + 8);
 
-		g.rotate(Math.toRadians(legR), img.getWidth()/2, h.getHeight() + b.getHeight() - 8);
-		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, h.getHeight() + b.getHeight(), null);
-		g.rotate(Math.toRadians(-legR), img.getWidth()/2, h.getHeight() + b.getHeight() - 8);
-		g.rotate(Math.toRadians(legL), img.getWidth()/2, h.getHeight() + b.getHeight() - 8);
-		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, h.getHeight() + b.getHeight(), null);
-		g.rotate(Math.toRadians(-legL), img.getWidth()/2, h.getHeight() + b.getHeight() - 8);
+		g.rotate(Math.toRadians(legR), img.getWidth()/2, headHeight + b.getHeight() - 8);
+		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, headHeight + b.getHeight(), null);
+		g.rotate(Math.toRadians(-legR), img.getWidth()/2, headHeight + b.getHeight() - 8);
+		g.rotate(Math.toRadians(legL), img.getWidth()/2, headHeight + b.getHeight() - 8);
+		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, headHeight + b.getHeight(), null);
+		g.rotate(Math.toRadians(-legL), img.getWidth()/2, headHeight + b.getHeight() - 8);
 
-		g.drawImage(h, img.getWidth()/2 - h.getWidth()/2, 0, null);
-		g.drawImage(b, img.getWidth()/2 - b.getWidth()/2, h.getHeight(), null);
+		g.drawImage(h, img.getWidth() - h.getWidth(), 0, null);
+		g.drawImage(b, img.getWidth()/2 - b.getWidth()/2, headHeight, null);
 
-		g.rotate(Math.toRadians(armL), img.getWidth()/2, h.getHeight()+8);
-		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, h.getHeight()+8, null);
-		g.rotate(Math.toRadians(-armL), img.getWidth()/2, h.getHeight()+8);
+		g.rotate(Math.toRadians(armL), img.getWidth()/2, headHeight + 8);
+		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 8, null);
+		g.rotate(Math.toRadians(-armL), img.getWidth()/2, headHeight + 8);
 
 		g.dispose();
 		return new SingleImage(img);
