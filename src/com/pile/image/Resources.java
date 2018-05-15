@@ -16,13 +16,13 @@ public class Resources {
 	public static Animation playerMaleWalking, playerFemaleWalking;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale;
 	public static void load() throws IOException {
-		playerMaleWalking = new Animation(1);
-		playerFemaleWalking = new Animation(2);
-		for (int i = 0; i <= 19; i++) {
-			String path = String.format("assets/images/char/female/%d.png", i);
-			System.out.println(path);
-			playerFemaleWalking.addScene(ImageIO.read(new File(path)));
-		}
+//		playerMaleWalking = new Animation(1);
+//		playerFemaleWalking = new Animation(2);
+//		for (int i = 0; i <= 19; i++) {
+//			String path = String.format("assets/images/char/female/%d.png", i);
+//			System.out.println(path);
+//			playerFemaleWalking.addScene(ImageIO.read(new File(path)));
+//		}
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
 		grass = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt_grass.png")), SCALE));
 
