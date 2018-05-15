@@ -8,9 +8,7 @@ import java.awt.image.BufferedImage;
 
 public abstract class Entity extends GameObject {
 	protected double width, height, velX, velY, accX, accY;
-	protected ImageType image;
 	protected boolean onGround, flipped;
-
 
 	public Entity(double x, double y) {
 		super(x, y);

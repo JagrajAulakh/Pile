@@ -3,6 +3,7 @@ package com.pile;
 import com.pile.block.Block;
 import com.pile.block.BlockManager;
 import com.pile.block.Dirt;
+import com.pile.block.Grass;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.EntityManager;
@@ -15,7 +16,7 @@ public class World {
 	public static final double GRAVITY = 0.6;
 	public static final double FRICTION = 0.2;
 	public static final int GRID_SIZE = 200;
-	private int width = 1000;
+	private int width = 2000;
 	private int height = 1000;
 
 	private LinkedList<GameObject>[][] grid;
@@ -24,12 +25,13 @@ public class World {
 	private BlockManager blocks;
 	private GameCamera camera;
 
+	private Thread genThread;
+
 	public World() {
 		camera = new GameCamera(this);
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
 		clearGrid();
-		generateWorld();
 	}
 
 	public int getWidth() {
@@ -48,8 +50,9 @@ public class World {
 	public int getGridX(GameObject e) { return getGridX(e.getX()); }
 	public int getGridY(GameObject e) { return getGridY(e.getY()); }
 
+	public LinkedList<GameObject> getGameObjectsAtGridSpot(int gx, int gy) { return grid[gx][gy]; }
 	public LinkedList<GameObject> getGameObjectsAtGridSpot(GameObject e) {
-		return grid[getGridX(e)][getGridY(e)];
+		return getGameObjectsAtGridSpot(getGridX(e.getX()), getGridY(e.getY()));
 	}
 	public LinkedList<GameObject> getObjectsAround(GameObject e) {
 		LinkedList<GameObject> list = new LinkedList<GameObject>();
@@ -87,13 +90,23 @@ public class World {
 
 	public void generateWorld() {
 		entities.add(new Player(width/2, 0));
-		entities.add(new Enemy(height/2, 0));
+		int x = 2;
+		for (int i = -x; i <= x; i++) {
+			entities.add(new Enemy(width/2 + i*150, 0));
+		}
 		for (int i = 0; i < width; i+= Block.WIDTH) {
 			blocks.add(new Dirt(i, height-Block.HEIGHT));
+			blocks.add(new Grass(i, height-Block.HEIGHT*2));
 		}
+
 	}
 
 	public void update() {
+		if (genThread == null) {
+			genThread = new Thread(() -> { generateWorld(); });
+			genThread.start();
+			while (genThread.isAlive()) { System.out.println("LOADING"); }
+		}
 		blocks.update();
 		entities.update();
 		clearGrid();

@@ -1,10 +1,13 @@
 package com.pile;
 
+import com.pile.image.ImageType;
+
 import java.awt.geom.Rectangle2D;
 
 public abstract class GameObject {
 	protected double x, y, width, height;
 	protected Rectangle2D hitBox;
+	protected ImageType image;
 
 	public GameObject(double x, double y) {
 		this.x = x;

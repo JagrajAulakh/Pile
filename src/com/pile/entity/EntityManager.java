@@ -36,16 +36,25 @@ public class EntityManager {
 		}
 		camera.centerOn(player);
 	}
+
+	private void draw(Graphics g, Entity e) {
+		BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false) : e.getImage();
+		double realX, realY;
+		realX = (e.getX()+e.getWidth()/2) - (e.getImage().getWidth()/2) - camera.getOffsetX();
+		realY = e.getY() - camera.getOffsetY();
+		g.drawImage(img, (int)(realX), (int)(realY), null);
+		Rectangle2D box = e.getHitBox();
+		g.setColor(Color.BLUE);
+		g.drawRect((int)(e.getX() - camera.getOffsetX()), (int)(e.getY() - camera.getOffsetY()), (int)e.getWidth(), (int)e.getHeight());
+	}
 	public void render(Graphics g) {
 		for (Entity e:entities) {
-			BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false) : e.getImage();
-			double realX, realY;
-			realX = (e.getX()+e.getWidth()/2) - (e.getImage().getWidth()/2) - camera.getOffsetX();
-			realY = e.getY() - camera.getOffsetY();
-			g.drawImage(img, (int)(realX), (int)(realY), null);
-			Rectangle2D box = e.getHitBox();
-			g.setColor(Color.BLUE);
-			g.drawRect((int)(e.getX() - camera.getOffsetX()), (int)(e.getY() - camera.getOffsetY()), (int)e.getWidth(), (int)e.getHeight());
+			if (!(e instanceof Player)) {
+				draw(g, e);
+			}
+		}
+		if (player != null) {
+			draw(g, player);
 		}
 	}
 }

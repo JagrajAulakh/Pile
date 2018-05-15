@@ -10,21 +10,23 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Resources {
-	public static double SCALE = 0.5;
+	public static double SCALE = 0.25;
 	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80);
-	public static SingleImage playerMaleArm, playerMaleLeg, playerMaleBody, playerMaleHead, dirt;
+	public static SingleImage dirt, grass;
 	public static Animation playerMaleWalking, playerFemaleWalking;
 	public static HashMap<String, BufferedImage> parts;
 	public static void load() throws IOException {
-
-		playerMaleWalking = new Animation(2);
+		playerMaleWalking = new Animation(1);
 		playerFemaleWalking = new Animation(2);
-		for (int i = 0; i <= 19; i++) {
-			playerMaleWalking.addScene(ImageIO.read(new File(String.format("assets/images/char/male/%d.png", i))));
-			playerFemaleWalking.addScene(ImageIO.read(new File(String.format("assets/images/char/female/%d.png", i))));
+		for (int i = 0; i <= 23; i++) {
+			String path = String.format("assets/images/char/male/better/%d.png", i);
+			playerMaleWalking.addScene(ImageIO.read(new File(path)));
+//			playerFemaleWalking.addScene(ImageIO.read(new File(String.format("assets/images/char/female/%d.png", i))));
 		}
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
-		parts = new HashMap<String, BufferedImage>();
+		grass = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt_grass.png")), SCALE));
+
+		parts = new HashMap<>();
 		parts.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_head.png")));
 		parts.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_arm.png")));
 		parts.put("leg", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_leg.png")));
