@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class GamePanel extends JPanel {
-	GameStateManager gsm;
+	GameStateManager gsm; // Used to manage different screens
 	public GamePanel() {
 		gsm = new GameStateManager();
 		gsm.push(new MenuState());

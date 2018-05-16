@@ -3,11 +3,11 @@ package com.pile;
 import com.pile.image.ImageType;
 
 import java.awt.geom.Rectangle2D;
-
+// Takes care of all Entities & Blocks
 public abstract class GameObject {
-	protected double x, y, width, height;
-	protected Rectangle2D hitBox;
-	protected ImageType image;
+	protected double x, y, width, height; // Location & Size of Object
+	protected Rectangle2D hitBox; // Hitbox of GameObject
+	protected ImageType image; // Visual display of GameObject
 
 	public GameObject(double x, double y) {
 		this.x = x;
