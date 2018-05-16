@@ -16,7 +16,7 @@ public class World {
 	// Used for detecting collisions within 1 Grid Space of Entities
 	public static final int GRID_SIZE = 200;
 	// Todo Change W & H
-	private int width = 1000; // World Width
+	private int width = 2000; // World Width
 	private int height = 1000; // World Height
 
 	// Grid of the World, used to determine where every GameObjects are

@@ -22,10 +22,10 @@ public class Player extends Entity {
 
 	public Player(double x, double y) {
 		super(x, y);
-		head = new Head(Resources.partsFemale.get("head"));
-		body = new Body(Resources.partsFemale.get("body"));
-		arm = new Arm(Resources.partsFemale.get("arm"));
-		leg = new Leg(Resources.partsFemale.get("leg"));
+		head = new Head(Resources.partsMale.get("head"));
+		body = new Body(Resources.partsMale.get("body"));
+		arm = new Arm(Resources.partsMale.get("arm"));
+		leg = new Leg(Resources.partsMale.get("leg"));
 		image = drawImage(0, 0, 0, 0);
 		width = 64;
 		height = image.getImage().getHeight();
@@ -38,14 +38,16 @@ public class Player extends Entity {
 		BufferedImage img = new BufferedImage(200, 180, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
 		int headHeight = 64;
+		int x = 0;
+		int y = 0;
 		BufferedImage h = head.getImage();
 		BufferedImage b = body.getImage();
 		BufferedImage a = arm.getImage();
 		BufferedImage l = leg.getImage();
 
-		g.rotate(Math.toRadians(armFront), img.getWidth()/2, headHeight);
-		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight, null);
-		g.rotate(Math.toRadians(-armFront), img.getWidth()/2, headHeight);
+		g.rotate(Math.toRadians(armFront), img.getWidth()/2, headHeight + 4);
+		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 4, null);
+		g.rotate(Math.toRadians(-armFront), img.getWidth()/2, headHeight + 4);
 
 		g.rotate(Math.toRadians(legFront), img.getWidth()/2, headHeight + b.getHeight() - 8);
 		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, headHeight + b.getHeight(), null);
@@ -58,14 +60,15 @@ public class Player extends Entity {
 		g.drawImage(h, hpos, 0, null);
 		g.drawImage(b, img.getWidth()/2 - b.getWidth()/2, headHeight, null);
 
-		g.rotate(Math.toRadians(armBack), img.getWidth()/2, headHeight + 8);
-		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 8, null);
-		g.rotate(Math.toRadians(-armBack), img.getWidth()/2, headHeight + 8);
+		g.rotate(Math.toRadians(armBack), img.getWidth()/2, headHeight + 4);
+		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 4, null);
+		g.rotate(Math.toRadians(-armBack), img.getWidth()/2, headHeight + 4);
 
 		g.dispose();
 		return new SingleImage(img);
 	}
 
+	// Offscreen drawing for player's image
 	private void determineImage() {
 		if (onGround) {
 			if (Math.abs(velX) > 0.8) {
@@ -77,12 +80,16 @@ public class Player extends Entity {
 				image = drawImage(0, 0, 0, 0);
 			}
 		} else {
-			counter = 0;
 			// TODO Temporary player jumping. Change it maybe.
-			image = drawImage(170, 170, -10, 10);
+			counter = (counter + 10) % 360;
+			double angle = (10)*Math.sin(Math.toRadians(counter));
+			if (velY < 0) {
+				image = drawImage(150, 150, -10, 10);
+			}
+			else if (velY > 0) {
+				image = drawImage(angle+150, -angle+150, -angle, angle);
+			}
 		}
-
-		// Offscreen drawing of the player
 	}
 
 	private void collisionY() {
