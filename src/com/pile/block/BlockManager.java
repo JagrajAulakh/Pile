@@ -1,5 +1,6 @@
 package com.pile.block;
 
+import com.pile.Game;
 import com.pile.GameCamera;
 
 import java.awt.*;
@@ -27,7 +28,13 @@ public class BlockManager {
 
 	public void render(Graphics g) {
 		for (Block b:blocks) {
-			g.drawImage(b.getImage(), (int)(b.getX() - camera.getOffsetX()), (int)(b.getY() - camera.getOffsetY()), null);
+			int xPos = (int)(b.getX() - camera.getOffsetX());
+			int yPos = (int)(b.getY() - camera.getOffsetY());
+			if (xPos < Game.WIDTH && xPos + b.WIDTH > 0) {
+				if (yPos < Game.HEIGHT && yPos + b.HEIGHT > 0) {
+					g.drawImage(b.getImage(), xPos, yPos, null);
+				}
+			}
 		}
 	}
 }
