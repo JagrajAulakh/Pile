@@ -19,6 +19,12 @@ public abstract class Block extends GameObject {
 		this.image = image;
 		this.canCollide = true;
 	}
+
+	@Override
+	public void updateHitBox() {
+		hitBox.setRect(x, y, WIDTH, HEIGHT);
+	}
+
 	public BufferedImage getImage() { return image.getImage(); }
 	public boolean canCollide() { return canCollide; }
 	public abstract void update();

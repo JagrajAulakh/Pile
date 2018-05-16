@@ -16,7 +16,7 @@ import java.util.LinkedList;
 
 public class Player extends Entity {
 	public static final double SPEED = 4;
-	public static final double JUMP_HEIGHT = 10;
+	public static final double JUMP_HEIGHT = 12;
 	private BodyPart arm, leg, body, head;
 	private double counter;
 

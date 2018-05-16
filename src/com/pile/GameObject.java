@@ -12,6 +12,7 @@ public abstract class GameObject {
 	public GameObject(double x, double y) {
 		this.x = x;
 		this.y = y;
+		hitBox = new Rectangle2D.Double(x, y, width, height);
 	}
 
 	public double getX() { return x; }
@@ -21,4 +22,5 @@ public abstract class GameObject {
 		Rectangle2D enemyHit = other.getHitBox();
 		return hitBox.intersects(enemyHit);
 	}
+	public abstract void updateHitBox();
 }

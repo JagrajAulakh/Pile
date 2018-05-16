@@ -17,11 +17,13 @@ public class BlockManager {
 	public void add(Block b) {
 		blocks.add(b);
 	}
+	public void remove(Block b) { blocks.remove(b); }
 
 	public ArrayList<Block> getBlocks() { return blocks; }
 
 	public void update() {
 		for (Block b:blocks) {
+			b.updateHitBox();
 			b.update();
 		}
 	}

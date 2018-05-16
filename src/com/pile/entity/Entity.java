@@ -19,6 +19,7 @@ public abstract class Entity extends GameObject {
 	public double getHeight() { return height; }
 	public boolean isFlipped() { return flipped; }
 
+	@Override
 	public void updateHitBox() {
 		hitBox.setRect(x, y, width, height);
 	}
