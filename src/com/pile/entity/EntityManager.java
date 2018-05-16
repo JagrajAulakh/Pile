@@ -1,5 +1,6 @@
 package com.pile.entity;
 
+import com.pile.Game;
 import com.pile.GameCamera;
 import com.pile.entity.player.Player;
 import com.pile.image.Resources;
@@ -39,13 +40,19 @@ public class EntityManager {
 
 	private void draw(Graphics g, Entity e) {
 		BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false) : e.getImage();
-		double realX, realY;
+		double realX, realY, screenX, screenY;
 		realX = (e.getX()+e.getWidth()/2) - (e.getImage().getWidth()/2) - camera.getOffsetX();
 		realY = e.getY() - camera.getOffsetY();
-		g.drawImage(img, (int)(realX), (int)(realY), null);
-		Rectangle2D box = e.getHitBox();
-		g.setColor(Color.BLUE);
-		g.drawRect((int)(box.getX() - camera.getOffsetX()), (int)(box.getY() - camera.getOffsetY()), (int)box.getWidth(), (int)box.getHeight());
+		screenX = e.getX() - camera.getOffsetX();
+		screenY = e.getY() - camera.getOffsetY();
+		if (screenX <= Game.WIDTH && screenX + e.getWidth() >= 0) {
+			if (screenY <= Game.HEIGHT && screenY + e.getHeight() >= 0) {
+				g.drawImage(img, (int)(realX), (int)(realY), null);
+				Rectangle2D box = e.getHitBox();
+				g.setColor(Color.BLUE);
+				g.drawRect((int)(box.getX() - camera.getOffsetX()), (int)(box.getY() - camera.getOffsetY()), (int)box.getWidth(), (int)box.getHeight());
+			}
+		}
 	}
 	public void render(Graphics g) {
 		for (Entity e:entities) {

@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class World {
-	public static final double GRAVITY = 0.6;
+	public static final double GRAVITY = 0.1;
 	public static final double FRICTION = 0.2;
 	// Used for detecting collisions within 1 Grid Space of Entities
 	public static final int GRID_SIZE = 200;

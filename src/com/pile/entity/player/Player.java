@@ -38,8 +38,6 @@ public class Player extends Entity {
 		BufferedImage img = new BufferedImage(200, 180, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
 		int headHeight = 64;
-		int x = 0;
-		int y = 0;
 		BufferedImage h = head.getImage();
 		BufferedImage b = body.getImage();
 		BufferedImage a = arm.getImage();
