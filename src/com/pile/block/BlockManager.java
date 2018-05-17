@@ -2,6 +2,8 @@ package com.pile.block;
 
 import com.pile.Game;
 import com.pile.GameCamera;
+import com.pile.Input;
+import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -37,6 +39,12 @@ public class BlockManager {
 					g.drawImage(b.getImage(), xPos, yPos, null);
 				}
 			}
+		}
+		Block b = PlayState.world.getBlockAtSpot(Input.mx, Input.my);
+		if (b != null) {
+			System.out.println("BLOCK SELECTED");
+			g.setColor(Color.GREEN);
+			g.drawRect((int)b.getX(), (int)b.getY(), Block.WIDTH, Block.HEIGHT);
 		}
 	}
 }

@@ -28,4 +28,9 @@ public abstract class Block extends GameObject {
 	public BufferedImage getImage() { return image.getImage(); }
 	public boolean canCollide() { return canCollide; }
 	public abstract void update();
+
+	@Override
+	public String toString() {
+		return "BLOCK";
+	}
 }

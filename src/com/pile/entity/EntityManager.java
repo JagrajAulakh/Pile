@@ -2,8 +2,11 @@ package com.pile.entity;
 
 import com.pile.Game;
 import com.pile.GameCamera;
+import com.pile.Input;
+import com.pile.block.Block;
 import com.pile.entity.player.Player;
 import com.pile.image.Resources;
+import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;

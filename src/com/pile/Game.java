@@ -31,9 +31,10 @@ public class Game extends Canvas {
 		addMouseListener(i);
 		addMouseMotionListener(i);
 		frame.add(this, BorderLayout.CENTER);
-		frame.pack();
+//		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		frame.setResizable(false);
 		run();
 	}
 

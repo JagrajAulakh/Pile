@@ -3,6 +3,8 @@ package com.pile.entity.player;
 import com.pile.GameObject;
 import com.pile.Input;
 import com.pile.World;
+import com.pile.block.Block;
+import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.image.ImageType;
 import com.pile.image.Resources;
@@ -99,12 +101,22 @@ public class Player extends Entity {
 			y = 0;
 			accY = velY = 0;
 		}
+		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
+		if (l != null) {
+			for (GameObject e:l) {
+				if (e instanceof Block) {
+					if (collides(e)) {
+						System.out.println("HITTING BLOCK");
+					}
+				}
+			}
+		}
 	}
 	private void collisionX() {
 		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
 		if (l != null) {
 			for (GameObject e:l) {
-				if (!(e instanceof Player)) {
+				if (e instanceof Enemy) {
 					if (collides(e)) {
 //						System.out.println("HITTING DA ENEMY");
 					}

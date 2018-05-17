@@ -45,49 +45,53 @@ public class World {
 	public int getHeight() {
 		return height;
 	}
-
-	private void clearGrid() {
-		grid = new LinkedList[width][height];
-	}
-
 	public int getGridX(double wx) { return (int)(wx/GRID_SIZE); }
 	public int getGridY(double wy) { return (int)(wy/GRID_SIZE); }
 	public int getGridX(GameObject e) { return getGridX(e.getX()); }
 	public int getGridY(GameObject e) { return getGridY(e.getY()); }
+	private void clearGrid() { grid = new LinkedList[width][height]; }
+	private void clearBlockGrid() { blockGrid = new LinkedList[width][height]; }
 
 	public LinkedList<GameObject> getGameObjectsAtGridSpot(int gx, int gy) { return grid[gx][gy]; }
-	public LinkedList<GameObject> getGameObjectsAtSpot(GameObject e) {
-		return getGameObjectsAtGridSpot(getGridX(e.getX()), getGridY(e.getY()));
-	}
 	public LinkedList<GameObject> getGameObjectsAtSpot(double x, double y) {
 		return getGameObjectsAtGridSpot(getGridX(x), getGridX(y));
 	}
+	public LinkedList<GameObject> getGameObjectsAtSpot(GameObject e) {
+		return getGameObjectsAtSpot(e.getX(), e.getY());
+	}
 	public LinkedList<GameObject> getObjectsAround(GameObject e) {
+		return getObjectsAround(e, 1);
+	}
+	public LinkedList<GameObject> getObjectsAround(GameObject e, int rad) {
 		LinkedList<GameObject> list = new LinkedList<GameObject>();
 		int gx = getGridX(e);
 		int gy = getGridY(e);
-		for (int x = gx-1; x <= gx + 1; x++) {
-			for (int y = gy-1; y <= gy + 1; y++) {
-				if (0 <= x && x <= width/GRID_SIZE && 0 <= y && y <= height/GRID_SIZE) {
+		for (int x = gx - rad; x <= gx + rad; x++) {
+			for (int y = gy - rad; y <= gy + rad; y++) {
+				if (0 <= x && x <= getGridX(width) && 0 <= y && y <= getGridY(height)) {
 					LinkedList<GameObject> l = grid[x][y];
-					if (l != null) {
-						list.addAll(l);
-					}
+					if (l != null) list.addAll(l);
 				}
 			}
 		}
 		return list;
 	}
 
-	private Block getBlockAtSpot(double x, double y) {
+	// returns a block if there is a block at position (x,y) on screen
+	public Block getBlockAtSpot(double x, double y) {
 		LinkedList<GameObject> l = getGameObjectsAtSpot(x, y);
 		if (l != null) {
 			for (GameObject o:l) {
 				if (o instanceof Block) {
+					System.out.println("o");
 					double screenX, screenY;
 					screenX = o.getX() - camera.getOffsetX();
 					screenY = o.getY() - camera.getOffsetY();
-//					if (screenX < x && x < screenX)
+					if (screenX < x && x < screenX + Block.WIDTH) {
+						if (screenY < y && y < screenY + Block.WIDTH) {
+							return (Block)o;
+						}
+					}
 				}
 			}
 		}
