@@ -11,7 +11,8 @@ import java.util.HashMap;
 
 public class Resources {
 	public static double SCALE = 0.25;
-	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80);
+	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80); //Todo Terraria Font? ;)
+	//Todo make this into a data file, it'll allow easier modifying
 	public static SingleImage dirt, grass, stone;
 
 	public static HashMap<String, BufferedImage> partsMale, partsFemale;
@@ -20,6 +21,7 @@ public class Resources {
 		grass = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt_grass.png")), SCALE));
 		stone = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/stone.png")), SCALE));
 
+		//Todo create a method
 		partsMale = new HashMap<>();
 		partsMale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_head.png")));
 		partsMale.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_arm.png")));
