@@ -54,7 +54,7 @@ public class World {
 
 	public LinkedList<GameObject> getGameObjectsAtGridSpot(int gx, int gy) { return grid[gx][gy]; }
 	public LinkedList<GameObject> getGameObjectsAtSpot(double x, double y) {
-		return getGameObjectsAtGridSpot(getGridX(x), getGridX(y));
+		return getGameObjectsAtGridSpot(getGridX(x), getGridY(y));
 	}
 	public LinkedList<GameObject> getGameObjectsAtSpot(GameObject e) {
 		return getGameObjectsAtSpot(e.getX(), e.getY());
@@ -83,12 +83,11 @@ public class World {
 		if (l != null) {
 			for (GameObject o:l) {
 				if (o instanceof Block) {
-					System.out.println("o");
 					double screenX, screenY;
-					screenX = o.getX() - camera.getOffsetX();
-					screenY = o.getY() - camera.getOffsetY();
-					if (screenX < x && x < screenX + Block.WIDTH) {
-						if (screenY < y && y < screenY + Block.WIDTH) {
+					screenX = o.getX();
+					screenY = o.getY();
+					if (screenX <= x && x <= screenX + Block.WIDTH) {
+						if (screenY <= y && y <= screenY + Block.HEIGHT) {
 							return (Block)o;
 						}
 					}
@@ -110,7 +109,6 @@ public class World {
 	}
 
 	private void sortEntities() {
-		grid = blockGrid;
 		for (Entity e:entities.getEntities()) {
 			int posX = getGridX(e);
 			int posY = getGridY(e);
@@ -133,13 +131,13 @@ public class World {
 			entities.add(new Enemy(width/2 + i*150, 0));
 		}
 
-		for (int x = 0; x < width; x += Block.WIDTH) {
-			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
-			blocks.add(new Grass(x, height-Block.HEIGHT*8));
-			for (int y = 0; y <= 6; y += 1) {
-				blocks.add(new Stone(x, height - Block.HEIGHT*y));
-			}
-		}
+//		for (int x = 1; x < width; x += Block.WIDTH) {
+//			blocks.add(new Grass(x, height-Block.HEIGHT*8));
+//			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
+//			for (int y = 1; y <= 6; y += 1) {
+//				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+//			}
+//		}
 
 	}
 

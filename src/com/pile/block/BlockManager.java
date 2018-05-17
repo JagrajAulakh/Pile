@@ -40,11 +40,12 @@ public class BlockManager {
 				}
 			}
 		}
-		Block b = PlayState.world.getBlockAtSpot(Input.mx, Input.my);
+		Block b = PlayState.world.getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
 		if (b != null) {
-			System.out.println("BLOCK SELECTED");
 			g.setColor(Color.GREEN);
-			g.drawRect((int)b.getX(), (int)b.getY(), Block.WIDTH, Block.HEIGHT);
+			int xPos = (int)(b.getX() - camera.getOffsetX());
+			int yPos = (int)(b.getY() - camera.getOffsetY());
+			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
 		}
 	}
 }

@@ -3,7 +3,6 @@ package com.pile;
 import com.pile.image.Resources;
 
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.awt.image.*;
 import javax.swing.*;
 
@@ -11,7 +10,8 @@ public class Game extends Canvas {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	private JFrame frame;
-	private GamePanel panel;
+	// TODO change "panel" to something else
+	private GameLogic panel;
 	private boolean running = true;
 
 	public Game() {
@@ -19,22 +19,22 @@ public class Game extends Canvas {
 		try{
 			Resources.load();
 		} catch (Exception e) { e.printStackTrace(); }
-		panel = new GamePanel();
+		panel = new GameLogic();
 		Dimension d = new Dimension(Game.WIDTH, Game.HEIGHT-1);
 		setPreferredSize(d);
-		setMinimumSize(d);
-		setMaximumSize(d);
-		Input i = new Input();
+
 		setFocusable(true);		// These two lines allow
 		requestFocusInWindow();	// the key listener to work
+		Input i = new Input();
 		addKeyListener(i);
 		addMouseListener(i);
 		addMouseMotionListener(i);
+
 		frame.add(this, BorderLayout.CENTER);
-//		frame.pack();
+		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.setResizable(false);
+//		frame.setResizable(false);
 		run();
 	}
 
@@ -73,7 +73,6 @@ public class Game extends Canvas {
 	}
 	// Render runs as many times as it can
 	public void render() {
-		// repaint();
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(2);
@@ -81,8 +80,6 @@ public class Game extends Canvas {
 		}
 		Graphics g = bs.getDrawGraphics();
 		panel.render(g);
-		// g.setColor(Color.RED);
-		// g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.dispose();
 		bs.show();
 	}
