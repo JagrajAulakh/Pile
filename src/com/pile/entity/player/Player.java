@@ -93,6 +93,7 @@ public class Player extends Entity {
 	}
 
 	private void collisionY() {
+		onGround = false;
 		if (y + height > PlayState.world.getHeight()) {
 			y = PlayState.world.getHeight() - height;
 			accY = velY = 0;
@@ -106,7 +107,15 @@ public class Player extends Entity {
 			for (GameObject e:l) {
 				if (e instanceof Block) {
 					if (collides(e)) {
-						System.out.println("HITTING BLOCK");
+						if (y < e.getY()) {
+							y = e.getY() - height;
+							velY = accY = 0;
+							onGround = true;
+						}
+						else if (y < e.getY() + Block.HEIGHT) {
+							y = e.getY() + Block.HEIGHT;
+							velY = accY = 0;
+						}
 					}
 				}
 			}
@@ -120,6 +129,7 @@ public class Player extends Entity {
 					if (collides(e)) {
 //						System.out.println("HITTING DA ENEMY");
 					}
+				} else if (e instanceof Block) {
 				}
 			}
 		}
@@ -150,7 +160,7 @@ public class Player extends Entity {
 		}
 
 		// Starting here is the Y movement
-		onGround = false;
+		System.out.println(onGround);
 		velY += accY;
 		y += velY;
 		collisionY();

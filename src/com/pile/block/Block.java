@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 public abstract class Block extends GameObject {
 	public static int WIDTH = (int)(128 * Resources.SCALE);
 	public static int HEIGHT = (int)(128 * Resources.SCALE);
-	protected double x, y;
 	protected ImageType image;
 	protected boolean canCollide;
 
@@ -18,6 +17,7 @@ public abstract class Block extends GameObject {
 		super(x, y);
 		this.image = image;
 		this.canCollide = true;
+		updateHitBox();
 	}
 
 	@Override

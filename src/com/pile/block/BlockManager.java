@@ -25,7 +25,7 @@ public class BlockManager {
 
 	public void update() {
 		for (Block b:blocks) {
-			b.updateHitBox();
+//			b.updateHitBox();
 			b.update();
 		}
 	}
