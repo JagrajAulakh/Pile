@@ -10,7 +10,20 @@ public class PlayState implements GameState {
 
 	public PlayState() {
 		world = new World();
+		loadWorld();
+	}
 
+	private void loadWorld() {
+		Thread lw = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				world.generateWorld();
+			}
+		});
+		lw.start();
+		while (lw.isAlive()) {
+			System.out.println("LOADING WORLD");
+		}
 	}
 
 	@Override

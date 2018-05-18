@@ -14,15 +14,16 @@ public class GameLogic {
 	}
 
 	public void refresh() {
+		Input.update();
 		if (gsm.currentState() instanceof MenuState) {
-			if (Input.keys[KeyEvent.VK_ENTER]) {
-				gsm.push(new PlayState());
-			}
-			if (Input.keys[KeyEvent.VK_ESCAPE]) {
+//			if (Input.keys[KeyEvent.VK_ENTER]) {
+//				gsm.push(new PlayState());
+//			}
+			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
 				System.exit(0);
 			}
 		} else if (gsm.currentState() instanceof PlayState) {
-			if (Input.keys[KeyEvent.VK_ESCAPE]) {
+			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
 				gsm.pop();
 			}
 		}

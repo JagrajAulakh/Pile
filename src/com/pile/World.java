@@ -36,7 +36,7 @@ public class World {
 		blocks = new BlockManager(camera);
 		clearGrid();
 		blockGrid = new LinkedList[width][height];
-		generateWorld();
+//		generateWorld();
 	}
 
 	public int getWidth() {
@@ -131,13 +131,13 @@ public class World {
 			entities.add(new Enemy(width/2 + i*150, 0));
 		}
 
-//		for (int x = 1; x < width; x += Block.WIDTH) {
-//			blocks.add(new Grass(x, height-Block.HEIGHT*8));
-//			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
-//			for (int y = 1; y <= 6; y += 1) {
-//				blocks.add(new Stone(x, height - Block.HEIGHT*y));
-//			}
-//		}
+		for (int x = 1; x < width; x += Block.WIDTH) {
+			blocks.add(new Grass(x, height-Block.HEIGHT*8));
+			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
+			for (int y = 1; y <= 6; y += 1) {
+				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+			}
+		}
 
 	}
 

@@ -9,7 +9,10 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 	public static boolean[] mb = new boolean[3];
 	// Keeping track of where the player's mouse is
 	public static int mx, my;
-
+	public static boolean mouseUp, keyUp;
+	private static KeyEvent currentKeyEvent;
+	private static MouseEvent currentMouseEvent;
+	private static int counter;
 
 	@Override
 	public void keyTyped(KeyEvent e) {}
@@ -21,6 +24,8 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		keyUp = true;
+		currentKeyEvent = e;
 		keys[e.getKeyCode()] = false;
 	}
 
@@ -31,6 +36,8 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		mouseUp = true;
+		currentMouseEvent = e;
 		mb[e.getButton()-1] = false;
 	}
 
@@ -53,5 +60,28 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 		mx = e.getX();
 		my = e.getY();
+	}
+
+	public static void update() {
+		if (mouseUp) {
+			if (counter == 0) {
+				counter++;
+				mb[currentMouseEvent.getButton()-1] = true;
+			} else {
+				counter = 0;
+				mouseUp = false;
+				mb[currentMouseEvent.getButton()-1] = false;
+			}
+		}
+		if (keyUp) {
+			if (counter == 0) {
+				counter++;
+				keys[currentKeyEvent.getKeyCode()] = true;
+			} else {
+				counter = 0;
+				keyUp= false;
+				keys[currentKeyEvent.getKeyCode()] = false;
+			}
+		}
 	}
 }
