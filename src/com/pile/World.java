@@ -18,6 +18,7 @@ public class World {
 	private int width = 2000; // World Width
 	private int height = 1000; // World Height
 
+	// Counter that resets every second
 	private int frame;
 
 	// Grid of the World, used to determine where every GameObjects are
@@ -27,17 +28,17 @@ public class World {
 	private EntityManager entities;
 	private BlockManager blocks;
 	private GameCamera camera;
-
-	private Thread genThread;
+	private Player player;
 
 	public World() {
+		player = new Player(0,0);
 		camera = new GameCamera(this);
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
 		clearGrid();
 		blockGrid = new LinkedList[width][height];
-//		generateWorld();
 	}
+	public void setPlayer(Player player) { this.player = player; }
 
 	public int getWidth() {
 		return width;
@@ -49,8 +50,35 @@ public class World {
 	public int getGridY(double wy) { return (int)(wy/GRID_SIZE); }
 	public int getGridX(GameObject e) { return getGridX(e.getX()); }
 	public int getGridY(GameObject e) { return getGridY(e.getY()); }
-	private void clearGrid() { grid = new LinkedList[width][height]; }
-	private void clearBlockGrid() { blockGrid = new LinkedList[width][height]; }
+	private void clearGrid() {
+		if (grid == null) {
+			grid = new LinkedList[width][height];
+		}
+		int px = getGridX(player);
+		int py = getGridY(player);
+		for (int x = px - 5; x <= px + 5; x++) {
+			for (int y = 0; y < grid[0].length; y++) {
+				if (0 <= x && x < grid.length) {
+					grid[x][y] = null;
+				}
+			}
+		}
+	}
+	private void clearBlockGrid() {
+//		blockGrid = new LinkedList[width][height];
+		if (blockGrid == null) {
+			blockGrid = new LinkedList[width][height];
+		}
+		int px = getGridX(player);
+		int py = getGridY(player);
+		for (int x = px - 5; x <= px + 5; x++) {
+			for (int y = 0; y < blockGrid[0].length; y++) {
+				if (0 <= x && x < blockGrid.length) {
+					blockGrid[x][y] = null;
+				}
+			}
+		}
+	}
 
 	public LinkedList<GameObject> getGameObjectsAtGridSpot(int gx, int gy) { return grid[gx][gy]; }
 	public LinkedList<GameObject> getGameObjectsAtSpot(double x, double y) {
@@ -126,27 +154,40 @@ public class World {
 
 	public void generateWorld() {
 		entities.add(new Player(width/2, 0));
-		int tmp = 2;
-		for (int i = -tmp; i <= tmp; i++) {
-			entities.add(new Enemy(width/2 + i*150, 0));
-		}
+		String dir = "down";
+		int y = (int)(Math.random()*(height/Block.HEIGHT/4)) * Block.HEIGHT;
+		for (int x = 0; x < width; x += Block.WIDTH) {
+			// Random chance that direction will change
+			if (Math.random()*100 < 10) {
+				if (dir.equals("down")) {
+					dir = "up";
+				} else {
+					dir = "down";
+				}
+			}
 
-		for (int x = 1; x < width; x += Block.WIDTH) {
-			blocks.add(new Grass(x, height-Block.HEIGHT*8));
-			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
-			for (int y = 1; y <= 6; y += 1) {
-				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+			int diff = (int)(Math.random()*3) * Block.HEIGHT;
+			y += (dir.equals("down")? diff: -diff);
+			for (int i = y+Block.HEIGHT*2; i > 0; i+=Block.HEIGHT) {
+				blocks.add(new Stone(x, i));
 			}
 		}
+//		int tmp = 2;
+//		for (int i = -tmp; i <= tmp; i++) {
+//			entities.add(new Enemy(width/2 + i*150, 0));
+//		}
+//
+//		for (int x = 1; x < width; x += Block.WIDTH) {
+//			blocks.add(new Grass(x, height-Block.HEIGHT*8));
+//			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
+//			for (int y = 1; y <= 6; y += 1) {
+//				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+//			}
+//		}
 
 	}
 
 	public void update() {
-//		if (genThread == null) {
-//			genThread = new Thread(() -> { generateWorld(); });
-//			genThread.start();
-//			while (genThread.isAlive()) { System.out.println("LOADING"); }
-//		}
 		blocks.update();
 		entities.update();
 		if (frame % 10 == 1) {

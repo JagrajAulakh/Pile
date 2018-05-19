@@ -14,9 +14,12 @@ public class Resources {
 	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80); //Todo Terraria Font? ;)
 	//Todo make this into a data file, it'll allow easier modifying
 	public static SingleImage dirt, grass, stone;
+	public static SingleImage[] blocks;
 
 	public static HashMap<String, BufferedImage> partsMale, partsFemale;
 	public static void load() throws IOException {
+		// TODO add all blocks into array sorted by id
+//		blocks = new SingleImage[];
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
 		grass = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt_grass.png")), SCALE));
 		stone = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/stone.png")), SCALE));
