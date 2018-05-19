@@ -10,8 +10,7 @@ public class Game extends Canvas {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	private JFrame frame;
-	// TODO change "panel" to something else
-	private GameLogic panel;
+	private GameLogic gameLogic;
 	private boolean running = true;
 
 	public Game() {
@@ -19,7 +18,7 @@ public class Game extends Canvas {
 		try{
 			Resources.load();
 		} catch (Exception e) { e.printStackTrace(); }
-		panel = new GameLogic();
+		gameLogic = new GameLogic();
 		Dimension d = new Dimension(Game.WIDTH, Game.HEIGHT-1);
 		setPreferredSize(d);
 
@@ -69,7 +68,7 @@ public class Game extends Canvas {
 	}
 	// Tick is running at exactly 60 times a second
 	public void tick() {
-		panel.refresh();
+		gameLogic.refresh();
 	}
 	// Render runs as many times as it can
 	public void render() {
@@ -79,7 +78,7 @@ public class Game extends Canvas {
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		panel.render(g);
+		gameLogic.render(g);
 		g.dispose();
 		bs.show();
 	}

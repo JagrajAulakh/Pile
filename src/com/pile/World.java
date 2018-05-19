@@ -154,36 +154,36 @@ public class World {
 
 	public void generateWorld() {
 		entities.add(new Player(width/2, 0));
-		String dir = "down";
-		int y = (int)(Math.random()*(height/Block.HEIGHT/4)) * Block.HEIGHT;
-		for (int x = 0; x < width; x += Block.WIDTH) {
-			// Random chance that direction will change
-			if (Math.random()*100 < 10) {
-				if (dir.equals("down")) {
-					dir = "up";
-				} else {
-					dir = "down";
-				}
-			}
-
-			int diff = (int)(Math.random()*3) * Block.HEIGHT;
-			y += (dir.equals("down")? diff: -diff);
-			for (int i = y+Block.HEIGHT*2; i > 0; i+=Block.HEIGHT) {
-				blocks.add(new Stone(x, i));
-			}
-		}
-//		int tmp = 2;
-//		for (int i = -tmp; i <= tmp; i++) {
-//			entities.add(new Enemy(width/2 + i*150, 0));
-//		}
+//		String dir = "down";
+//		int y = (int)(Math.random()*(height/Block.HEIGHT/4)) * Block.HEIGHT;
+//		for (int x = 0; x < width; x += Block.WIDTH) {
+//			// Random chance that direction will change
+//			if (Math.random()*100 < 10) {
+//				if (dir.equals("down")) {
+//					dir = "up";
+//				} else {
+//					dir = "down";
+//				}
+//			}
 //
-//		for (int x = 1; x < width; x += Block.WIDTH) {
-//			blocks.add(new Grass(x, height-Block.HEIGHT*8));
-//			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
-//			for (int y = 1; y <= 6; y += 1) {
-//				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+//			int diff = (int)(Math.random()*3) * Block.HEIGHT;
+//			y += (dir.equals("down")? diff: -diff);
+//			for (int i = y+Block.HEIGHT*2; i > 0; i+=Block.HEIGHT) {
+//				blocks.add(new Stone(x, i));
 //			}
 //		}
+		int tmp = 2;
+		for (int i = -tmp; i <= tmp; i++) {
+			entities.add(new Enemy(width/2 + i*150, 0));
+		}
+
+		for (int x = 1; x < width; x += Block.WIDTH) {
+			blocks.add(new Grass(x, height-Block.HEIGHT*8));
+			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
+			for (int y = 1; y <= 6; y += 1) {
+				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+			}
+		}
 
 	}
 

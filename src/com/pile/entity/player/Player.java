@@ -6,13 +6,13 @@ import com.pile.World;
 import com.pile.block.Block;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
-import com.pile.image.ImageType;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
 import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
@@ -80,7 +80,6 @@ public class Player extends Entity {
 				image = drawImage(0, 0, 0, 0);
 			}
 		} else {
-			// TODO Temporary player jumping. Change it maybe.
 			counter = (counter + 10) % 360;
 			double angle = (10)*Math.sin(Math.toRadians(counter));
 			if (velY < 0) {

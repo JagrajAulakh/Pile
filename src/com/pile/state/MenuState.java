@@ -1,5 +1,6 @@
 package com.pile.state;
 
+import com.pile.Game;
 import com.pile.Input;
 import com.pile.ui.Button;
 import com.pile.ui.ButtonManager;
@@ -12,14 +13,12 @@ public class MenuState implements GameState {
 
 	public MenuState() {
 		this.buttons = new ButtonManager();
-		buttons.add(new Button("Test", 200, 200, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255)));
+		Button playButton = new Button("Play", Game.WIDTH/2, Game.HEIGHT/2, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255));
+		buttons.add(playButton);
 	}
 
 	@Override
 	public void update() {
-//		if (Input.keys[KeyEvent.VK_ESCAPE]) {
-//			System.exit(0);
-//		}
 		buttons.update();
 	}
 

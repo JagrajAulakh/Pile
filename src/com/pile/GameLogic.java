@@ -16,9 +16,6 @@ public class GameLogic {
 	public void refresh() {
 		Input.update();
 		if (gsm.currentState() instanceof MenuState) {
-//			if (Input.keys[KeyEvent.VK_ENTER]) {
-//				gsm.push(new PlayState());
-//			}
 			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
 				System.exit(0);
 			}

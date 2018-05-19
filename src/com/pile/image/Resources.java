@@ -11,13 +11,15 @@ import java.util.HashMap;
 
 public class Resources {
 	public static double SCALE = 0.25;
-	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80); //Todo Terraria Font? ;)
+//	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80);
+	public static Font mainFont;
 	//Todo make this into a data file, it'll allow easier modifying
 	public static SingleImage dirt, grass, stone;
 	public static SingleImage[] blocks;
 
 	public static HashMap<String, BufferedImage> partsMale, partsFemale;
-	public static void load() throws IOException {
+	public static void load() throws IOException,FontFormatException {
+		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
 		// TODO add all blocks into array sorted by id
 //		blocks = new SingleImage[];
 		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
@@ -38,10 +40,13 @@ public class Resources {
 		partsFemale.put("body", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_body.png")));
 	}
 
-	public static int[] getSize(String text, Font f) {
-		Rectangle2D s = Resources.font1.deriveFont(Font.BOLD).getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true));
-		return new int[] {(int)s.getWidth(), (int)s.getHeight()};
-	}
+	public static Font getFont(float size) { return mainFont.deriveFont(size); }
+	public static int getWidth(String text, Font f) { return (int)f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true)).getWidth(); }
+	public static int getHeight(String text, Font f) { return (int)f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true)).getHeight(); }
+//	public static int[] getSize(String text, Font f) {
+//		Rectangle2D s = f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true));
+//		return new int[] {(int)s.getWidth(), (int)s.getHeight()};
+//	}
 	public static BufferedImage scale(BufferedImage original, int newWidth, int newHeight) {
 		BufferedImage resized = new BufferedImage(newWidth, newHeight, original.getType());
 		Graphics2D g = resized.createGraphics();

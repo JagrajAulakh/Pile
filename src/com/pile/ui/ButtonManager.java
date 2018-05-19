@@ -1,7 +1,5 @@
 package com.pile.ui;
 
-import com.pile.image.Resources;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -23,12 +21,14 @@ public class ButtonManager {
 	}
 	
 	public void render(Graphics g) {
-		g.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		for (Button b:buttons) {
-			g.setFont(Resources.font1);
+			// Background
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+
+			g.setFont(b.getFont());
 			g.setColor(b.getColor());
-			g.drawString(b.getText(), b.getX(), b.getY() + b.getHeight());
-			g.drawRect(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+			g.drawString(b.getText(), b.getX(), b.getY() + b.getHeight()*3/4);
 		}
 	}
 }
