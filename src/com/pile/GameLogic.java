@@ -6,11 +6,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class GameLogic {
-	GameStateManager gsm; // Used to manage different screens
+	public static GameStateManager gsm; // Used to manage different screens
 	public GameLogic() {
 		gsm = new GameStateManager();
 		gsm.push(new MenuState());
-		gsm.push(new PlayState());
 	}
 
 	public void refresh() {
@@ -21,10 +20,15 @@ public class GameLogic {
 			}
 		} else if (gsm.currentState() instanceof PlayState) {
 			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
-				gsm.pop();
+				gsm.push(new PauseState());
+			}
+		} else if (gsm.currentState() instanceof PauseState) {
+			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
+				System.exit(0);
 			}
 		}
 		gsm.currentState().update();
+		System.out.println(gsm.size());
 	}
 	public void render(Graphics g) {
 		g.setColor(Color.WHITE);

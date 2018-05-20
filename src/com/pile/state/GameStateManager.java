@@ -9,6 +9,8 @@ public class GameStateManager {
 		states = new Stack<GameState>();
 	}
 
+	public int size() { return states.size(); }
+
 	public void push(GameState s) {
 		states.push(s);
 	}

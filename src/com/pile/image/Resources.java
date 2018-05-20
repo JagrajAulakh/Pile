@@ -16,8 +16,8 @@ public class Resources {
 	//Todo make this into a data file, it'll allow easier modifying
 	public static SingleImage dirt, grass, stone;
 	public static SingleImage[] blocks;
-
 	public static HashMap<String, BufferedImage> partsMale, partsFemale;
+
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
 		// TODO add all blocks into array sorted by id
@@ -26,20 +26,31 @@ public class Resources {
 		grass = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt_grass.png")), SCALE));
 		stone = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/stone.png")), SCALE));
 
-		//Todo create a method
-		partsMale = new HashMap<>();
-		partsMale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_head.png")));
-		partsMale.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_arm.png")));
-		partsMale.put("leg", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_leg.png")));
-		partsMale.put("body", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_body.png")));
+		partsMale = getParts("male");
+//		partsMale = new HashMap<>();
+//		partsMale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_head.png")));
+//		partsMale.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_arm.png")));
+//		partsMale.put("leg", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_leg.png")));
+//		partsMale.put("body", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_body.png")));
 
-		partsFemale = new HashMap<>();
-		partsFemale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_head.png")));
-		partsFemale.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_arm.png")));
-		partsFemale.put("leg", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_leg.png")));
-		partsFemale.put("body", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_body.png")));
+		partsFemale = getParts("female");
+//		partsFemale = new HashMap<>();
+//		partsFemale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_head.png")));
+//		partsFemale.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_arm.png")));
+//		partsFemale.put("leg", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_leg.png")));
+//		partsFemale.put("body", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_body.png")));
 	}
-
+	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {
+		ch = ch.toLowerCase();
+		HashMap<String, BufferedImage> map = new HashMap<String, BufferedImage>();
+		String[] p = new String[] {"head", "arm", "leg", "body"};
+		for (String part:p) {
+			String folder = ch.equals("male")||ch.equals("female")?"Player "+ch:ch.substring(0, 1).toUpperCase()+ch.substring(1);
+			String path = String.format("assets/images/PNG/Characters/%s/%s_%s.png", folder, ch, part);
+			map.put(part, ImageIO.read(new File(path)));
+		}
+		return map;
+	}
 	public static Font getFont(float size) { return mainFont.deriveFont(size); }
 	public static int getWidth(String text, Font f) { return (int)f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true)).getWidth(); }
 	public static int getHeight(String text, Font f) { return (int)f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true)).getHeight(); }

@@ -159,7 +159,7 @@ public class Player extends Entity {
 		}
 
 		// Starting here is the Y movement
-		System.out.println(onGround);
+		// System.out.println(onGround);
 		velY += accY;
 		y += velY;
 		collisionY();

@@ -13,7 +13,7 @@ public class MenuState implements GameState {
 
 	public MenuState() {
 		this.buttons = new ButtonManager();
-		Button playButton = new Button("Play", Game.WIDTH/2, Game.HEIGHT/2, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255));
+		Button playButton = new Button("Play", Game.WIDTH/2, Game.HEIGHT/2, 70f, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255));
 		buttons.add(playButton);
 	}
 
