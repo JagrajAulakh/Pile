@@ -28,7 +28,7 @@ public class GameLogic {
 			}
 		}
 		gsm.currentState().update();
-		System.out.println(gsm.size());
+//		System.out.println(gsm.size());
 	}
 	public void render(Graphics g) {
 		g.setColor(Color.WHITE);

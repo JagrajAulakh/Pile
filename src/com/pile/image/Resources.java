@@ -1,5 +1,7 @@
 package com.pile.image;
 
+import com.pile.io.Reader;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -11,34 +13,25 @@ import java.util.HashMap;
 
 public class Resources {
 	public static double SCALE = 0.25;
-//	public static Font font1 = new Font("Times New Roman", Font.PLAIN, 80);
 	public static Font mainFont;
-	//Todo make this into a data file, it'll allow easier modifying
-	public static SingleImage dirt, grass, stone;
 	public static SingleImage[] blocks;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale;
 
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
-		// TODO add all blocks into array sorted by id
-//		blocks = new SingleImage[];
-		dirt = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt.png")), SCALE));
-		grass = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/dirt_grass.png")), SCALE));
-		stone = new SingleImage(scale(ImageIO.read(new File("assets/images/PNG/Tiles/stone.png")), SCALE));
+
+		// All blocks, sorted by ID numbers
+		blocks = new SingleImage[50]; // Random number
+		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
+		for (int i = 0; i < bFile.length; i++) {
+			String path = "assets/images/PNG/Tiles/" + bFile[i] + ".png";
+			System.out.println(path);
+			blocks[i] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
+		}
 
 		partsMale = getParts("male");
-//		partsMale = new HashMap<>();
-//		partsMale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_head.png")));
-//		partsMale.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_arm.png")));
-//		partsMale.put("leg", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_leg.png")));
-//		partsMale.put("body", ImageIO.read(new File("assets/images/PNG/Characters/Player male/male_body.png")));
-
 		partsFemale = getParts("female");
-//		partsFemale = new HashMap<>();
-//		partsFemale.put("head", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_head.png")));
-//		partsFemale.put("arm", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_arm.png")));
-//		partsFemale.put("leg", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_leg.png")));
-//		partsFemale.put("body", ImageIO.read(new File("assets/images/PNG/Characters/Player female/female_body.png")));
+
 	}
 	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {
 		ch = ch.toLowerCase();

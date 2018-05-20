@@ -178,10 +178,10 @@ public class World {
 		}
 
 		for (int x = 1; x < width; x += Block.WIDTH) {
-			blocks.add(new Grass(x, height-Block.HEIGHT*8));
-			blocks.add(new Dirt(x, height-Block.HEIGHT*7));
+			blocks.add(new Block(x, height-Block.HEIGHT*8, 1)); // Grass
+			blocks.add(new Block(x, height-Block.HEIGHT*7, 0)); // Dirt
 			for (int y = 1; y <= 6; y += 1) {
-				blocks.add(new Stone(x, height - Block.HEIGHT*y));
+				blocks.add(new Block(x, height - Block.HEIGHT*y, 2)); // Stone
 			}
 		}
 

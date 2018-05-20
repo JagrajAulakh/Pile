@@ -56,7 +56,7 @@ public class Player extends Entity {
 		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, headHeight + b.getHeight(), null);
 		g.rotate(Math.toRadians(-legBack), img.getWidth()/2, headHeight + b.getHeight() - 8);
 
-		int hpos = (int)(img.getWidth()/2 - headHeight/2);
+		int hpos = img.getWidth()/2 - headHeight/2;
 		g.drawImage(h, hpos, 0, null);
 		g.drawImage(b, img.getWidth()/2 - b.getWidth()/2, headHeight, null);
 
@@ -105,6 +105,7 @@ public class Player extends Entity {
 		if (l != null) {
 			for (GameObject e:l) {
 				if (e instanceof Block) {
+					// TODO fix onGround glitch
 					if (collides(e)) {
 						if (y < e.getY()) {
 							y = e.getY() - height;

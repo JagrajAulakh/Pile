@@ -1,14 +1,16 @@
 package com.pile.io;
 
-import java.nio.file.FileSystems;
-import java.nio.file.PathMatcher;
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Reader {
-	public static String readFile(String path) {
-		// Glob example
-
-		// String pattern = ...;
-		// PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
-		return "";
+	public static String readFile(String path) throws IOException {
+		String tot = "";
+		Scanner file = new Scanner(new File(path));
+		while (file.hasNextLine()) {
+			tot += file.nextLine() + "\n";
+		}
+		return tot;
 	}
 }

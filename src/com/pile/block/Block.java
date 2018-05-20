@@ -7,15 +7,17 @@ import com.pile.image.Resources;
 import java.awt.image.BufferedImage;
 //Todo Think about how we want Images of Physically in the world, Dropped Blocks and Inventory
 // ^^^ Could use the same Image
-public abstract class Block extends GameObject {
+public class Block extends GameObject {
 	public static final int WIDTH = (int)(128 * Resources.SCALE);
 	public static final int HEIGHT = (int)(128 * Resources.SCALE);
+	protected int id;
 	protected ImageType image;
 	protected boolean canCollide;
 
-	public Block(double x, double y, ImageType image) {
+	public Block(double x, double y, int id) {
 		super(x, y);
-		this.image = image;
+		this.id = id;
+		this.image = Resources.blocks[id];
 		this.canCollide = true;
 		updateHitBox();
 	}
@@ -27,7 +29,9 @@ public abstract class Block extends GameObject {
 
 	public BufferedImage getImage() { return image.getImage(); }
 	public boolean canCollide() { return canCollide; }
-	public abstract void update();
+	public void update() {
+
+	}
 
 	@Override
 	public String toString() {

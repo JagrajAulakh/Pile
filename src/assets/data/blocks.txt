@@ -1,0 +1,10 @@
+dirt
+dirt_grass
+stone
+oven
+stone_coal
+stone_silver
+stone_iron
+stone_browniron
+stone_gold
+stone_diamond
