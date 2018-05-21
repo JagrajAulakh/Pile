@@ -15,20 +15,19 @@ public class GameLogic {
 	public void refresh() {
 		Input.update();
 		if (gsm.currentState() instanceof MenuState) {
-			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
+			if (Input.upKeys[KeyEvent.VK_ESCAPE]) {
 				System.exit(0);
 			}
 		} else if (gsm.currentState() instanceof PlayState) {
-			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
+			if (Input.upKeys[KeyEvent.VK_ESCAPE]) {
 				gsm.push(new PauseState());
 			}
 		} else if (gsm.currentState() instanceof PauseState) {
-			if (Input.keyUp && Input.keys[KeyEvent.VK_ESCAPE]) {
+			if (Input.upKeys[KeyEvent.VK_ESCAPE]) {
 				System.exit(0);
 			}
 		}
 		gsm.currentState().update();
-//		System.out.println(gsm.size());
 	}
 	public void render(Graphics g) {
 		g.setColor(Color.WHITE);

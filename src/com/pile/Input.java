@@ -5,6 +5,7 @@ import java.awt.event.*;
 public class Input implements KeyListener,MouseListener,MouseMotionListener {
 	// Arrays to keep track of Keys and Mouse
 	public static boolean[] keys = new boolean[KeyEvent.KEY_LAST];
+	public static boolean[] upKeys = new boolean[KeyEvent.KEY_LAST];
 	//Todo maybe add scroll, so change array list size
 	public static boolean[] mb = new boolean[3];
 	// Keeping track of where the player's mouse is
@@ -26,6 +27,7 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 	public void keyReleased(KeyEvent e) {
 		keyUp = true;
 		currentKeyEvent = e;
+		upKeys[e.getKeyCode()] = true;
 		keys[e.getKeyCode()] = false;
 	}
 
@@ -76,11 +78,12 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 		if (keyUp) {
 			if (counter == 0) {
 				counter++;
-				keys[currentKeyEvent.getKeyCode()] = true;
+//				keys[currentKeyEvent.getKeyCode()] = true;
 			} else {
 				counter = 0;
 				keyUp= false;
-				keys[currentKeyEvent.getKeyCode()] = false;
+//				keys[currentKeyEvent.getKeyCode()] = false;
+				upKeys[currentKeyEvent.getKeyCode()] = false;
 			}
 		}
 	}

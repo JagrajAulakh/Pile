@@ -92,7 +92,6 @@ public class Player extends Entity {
 	}
 
 	private void collisionY() {
-		onGround = false;
 		if (y + height > PlayState.world.getHeight()) {
 			y = PlayState.world.getHeight() - height;
 			accY = velY = 0;
@@ -105,16 +104,16 @@ public class Player extends Entity {
 		if (l != null) {
 			for (GameObject e:l) {
 				if (e instanceof Block) {
-					// TODO fix onGround glitch
 					if (collides(e)) {
-						if (y < e.getY()) {
+						if (velY > 0) {
+							System.out.println(velY);
 							y = e.getY() - height;
 							velY = accY = 0;
 							onGround = true;
 						}
-						else if (y < e.getY() + Block.HEIGHT) {
+						else if (velY < 0) {
 							y = e.getY() + Block.HEIGHT;
-							velY = accY = 0;
+							velY = 0;
 						}
 					}
 				}
@@ -155,6 +154,7 @@ public class Player extends Entity {
 			flipped = false;
 		} if (Input.keys[KeyEvent.VK_SPACE]) {
 			if (onGround) {
+				onGround = false;
 				velY = -JUMP_HEIGHT;
 			}
 		}
