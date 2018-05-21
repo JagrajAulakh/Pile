@@ -42,7 +42,7 @@ public class EntityManager {
 		camera.centerOn(player);
 	}
 
-	private void draw(Graphics g, Entity e) {
+	public void draw(Graphics g, Entity e) {
 		BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false) : e.getImage();
 		double realX, realY, screenX, screenY;
 		realX = (e.getX()+e.getWidth()/2) - (e.getImage().getWidth()/2) - camera.getOffsetX();

@@ -110,7 +110,7 @@ public class Player extends Entity {
 						velY = accY = 0;
 						onGround = true;
 					}
-					else if (velY < 0) {
+					else {
 						y = e.getY() + Block.HEIGHT;
 						velY = 0;
 					}
@@ -128,9 +128,18 @@ public class Player extends Entity {
 		for (GameObject e:l) {
 			if (e instanceof Enemy) {
 				if (collides(e)) {
-					System.out.println("OUCH!");
+//					System.out.*println("OUCH!");
 				}
 			} else if (e instanceof Block) {
+				if (collides(e)) {
+					if (velX > 0) {
+						x = e.getX() - width;
+						velX = accX = 0;
+					} else if (velX < 0) {
+						x = e.getX() + Block.WIDTH;
+						velX = accX = 0;
+					}
+				}
 			}
 		}
 	}
@@ -158,17 +167,20 @@ public class Player extends Entity {
 		// Starting here is the Y movement
 		velY += accY;
 		y += velY;
+		updateHitBox();
 		collisionY();
+		updateHitBox();
+
 
 		// Starting here is the X movement
 		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
-		collisionX();
-
 		updateHitBox();
+		collisionX();
+		updateHitBox();
+
 		determineImage();
 		image.tick();
-		System.out.println(velY);
 	}
 }

@@ -24,11 +24,5 @@ public abstract class Entity extends GameObject {
 		hitBox.setRect(x, y, width, height);
 	}
 	public BufferedImage getImage() { return image.getImage(); }
-
-	public abstract void update();
-
-	@Override
-	public String toString() {
-		return "PLAYER";
-	}
+//	public abstract void update();
 }

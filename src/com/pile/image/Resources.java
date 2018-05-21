@@ -15,7 +15,7 @@ public class Resources {
 	public static double SCALE = 0.25;
 	public static Font mainFont;
 	public static SingleImage[] blocks;
-	public static HashMap<String, BufferedImage> partsMale, partsFemale;
+	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
 
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
@@ -30,6 +30,7 @@ public class Resources {
 
 		partsMale = getParts("male");
 		partsFemale = getParts("female");
+		partsZombie = getParts("zombie");
 
 	}
 	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {

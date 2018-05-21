@@ -2,6 +2,7 @@ package com.pile;
 
 import com.pile.image.ImageType;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 // Takes care of all Entities & Blocks
 public abstract class GameObject {
@@ -22,5 +23,8 @@ public abstract class GameObject {
 		Rectangle2D enemyHit = other.getHitBox();
 		return hitBox.intersects(enemyHit);
 	}
+//	public abstract void update();
 	public abstract void updateHitBox();
+
+	public abstract void update();
 }

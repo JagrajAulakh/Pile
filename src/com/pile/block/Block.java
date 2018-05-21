@@ -22,19 +22,16 @@ public class Block extends GameObject {
 		updateHitBox();
 	}
 
+	public BufferedImage getImage() { return image.getImage(); }
+	public boolean canCollide() { return canCollide; }
+
 	@Override
 	public void updateHitBox() {
 		hitBox.setRect(x, y, WIDTH, HEIGHT);
 	}
 
-	public BufferedImage getImage() { return image.getImage(); }
-	public boolean canCollide() { return canCollide; }
-	public void update() {
-
-	}
-
 	@Override
-	public String toString() {
-		return "BLOCK";
+	public void update() {
+		updateHitBox();
 	}
 }
