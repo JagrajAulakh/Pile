@@ -1,5 +1,6 @@
 package com.pile.entity.player;
 
+import com.pile.Game;
 import com.pile.GameObject;
 import com.pile.Input;
 import com.pile.World;
@@ -101,41 +102,36 @@ public class Player extends Entity {
 			accY = velY = 0;
 		}
 		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
-		if (l != null) {
-			for (GameObject e:l) {
-				if (e instanceof Block) {
-					if (collides(e)) {
-						if (velY > 0) {
-							System.out.println(velY);
-							y = e.getY() - height;
-							velY = accY = 0;
-							onGround = true;
-						}
-						else if (velY < 0) {
-							y = e.getY() + Block.HEIGHT;
-							velY = 0;
-						}
+		for (GameObject e:l) {
+			if (e instanceof Block) {
+				if (collides(e)) {
+					if (velY >= 0) {
+						y = e.getY() - height;
+						velY = accY = 0;
+						onGround = true;
+					}
+					else if (velY < 0) {
+						y = e.getY() + Block.HEIGHT;
+						velY = 0;
 					}
 				}
 			}
 		}
 	}
 	private void collisionX() {
-		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
-		if (l != null) {
-			for (GameObject e:l) {
-				if (e instanceof Enemy) {
-					if (collides(e)) {
-//						System.out.println("HITTING DA ENEMY");
-					}
-				} else if (e instanceof Block) {
-				}
-			}
-		}
 		if (x < 0) {
 			x = 0;
 		} else if (x + width > PlayState.world.getWidth()) {
 			x = PlayState.world.getWidth() - width;
+		}
+		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
+		for (GameObject e:l) {
+			if (e instanceof Enemy) {
+				if (collides(e)) {
+					System.out.println("OUCH!");
+				}
+			} else if (e instanceof Block) {
+			}
 		}
 	}
 
@@ -144,15 +140,15 @@ public class Player extends Entity {
 		accX = 0;
 		accY = World.GRAVITY;
 
-		if (Input.keys[KeyEvent.VK_D]) {
+		if (Game.input.keyDown(KeyEvent.VK_D)) {
 			accX = SPEED;
 			velX = Math.min(velX, 3);
 			flipped = true;
-		} if (Input.keys[KeyEvent.VK_A]) {
+		} if (Game.input.keyDown(KeyEvent.VK_A)) {
 			accX = -SPEED;
 			velX = Math.max(velX, -3);
 			flipped = false;
-		} if (Input.keys[KeyEvent.VK_SPACE]) {
+		} if (Game.input.keyDown(KeyEvent.VK_SPACE)) {
 			if (onGround) {
 				onGround = false;
 				velY = -JUMP_HEIGHT;
@@ -160,11 +156,9 @@ public class Player extends Entity {
 		}
 
 		// Starting here is the Y movement
-		// System.out.println(onGround);
 		velY += accY;
 		y += velY;
 		collisionY();
-
 
 		// Starting here is the X movement
 		accX -= velX * World.FRICTION;
@@ -173,11 +167,8 @@ public class Player extends Entity {
 		collisionX();
 
 		updateHitBox();
-//		prevImage = image;
 		determineImage();
-//		if (prevImage != image) {
-//			image.reset();
-//		}
 		image.tick();
+		System.out.println(velY);
 	}
 }

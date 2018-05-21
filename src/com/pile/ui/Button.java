@@ -1,7 +1,7 @@
 package com.pile.ui;
 
+import com.pile.Game;
 import com.pile.GameLogic;
-import com.pile.Input;
 import com.pile.image.Resources;
 import com.pile.io.Writer;
 import com.pile.state.MenuState;
@@ -41,12 +41,12 @@ public class Button {
 	public Font getFont() { return Resources.getFont(size); }
 
 	public void update() {
-		if (getX() < Input.mx && Input.mx < getX() + width && getY() < Input.my && Input.my < getY() + height) {
+		if (getX() < Game.input.mx && Game.input.mx < getX() + width && getY() < Game.input.my && Game.input.my < getY() + height) {
 			curColor = hoverColor;
-			if (Input.mb[0]) {
+			if (Game.input.buttonPressed(0)) {
 				curColor = clickColor;
 			}
-			if (Input.mouseUp) {
+			if (Game.input.mouseUp(0)) {
 				if (text.toLowerCase().equals("play")) {
 					GameLogic.gsm.set(new PlayState());
 				} else if (text.toLowerCase().equals("exit")) {

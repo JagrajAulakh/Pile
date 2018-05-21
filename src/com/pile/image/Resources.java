@@ -25,7 +25,6 @@ public class Resources {
 		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
 		for (int i = 0; i < bFile.length; i++) {
 			String path = "assets/images/PNG/Tiles/" + bFile[i] + ".png";
-			System.out.println(path);
 			blocks[i] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
 		}
 

@@ -25,7 +25,6 @@ public class Writer {
 				files[i] = dataFiles[i].getName();
 			}
 			Arrays.sort(files);
-			System.out.println(Arrays.toString(files));
 		}
 	}
 }

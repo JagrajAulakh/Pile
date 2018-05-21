@@ -12,6 +12,7 @@ public class Game extends Canvas {
 	private JFrame frame;
 	private GameLogic gameLogic;
 	private boolean running = true;
+	public static Input input;
 
 	public Game() {
 		frame = new JFrame("Piles");
@@ -24,10 +25,10 @@ public class Game extends Canvas {
 
 		setFocusable(true);		// These two lines allow
 		requestFocusInWindow();	// the key listener to work
-		Input i = new Input();
-		addKeyListener(i);
-		addMouseListener(i);
-		addMouseMotionListener(i);
+		input = new Input();
+		addKeyListener(input);
+		addMouseListener(input);
+		addMouseMotionListener(input);
 
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();

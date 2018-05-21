@@ -1,6 +1,10 @@
 package com.pile.entity;
 
+import com.pile.Game;
+import com.pile.GameLogic;
+import com.pile.GameObject;
 import com.pile.World;
+import com.pile.block.Block;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
 import com.pile.state.PlayState;
@@ -8,6 +12,7 @@ import com.pile.entity.player.Player;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 public class Enemy extends Entity {
 	public Enemy(double x, double y) {
@@ -22,6 +27,33 @@ public class Enemy extends Entity {
 		updateHitBox();
 	}
 
+	public void collisionY() {
+		if (y + height > PlayState.world.getHeight()) {
+			y = PlayState.world.getHeight() - height;
+			velY = accY = 0;
+			onGround = true;
+		}
+		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
+		for (GameObject e:l) {
+			if (e instanceof Block) {
+				if (collides(e)) {
+					if (velY > 0) {
+						y = e.getY() - height;
+						velY = accY = 0;
+						onGround = true;
+					}
+					else if (velY < 0) {
+						y = e.getY() + Block.HEIGHT;
+						velY = 0;
+					}
+				}
+			}
+		}
+	}
+	public void collisionX() {
+
+	}
+
 	@Override
 	public void update() {
 		accY = World.GRAVITY;
@@ -34,15 +66,13 @@ public class Enemy extends Entity {
 		onGround = false;
 		velY += accY;
 		y += velY;
-		if (y + height > PlayState.world.getHeight()) {
-			y = PlayState.world.getHeight() - height;
-			velY = accY = 0;
-			onGround = true;
-		}
+		collisionY();
 
 		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
+		collisionX();
+
 		updateHitBox();
 	}
 }
