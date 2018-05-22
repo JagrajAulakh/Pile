@@ -18,6 +18,8 @@ public abstract class GameObject {
 
 	public double getX() { return x; }
 	public double getY() { return y; }
+	public int getGridX() { return (int)(x / World.GRID_SIZE); }
+	public int getGridY() { return (int)(y / World.GRID_SIZE); }
 	public Rectangle2D getHitBox() { return hitBox; }
 	public boolean collides(GameObject other) {
 		Rectangle2D enemyHit = other.getHitBox();

@@ -1,7 +1,5 @@
 package com.pile.entity;
 
-import com.pile.Game;
-import com.pile.GameLogic;
 import com.pile.GameObject;
 import com.pile.World;
 import com.pile.block.Block;
