@@ -5,10 +5,8 @@ import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.EntityManager;
 import com.pile.entity.player.Player;
-import com.pile.state.PlayState;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class World {
@@ -25,7 +23,7 @@ public class World {
 
 	// Grid of the World, used to determine where every GameObjects are
 	private LinkedList<GameObject>[][] grid;
-	private LinkedList<GameObject>[][] blockGrid;
+	private LinkedList<Block>[][] blockGrid;
 
 	private EntityManager entities;
 	private BlockManager blocks;
@@ -33,7 +31,6 @@ public class World {
 	private Player player;
 
 	public World() {
-		player = new Player(0,0);
 		camera = new GameCamera(this);
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
@@ -85,8 +82,7 @@ public class World {
 
 	// returns a block if there is a block at position (x,y) in world
 	public Block getBlockAtSpot(double x, double y) {
-//		LinkedList<GameObject> l = getGameObjectsAtSpot(x, y);
-		LinkedList<GameObject> l = blockGrid[getGridX(x)][getGridX(y)];
+		LinkedList<Block> l = blockGrid[getGridX(x)][getGridX(y)];
 		if (l != null) {
 			for (GameObject o:l) {
 				if (o instanceof Block) {
@@ -107,7 +103,7 @@ public class World {
 	public void addBlock(Block b) {
 		blocks.add(b);
 		if (blockGrid[b.getGridX()][b.getGridY()] == null) {
-			blockGrid[b.getGridX()][b.getGridY()] = new LinkedList<GameObject>();
+			blockGrid[b.getGridX()][b.getGridY()] = new LinkedList<Block>();
 		}
 		blockGrid[b.getGridX()][b.getGridY()].add(b);
 	}
@@ -160,7 +156,7 @@ public class World {
 		}
 	}
 	public void generateWorld() {
-		addPlayer(new Player(width/2, 0));
+		addPlayer(new Player(width/2, 0, this));
 		int tmp = 80;
 		for (int i = -tmp; i <= tmp; i++) {
 			entities.add(new Enemy(width/2 + i*150, 0));
@@ -189,9 +185,9 @@ public class World {
 			e.update();
 		}
 		camera.centerOn(player);
-		if (Game.input.mouseUp(2)) {
-			int wx = (int)((Game.input.mx + camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
-			int wy = (int)((Game.input.my + camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
+		if (Input.mouseUp(2)) {
+			int wx = (int)((Input.mx + camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
+			int wy = (int)((Input.my + camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
 //			blocks.add(new Block(wx, wy, 0));
 			addBlock(new Block(wx, wy, 0));
 		}
@@ -214,13 +210,13 @@ public class World {
 			}
 		}
 		// FOR DRAWING BLOCK SELECTION
-		Block b = getBlockAtSpot(Game.input.mx + camera.getOffsetX(), Game.input.my + camera.getOffsetY());
+		Block b = getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
 		if (b != null) {
 			g.setColor(Color.GREEN);
 			int xPos = (int)(b.getX() - camera.getOffsetX());
 			int yPos = (int)(b.getY() - camera.getOffsetY());
 			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
-			if (Game.input.mouseUp(0)) {
+			if (Input.mouseUp(0)) {
 				removeBlock(b);
 			}
 		}

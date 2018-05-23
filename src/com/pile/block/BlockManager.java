@@ -2,6 +2,7 @@ package com.pile.block;
 
 import com.pile.Game;
 import com.pile.GameCamera;
+import com.pile.Input;
 import com.pile.state.PlayState;
 
 import java.awt.*;
@@ -48,7 +49,7 @@ public class BlockManager {
 	}
 
 	public void render(Graphics g) {
-		Block b = PlayState.world.getBlockAtSpot(Game.input.mx + camera.getOffsetX(), Game.input.my + camera.getOffsetY());
+		Block b = PlayState.world.getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
 		if (b != null) {
 			g.setColor(Color.GREEN);
 			int xPos = (int)(b.getX() - camera.getOffsetX());

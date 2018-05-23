@@ -13,17 +13,17 @@ public class GameLogic {
 	}
 
 	public void refresh() {
-		Game.input.update();
+		Input.update();
 		if (gsm.currentState() instanceof MenuState) {
-			if (Game.input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
+			if (Input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
 				System.exit(0);
 			}
 		} else if (gsm.currentState() instanceof PlayState) {
-			if (Game.input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
+			if (Input.keyUpOnce(KeyEvent.VK_ESCAPE)) {
 				gsm.push(new PauseState());
 			}
 		} else if (gsm.currentState() instanceof PauseState) {
-			if (Game.input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
+			if (Input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
 				System.exit(0);
 			}
 		}

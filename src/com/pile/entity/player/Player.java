@@ -22,9 +22,11 @@ public class Player extends Entity {
 	public static final double JUMP_HEIGHT = 12;
 	private BodyPart arm, leg, body, head;
 	private double counter;
+	private World world;
 
-	public Player(double x, double y) {
+	public Player(double x, double y, World world) {
 		super(x, y);
+		this.world = world;
 		head = new Head(Resources.partsMale.get("head"));
 		body = new Body(Resources.partsMale.get("body"));
 		arm = new Arm(Resources.partsMale.get("arm"));
@@ -93,15 +95,15 @@ public class Player extends Entity {
 	}
 
 	private void collisionY() {
-		if (y + height > PlayState.world.getHeight()) {
-			y = PlayState.world.getHeight() - height;
+		if (y + height > world.getHeight()) {
+			y = world.getHeight() - height;
 			accY = velY = 0;
 			onGround = true;
 		} else if (y < 0) {
 			y = 0;
 			accY = velY = 0;
 		}
-		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this);
+		LinkedList<GameObject> l = world.getBlocksAround(this);
 		for (GameObject e:l) {
 			if (e instanceof Block) {
 				if (collides(e)) {
@@ -121,10 +123,10 @@ public class Player extends Entity {
 	private void collisionX() {
 		if (x < 0) {
 			x = 0;
-		} else if (x + width > PlayState.world.getWidth()) {
-			x = PlayState.world.getWidth() - width;
+		} else if (x + width > world.getWidth()) {
+			x = world.getWidth() - width;
 		}
-		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this);
+		LinkedList<GameObject> l = world.getBlocksAround(this);
 		for (GameObject e:l) {
 			if (e instanceof Enemy) {
 				if (collides(e)) {
@@ -149,15 +151,15 @@ public class Player extends Entity {
 		accX = 0;
 		accY = World.GRAVITY;
 
-		if (Game.input.keyDown(KeyEvent.VK_D)) {
+		if (Input.keyDown(KeyEvent.VK_D)) {
 			accX = SPEED;
 			velX = Math.min(velX, 3);
 			flipped = true;
-		} if (Game.input.keyDown(KeyEvent.VK_A)) {
+		} if (Input.keyDown(KeyEvent.VK_A)) {
 			accX = -SPEED;
 			velX = Math.max(velX, -3);
 			flipped = false;
-		} if (Game.input.keyDown(KeyEvent.VK_SPACE)) {
+		} if (Input.keyDown(KeyEvent.VK_SPACE)) {
 			if (onGround) {
 				onGround = false;
 				velY = -JUMP_HEIGHT;

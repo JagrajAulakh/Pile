@@ -8,7 +8,8 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 	private enum KeyState {
 		RELEASED,
 		PRESSED,
-		ONCE
+		KEYDOWN,
+		KEYUP
 	}
 	private enum MouseButtonState {
 		MOUSEUP,
@@ -16,14 +17,14 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 		PRESSED,
 		RELEASED
 	}
-	private boolean[] currentKeys;
-	private KeyState[] keys;
+	private static boolean[] currentKeys;
+	private static KeyState[] keys;
 
-	public boolean[] currmb;
-	public MouseButtonState[] mb;
+	public static boolean[] currmb;
+	public static MouseButtonState[] mb;
 
 	// Keeping track of where the player's mouse is
-	public int mx, my;
+	public static int mx, my;
 
 	public Input() {
 		currentKeys = new boolean[KeyEvent.KEY_LAST];
@@ -38,19 +39,20 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 		}
 	}
 
-	public synchronized void poll() {
+	public static synchronized void poll() {
 		for(int i = 0; i < KeyEvent.KEY_LAST; i++) {
 			// Set the key state
 			if(currentKeys[i]) {
-				// If the key is down now, but was not
-				// down last frame, set it to ONCE,
-				// otherwise, set it to PRESSED
 				if(keys[i] == KeyState.RELEASED)
-					keys[i] = KeyState.ONCE;
+					keys[i] = KeyState.KEYDOWN;
 				else
 					keys[i] = KeyState.PRESSED;
 			} else {
-				keys[i] = KeyState.RELEASED;
+				if (keys[i] == KeyState.KEYDOWN || keys[i] == KeyState.PRESSED) {
+					keys[i] = KeyState.KEYUP;
+				} else {
+					keys[i] = KeyState.RELEASED;
+				}
 			}
 		}
 		for (int i = 0; i < mb.length; i++) {
@@ -68,23 +70,15 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 		}
 	}
 
-	public boolean keyDown(int keyCode) {
-		return keys[keyCode] == KeyState.ONCE || keys[keyCode] == KeyState.PRESSED;
-	}
+	public static boolean keyDown(int keyCode) { return keys[keyCode] == KeyState.KEYDOWN|| keys[keyCode] == KeyState.PRESSED; }
+	public static boolean keyDownOnce(int keyCode) { return keys[keyCode] == KeyState.KEYDOWN; }
+	public static boolean keyUp(int keyCode) { return keys[keyCode] == KeyState.KEYUP || keys[keyCode] == KeyState.RELEASED; }
+	public static boolean keyUpOnce(int keyCode) { return keys[keyCode] == KeyState.KEYUP; }
 
-	public boolean keyDownOnce(int keyCode) {
-		return keys[keyCode] == KeyState.ONCE;
-	}
+	public static boolean mouseUp(int button) { return mb[button] == MouseButtonState.MOUSEUP; }
+	public static boolean mouseDown(int button) { return mb[button] == MouseButtonState.MOUSEDOWN; }
 
-	public boolean mouseUp(int button) {
-		return mb[button] == MouseButtonState.MOUSEUP;
-	}
-
-	public boolean mouseDown(int button) {
-		return mb[button] == MouseButtonState.MOUSEDOWN;
-	}
-
-	public boolean buttonPressed(int button) { return mb[button] == MouseButtonState.MOUSEDOWN || mb[button] == MouseButtonState.PRESSED; }
+	public static boolean buttonPressed(int button) { return mb[button] == MouseButtonState.MOUSEDOWN || mb[button] == MouseButtonState.PRESSED; }
 
 	@Override
 	public synchronized void keyPressed(KeyEvent e) {
@@ -136,7 +130,7 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 	public void mouseWheelMoved(MouseWheelEvent e) {
 	}
 
-	public void update() {
+	public static void update() {
 		poll();
 	}
 }
