@@ -28,7 +28,7 @@ public class Button {
 		this.hoverColor = hoverColor;
 		this.width = Resources.getWidth(text, Resources.getFont(size));
 		this.height = Resources.getHeight(text, Resources.getFont(size));
-		this.height -= this.height/4;
+//		this.height -= this.height/3;
 		this.size = size;
 	}
 
