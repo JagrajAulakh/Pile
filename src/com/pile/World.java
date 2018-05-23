@@ -175,7 +175,7 @@ public class World {
 			addBlock(new Block(x, height - y*Block.HEIGHT, 1));
 			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT, 0));
 			for (int i = 0; i <= y-2; i++) {
-				addBlock(new Block(x, height - i*Block.HEIGHT, 2));
+				addBlock(new Block(x, height - i*Block.HEIGHT, 9));
 			}
 		}
 
