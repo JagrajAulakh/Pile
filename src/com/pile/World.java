@@ -17,7 +17,7 @@ public class World {
 	// Used for detecting collisions within 1 Grid Space of Entities
 	public static final int GRID_SIZE = 200;
 	// Todo Change W & H
-	private int width = 2048; // World Width
+	private int width = 2048*10; // World Width
 	private int height = 1024; // World Height
 
 	// Counter that resets every second
@@ -149,17 +149,19 @@ public class World {
 		for (Entity e:entities.getEntities()) {
 			int ex = e.getGridX();
 			int ey = e.getGridY();
-			if (px - range < ex && ex < px + range) {
-				if (grid[ex][ey] == null) {
-					grid[ex][ey] = new LinkedList<GameObject>();
+			if (0 <= ex && ex <= getGridX(width)) {
+				if (px - range < ex && ex < px + range) {
+					if (grid[ex][ey] == null) {
+						grid[ex][ey] = new LinkedList<GameObject>();
+					}
+					grid[ex][ey].add(e);
 				}
-				grid[ex][ey].add(e);
 			}
 		}
 	}
 	public void generateWorld() {
 		addPlayer(new Player(width/2, 0));
-		int tmp = 2;
+		int tmp = 80;
 		for (int i = -tmp; i <= tmp; i++) {
 			entities.add(new Enemy(width/2 + i*150, 0));
 		}
@@ -199,7 +201,6 @@ public class World {
 		frame = (frame + 1) % 60;
 	}
 	public void render(Graphics g) {
-		System.out.println("BREAK");
 		for (GameObject e:getThingsAround(player, blockGrid,10)) {
 			if (e instanceof Block) {
 				blocks.draw(g, (Block)e);

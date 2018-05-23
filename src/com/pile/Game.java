@@ -7,7 +7,7 @@ import java.awt.image.*;
 import javax.swing.*;
 
 public class Game extends Canvas {
-	public static final int WIDTH = 800;
+	public static final int WIDTH = 1000;
 	public static final int HEIGHT = 600;
 	private JFrame frame;
 	private GameLogic gameLogic;
@@ -34,7 +34,8 @@ public class Game extends Canvas {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-//		frame.setResizable(false);
+		System.out.println(frame.getContentPane().getHeight());
+		System.out.println(frame.getContentPane().getWidth());
 		run();
 	}
 

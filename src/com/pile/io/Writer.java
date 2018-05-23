@@ -1,10 +1,13 @@
 package com.pile.io;
 
+import com.pile.World;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Writer {
 	public static void writeToFile(String path, String val) throws IOException {
@@ -15,16 +18,17 @@ public class Writer {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 		writer.append(val);
 	}
-	public static void writeDataFile() {
-		File dataDir = new File("data/");
-		if (!dataDir.mkdirs()) {
-			File[] dataFiles = dataDir.listFiles();
-
-			String[] files = new String[dataFiles.length];
-			for (int i = 0; i < dataFiles.length; i++) {
-				files[i] = dataFiles[i].getName();
-			}
-			Arrays.sort(files);
+	public static boolean findSave(String worldname) {
+		new File("data/").mkdirs();
+		File dataDir = new File("data/" + worldname);
+		return dataDir.exists();
+	}
+	public static void writeDataFile(String worldname, World world) {
+		boolean dup = findSave(worldname);
+		if (dup) { return; }
+		else {
+			File worldDir = new File("data/" + worldname);
+			worldDir.mkdirs();
 		}
 	}
 }

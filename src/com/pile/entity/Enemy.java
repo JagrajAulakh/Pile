@@ -148,7 +148,7 @@ public class Enemy extends Entity {
 			else state = MovingState.WALKING;
 		}
 		if (state == MovingState.WALKING) {
-			if ((int)(Math.random()*100) < 10) dir *= 1;
+			if ((int)(Math.random()*100) < 5) dir *= -1;
 			velX = 5*dir;
 		} else {
 			velX = accX = 0;
