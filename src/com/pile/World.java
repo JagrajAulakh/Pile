@@ -40,7 +40,10 @@ public class World {
 		grid = new LinkedList[width][height];
 		blockGrid = new LinkedList[width][height];
 	}
-	public void setPlayer(Player player) { this.player = player; }
+	private void addPlayer(Player p) {
+		this.player = p;
+		entities.add(player);
+	}
 
 	public int getWidth() {
 		return width;
@@ -63,14 +66,16 @@ public class World {
 	public LinkedList<GameObject> getObjectsAround(GameObject e) {
 		return getObjectsAround(e, 1);
 	}
-	public LinkedList<GameObject> getObjectsAround(GameObject e, int rad) {
+	public LinkedList<GameObject> getBlocksAround(GameObject e) { return getThingsAround(e, blockGrid, 1); }
+	public LinkedList<GameObject> getObjectsAround(GameObject e, int rad) { return getThingsAround(e, grid, rad); }
+	public LinkedList<GameObject> getThingsAround(GameObject e, LinkedList[][] g, int rad) {
 		LinkedList<GameObject> list = new LinkedList<GameObject>();
 		int gx = getGridX(e);
 		int gy = getGridY(e);
 		for (int x = gx - rad; x <= gx + rad; x++) {
 			for (int y = gy - rad; y <= gy + rad; y++) {
 				if (0 <= x && x <= getGridX(width) && 0 <= y && y <= getGridY(height)) {
-					LinkedList<GameObject> l = grid[x][y];
+					LinkedList<GameObject> l = g[x][y];
 					if (l != null) list.addAll(l);
 				}
 			}
@@ -132,15 +137,19 @@ public class World {
 		int px = player.getGridX();
 		for (int x = px - range; x <= px + range; x++) {
 			for (int y = 0; y <= height/Block.HEIGHT; y++) {
-				if (0 <= x && x < grid.length) {
-					grid[x][y] = blockGrid[x][y];
+				if (0 <= x && x <= width/Block.WIDTH) {
+//					if (blockGrid[x][y] != null) {
+//						grid[x][y] = new LinkedList<GameObject>();
+//						grid[x][y].addAll(blockGrid[x][y]);
+//					}
+					grid[x][y] = null;
 				}
 			}
 		}
 		for (Entity e:entities.getEntities()) {
 			int ex = e.getGridX();
 			int ey = e.getGridY();
-			if (px - range <= ex && ex <= px + range) {
+			if (px - range < ex && ex < px + range) {
 				if (grid[ex][ey] == null) {
 					grid[ex][ey] = new LinkedList<GameObject>();
 				}
@@ -149,7 +158,7 @@ public class World {
 		}
 	}
 	public void generateWorld() {
-		entities.add(new Player(width/2, 0));
+		addPlayer(new Player(width/2, 0));
 		int tmp = 2;
 		for (int i = -tmp; i <= tmp; i++) {
 			entities.add(new Enemy(width/2 + i*150, 0));
@@ -171,9 +180,10 @@ public class World {
 	}
 
 	public void update() {
-//		blocks.update();
-//		entities.update();
-		for (GameObject e:getObjectsAround(player, 10)) {
+		for (GameObject e:getThingsAround(player, blockGrid, 10)) {
+			e.update();
+		}
+		for (GameObject e:getThingsAround(player, grid, 10)) {
 			e.update();
 		}
 		camera.centerOn(player);
@@ -189,13 +199,17 @@ public class World {
 		frame = (frame + 1) % 60;
 	}
 	public void render(Graphics g) {
+		System.out.println("BREAK");
+		for (GameObject e:getThingsAround(player, blockGrid,10)) {
+			if (e instanceof Block) {
+				blocks.draw(g, (Block)e);
+			}
+		}
 		for (GameObject e:getObjectsAround(player, 10)) {
 			if (e instanceof Entity) {
 				if (!(e instanceof Player)) {
 					entities.draw(g, (Entity)e);
 				}
-			} else if (e instanceof Block) {
-				blocks.draw(g, (Block)e);
 			}
 		}
 		// FOR DRAWING BLOCK SELECTION
@@ -206,8 +220,6 @@ public class World {
 			int yPos = (int)(b.getY() - camera.getOffsetY());
 			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
 			if (Game.input.mouseUp(0)) {
-//				blocks.remove(b);
-//				sortBlocks();
 				removeBlock(b);
 			}
 		}

@@ -27,11 +27,6 @@ public class EntityManager {
 	public void add(Entity e) {
 		entities.add(e);
 	}
-	public void add(Player p) {
-		add((Entity)p);
-		player = p;
-		PlayState.world.setPlayer(p);
-	}
 
 	public ArrayList<Entity> getEntities() { return entities; }
 

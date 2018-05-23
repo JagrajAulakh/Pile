@@ -99,7 +99,7 @@ public class Enemy extends Entity {
 			y = 0;
 			accY = velY = 0;
 		}
-		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
+		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this);
 		for (GameObject e:l) {
 			if (e instanceof Block) {
 				if (collides(e)) {
@@ -122,7 +122,7 @@ public class Enemy extends Entity {
 		} else if (x + width > PlayState.world.getWidth()) {
 			x = PlayState.world.getWidth() - width;
 		}
-		LinkedList<GameObject> l = PlayState.world.getObjectsAround(this);
+		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this);
 		for (GameObject e:l) {
 			if (e instanceof Block) {
 				if (collides(e)) {
