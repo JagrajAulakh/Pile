@@ -17,15 +17,7 @@ public class BlockManager {
 	}
 
 	public void add(Block b2) {
-		Block b1 = PlayState.world.getBlockAtSpot(b2.getX(), b2.getY());
-		if (b1 != null) {
-			if (!b2.collides(b1)) {
-				blocks.add(b2);
-			}
-		} else {
-			blocks.add(b2);
-
-		}
+		blocks.add(b2);
 	}
 	public void remove(Block b) { blocks.remove(b); }
 
@@ -45,16 +37,6 @@ public class BlockManager {
 			if (yPos < Game.HEIGHT && yPos + b.HEIGHT > 0) {
 				g.drawImage(b.getImage(), xPos, yPos, null);
 			}
-		}
-	}
-
-	public void render(Graphics g) {
-		Block b = PlayState.world.getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
-		if (b != null) {
-			g.setColor(Color.GREEN);
-			int xPos = (int)(b.getX() - camera.getOffsetX());
-			int yPos = (int)(b.getY() - camera.getOffsetY());
-			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
 		}
 	}
 }

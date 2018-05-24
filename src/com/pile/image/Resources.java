@@ -40,7 +40,7 @@ public class Resources {
 		for (String part:p) {
 			String folder = ch.equals("male")||ch.equals("female")?"Player "+ch:ch.substring(0, 1).toUpperCase()+ch.substring(1);
 			String path = String.format("assets/images/PNG/Characters/%s/%s_%s.png", folder, ch, part);
-			map.put(part, ImageIO.read(new File(path)));
+			map.put(part, scale(ImageIO.read(new File(path)), Resources.SCALE*2));
 		}
 		return map;
 	}

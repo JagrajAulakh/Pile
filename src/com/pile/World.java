@@ -84,15 +84,13 @@ public class World {
 	public Block getBlockAtSpot(double x, double y) {
 		LinkedList<Block> l = blockGrid[getGridX(x)][getGridX(y)];
 		if (l != null) {
-			for (GameObject o:l) {
-				if (o instanceof Block) {
-					double screenX, screenY;
-					screenX = o.getX();
-					screenY = o.getY();
-					if (screenX <= x && x <= screenX + Block.WIDTH) {
-						if (screenY <= y && y <= screenY + Block.HEIGHT) {
-							return (Block)o;
-						}
+			for (Block b:l) {
+				double screenX, screenY;
+				screenX = b.getX();
+				screenY = b.getY();
+				if (screenX < x && x < screenX + Block.WIDTH) {
+					if (screenY < y && y < screenY + Block.HEIGHT) {
+						return b;
 					}
 				}
 			}
@@ -101,11 +99,15 @@ public class World {
 	}
 
 	public void addBlock(Block b) {
-		blocks.add(b);
-		if (blockGrid[b.getGridX()][b.getGridY()] == null) {
-			blockGrid[b.getGridX()][b.getGridY()] = new LinkedList<Block>();
+		Block hit = getBlockAtSpot(b.getX(), b.getY());
+		if (hit == null) {
+			System.out.println("added block");
+			blocks.add(b);
+			if (blockGrid[b.getGridX()][b.getGridY()] == null) {
+				blockGrid[b.getGridX()][b.getGridY()] = new LinkedList<Block>();
+			}
+			blockGrid[b.getGridX()][b.getGridY()].add(b);
 		}
-		blockGrid[b.getGridX()][b.getGridY()].add(b);
 	}
 
 	public void removeBlock(Block b) {
@@ -113,31 +115,11 @@ public class World {
 		blockGrid[b.getGridX()][b.getGridY()].remove(b);
 	}
 
-	public int countEntities() {
-		int tot = 0;
-		for (LinkedList[] i:grid) {
-			for (LinkedList<GameObject> j:i) {
-				if (j != null) {
-					for (GameObject e:j) {
-						if (e instanceof Entity) {
-							tot++;
-						}
-					}
-				}
-			}
-		}
-		return tot;
-	}
-
 	public void sortEntities(int range) {
 		int px = player.getGridX();
 		for (int x = px - range; x <= px + range; x++) {
 			for (int y = 0; y <= height/Block.HEIGHT; y++) {
 				if (0 <= x && x <= width/Block.WIDTH) {
-//					if (blockGrid[x][y] != null) {
-//						grid[x][y] = new LinkedList<GameObject>();
-//						grid[x][y].addAll(blockGrid[x][y]);
-//					}
 					grid[x][y] = null;
 				}
 			}
@@ -157,7 +139,7 @@ public class World {
 	}
 	public void generateWorld() {
 		addPlayer(new Player(width/2, 0, this));
-		int tmp = 80;
+		int tmp = 5;
 		for (int i = -tmp; i <= tmp; i++) {
 			entities.add(new Enemy(width/2 + i*150, 0));
 		}
@@ -167,14 +149,23 @@ public class World {
 		for (int x = 0; x < width; x += Block.WIDTH) {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
 			y = Math.max(3, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
-			System.out.println(y);
-			addBlock(new Block(x, height - y*Block.HEIGHT, 1));
-			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT, 0));
+			addBlock(new Block(x, height - y*Block.HEIGHT, Block.GRASS));
+			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT, Block.DIRT));
 			for (int i = 0; i <= y-2; i++) {
-				addBlock(new Block(x, height - i*Block.HEIGHT, 9));
+				addBlock(new Block(x, height - i*Block.HEIGHT, Block.DIAMOND_ORE));
 			}
 		}
 
+		final int rad = 100;
+		for (int i = 0; i < (int)(Math.random()*10); i++) {
+			int randX = (int)(Math.random()*width);
+			int randY = (int)(Math.random()*width);
+			for (int bx = randX - rad; bx < randX + rad; bx += Block.WIDTH) {
+				for (int by = randY - rad; by < randY + rad; by += Block.HEIGHT) {
+
+				}
+			}
+		}
 	}
 
 	public void update() {
@@ -185,10 +176,9 @@ public class World {
 			e.update();
 		}
 		camera.centerOn(player);
-		if (Input.mouseUp(2)) {
+		if (Input.mousePressed(2)) {
 			int wx = (int)((Input.mx + camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 			int wy = (int)((Input.my + camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
-//			blocks.add(new Block(wx, wy, 0));
 			addBlock(new Block(wx, wy, 0));
 		}
 		if (frame % 10 == 0) {
@@ -211,12 +201,13 @@ public class World {
 		}
 		// FOR DRAWING BLOCK SELECTION
 		Block b = getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
+//		System.out.println(b);
 		if (b != null) {
 			g.setColor(Color.GREEN);
 			int xPos = (int)(b.getX() - camera.getOffsetX());
 			int yPos = (int)(b.getY() - camera.getOffsetY());
 			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
-			if (Input.mouseUp(0)) {
+			if (Input.mousePressed(0)) {
 				removeBlock(b);
 			}
 		}

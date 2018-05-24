@@ -18,8 +18,8 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 public class Player extends Entity {
-	public static final double SPEED = 4;
-	public static final double JUMP_HEIGHT = 12;
+	public static final double SPEED = 4 * Resources.SCALE*2;
+	public static final double JUMP_HEIGHT = 12 * Resources.SCALE*2;
 	private BodyPart arm, leg, body, head;
 	private double counter;
 	private World world;
@@ -32,7 +32,7 @@ public class Player extends Entity {
 		arm = new Arm(Resources.partsMale.get("arm"));
 		leg = new Leg(Resources.partsMale.get("leg"));
 		image = drawImage(0, 0, 0, 0);
-		width = 64;
+		width = 64 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
 		updateHitBox();
 		onGround = false;
@@ -40,9 +40,11 @@ public class Player extends Entity {
 	}
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
-		BufferedImage img = new BufferedImage(200, 180, BufferedImage.TYPE_INT_ARGB);
+		int w = (int)(200*Resources.SCALE * 2);
+		int hi = (int)(180*Resources.SCALE * 2);
+		BufferedImage img = new BufferedImage(w, hi, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
-		int headHeight = 64;
+		int headHeight = (int)(64 * Resources.SCALE * 2);
 		BufferedImage h = head.getImage();
 		BufferedImage b = body.getImage();
 		BufferedImage a = arm.getImage();

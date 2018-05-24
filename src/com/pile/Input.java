@@ -3,7 +3,7 @@ package com.pile;
 import java.awt.event.*;
 import java.util.Arrays;
 
-public class Input implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener {
+public class Input implements KeyListener,MouseListener,MouseMotionListener {
 	// Arrays to keep track of Keys and Mouse
 	private enum KeyState {
 		RELEASED,
@@ -32,8 +32,8 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 		for( int i = 0; i < KeyEvent.KEY_LAST; i++) {
 			keys[i] = KeyState.RELEASED;
 		}
-		currmb = new boolean[3];
-		mb = new MouseButtonState[3];
+		currmb = new boolean[5];
+		mb = new MouseButtonState[5];
 		for (int i = 0; i < mb.length; i++) {
 			mb[i] = MouseButtonState.RELEASED;
 		}
@@ -77,6 +77,7 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 
 	public static boolean mouseUp(int button) { return mb[button] == MouseButtonState.MOUSEUP; }
 	public static boolean mouseDown(int button) { return mb[button] == MouseButtonState.MOUSEDOWN; }
+	public static boolean mousePressed(int button) { return mb[button] == MouseButtonState.PRESSED; }
 
 	public static boolean buttonPressed(int button) { return mb[button] == MouseButtonState.MOUSEDOWN || mb[button] == MouseButtonState.PRESSED; }
 
@@ -124,10 +125,6 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 	public void mouseMoved(MouseEvent e) {
 		mx = e.getX();
 		my = e.getY();
-	}
-
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
 	}
 
 	public static void update() {

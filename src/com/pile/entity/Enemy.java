@@ -28,7 +28,7 @@ public class Enemy extends Entity {
 		height = 172;
 
 		image = drawImage(0, 0, 0, 0);
-		width = 64;
+		width = 64 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
 		updateHitBox();
 
@@ -37,9 +37,11 @@ public class Enemy extends Entity {
 	}
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
-		BufferedImage img = new BufferedImage(200, 180, BufferedImage.TYPE_INT_ARGB);
+		int w = (int)(200*Resources.SCALE * 2);
+		int hi = (int)(180*Resources.SCALE * 2);
+		BufferedImage img = new BufferedImage(w, hi, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
-		int headHeight = 64;
+		int headHeight = (int)(64 * Resources.SCALE*2);
 		BufferedImage h = Resources.partsZombie.get("head");
 		BufferedImage b = Resources.partsZombie.get("body");
 		BufferedImage a = Resources.partsZombie.get("arm");

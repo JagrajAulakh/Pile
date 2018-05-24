@@ -34,8 +34,6 @@ public class Game extends Canvas {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		System.out.println(frame.getContentPane().getHeight());
-		System.out.println(frame.getContentPane().getWidth());
 		run();
 	}
 
