@@ -101,22 +101,23 @@ public class Enemy extends Entity {
 			y = 0;
 			accY = velY = 0;
 		}
-		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this);
-		for (GameObject e:l) {
-			if (e instanceof Block) {
-				if (collides(e)) {
-					if (velY >= 0) {
-						y = e.getY() - height;
-						velY = accY = 0;
-						onGround = true;
-					}
-					else {
-						y = e.getY() + Block.HEIGHT;
-						velY = 0;
-					}
-				}
-			}
-		}
+		blockCollisionY();
+		//		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this, 1);
+//		for (GameObject e:l) {
+//			if (e instanceof Block) {
+//				if (collides(e)) {
+//					if (velY >= 0) {
+//						y = e.getY() - height;
+//						velY = accY = 0;
+//						onGround = true;
+//					}
+//					else {
+//						y = e.getY() + Block.HEIGHT;
+//						velY = 0;
+//					}
+//				}
+//			}
+//		}
 	}
 	private void collisionX() {
 		if (x < 0) {
@@ -124,20 +125,7 @@ public class Enemy extends Entity {
 		} else if (x + width > PlayState.world.getWidth()) {
 			x = PlayState.world.getWidth() - width;
 		}
-		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this);
-		for (GameObject e:l) {
-			if (e instanceof Block) {
-				if (collides(e)) {
-					if (velX > 0) {
-						x = e.getX() - width;
-						velX = accX = 0;
-					} else if (velX < 0) {
-						x = e.getX() + Block.WIDTH;
-						velX = accX = 0;
-					}
-				}
-			}
-		}
+		blockCollisionX();
 	}
 
 	@Override

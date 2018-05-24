@@ -1,10 +1,12 @@
 package com.pile;
 
 import com.pile.block.*;
+import com.pile.entity.Drop;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.EntityManager;
 import com.pile.entity.player.Player;
+import com.pile.image.Resources;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -13,7 +15,7 @@ public class World {
 	public static final double GRAVITY = 0.4;
 	public static final double FRICTION = 0.2;
 	// Used for detecting collisions within 1 Grid Space of Entities
-	public static final int GRID_SIZE = 200;
+	public static final int GRID_SIZE = (int)(200 * Resources.SCALE*2);
 	// Todo Change W & H
 	private int width = 2048*10; // World Width
 	private int height = 1024; // World Height
@@ -63,7 +65,7 @@ public class World {
 	public LinkedList<GameObject> getObjectsAround(GameObject e) {
 		return getObjectsAround(e, 1);
 	}
-	public LinkedList<GameObject> getBlocksAround(GameObject e) { return getThingsAround(e, blockGrid, 1); }
+	public LinkedList<GameObject> getBlocksAround(GameObject e, int rad) { return getThingsAround(e, blockGrid, rad); }
 	public LinkedList<GameObject> getObjectsAround(GameObject e, int rad) { return getThingsAround(e, grid, rad); }
 	public LinkedList<GameObject> getThingsAround(GameObject e, LinkedList[][] g, int rad) {
 		LinkedList<GameObject> list = new LinkedList<GameObject>();
@@ -96,6 +98,13 @@ public class World {
 			}
 		}
 		return null;
+	}
+
+	public void addEntity(Entity e) {
+		if (grid[e.getGridX()][e.getGridY()] == null) {
+			grid[e.getGridX()][e.getGridY()] = new LinkedList<GameObject>();
+		}
+		grid[e.getGridX()][e.getGridY()].add(e);
 	}
 
 	public void addBlock(Block b) {
@@ -142,6 +151,7 @@ public class World {
 		int tmp = 5;
 		for (int i = -tmp; i <= tmp; i++) {
 			entities.add(new Enemy(width/2 + i*150, 0));
+			entities.add(new Drop(width/2 + i*150, 0, Block.DIRT));
 		}
 
 		int dir = (int)(Math.random()*2) == 0?-1:1;
@@ -151,8 +161,9 @@ public class World {
 			y = Math.max(3, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
 			addBlock(new Block(x, height - y*Block.HEIGHT, Block.GRASS));
 			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT, Block.DIRT));
-			for (int i = 0; i <= y-2; i++) {
-				addBlock(new Block(x, height - i*Block.HEIGHT, Block.DIAMOND_ORE));
+			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT*2, Block.DIRT));
+			for (int i = 0; i <= y-3; i++) {
+				addBlock(new Block(x, height - i*Block.HEIGHT, Block.STONE));
 			}
 		}
 
@@ -184,10 +195,11 @@ public class World {
 		if (frame % 10 == 0) {
 			sortEntities(5);
 		}
+//		inventory.update();
 		frame = (frame + 1) % 60;
 	}
 	public void render(Graphics g) {
-		for (GameObject e:getThingsAround(player, blockGrid,10)) {
+		for (GameObject e:getBlocksAround(player, 10)) {
 			if (e instanceof Block) {
 				blocks.draw(g, (Block)e);
 			}
@@ -215,5 +227,6 @@ public class World {
 		if (player != null) {
 			entities.draw(g, player);
 		}
+//		inventory.render(g);
 	}
 }
