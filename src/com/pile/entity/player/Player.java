@@ -1,5 +1,5 @@
 package com.pile.entity.player;
-
+//Todo should have inventory toggle
 import com.pile.Game;
 import com.pile.GameObject;
 import com.pile.Input;
