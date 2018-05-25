@@ -28,7 +28,7 @@ public class Enemy extends Entity {
 		height = 172;
 
 		image = drawImage(0, 0, 0, 0);
-		width = 64 * Resources.SCALE*2;
+		width = 60 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
 		updateHitBox();
 

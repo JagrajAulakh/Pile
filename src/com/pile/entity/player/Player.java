@@ -1,6 +1,5 @@
 package com.pile.entity.player;
 //Todo should have inventory toggle
-import com.pile.Game;
 import com.pile.GameObject;
 import com.pile.Input;
 import com.pile.World;
@@ -9,7 +8,6 @@ import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
-import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -32,7 +30,7 @@ public class Player extends Entity {
 		arm = new Arm(Resources.partsMale.get("arm"));
 		leg = new Leg(Resources.partsMale.get("leg"));
 		image = drawImage(0, 0, 0, 0);
-		width = 64 * Resources.SCALE*2;
+		width = 60 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
 		updateHitBox();
 		onGround = false;
