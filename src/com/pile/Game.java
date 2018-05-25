@@ -7,7 +7,7 @@ import java.awt.image.*;
 import javax.swing.*;
 
 public class Game extends Canvas {
-	public static final int WIDTH = 1000;
+	public static final int WIDTH = 1800;
 	public static final int HEIGHT = 800;
 	private JFrame frame;
 	private GameLogic gameLogic;
@@ -16,11 +16,11 @@ public class Game extends Canvas {
 
 	public Game() {
 		frame = new JFrame("Piles");
-		try{
+		try {
 			Resources.load();
 		} catch (Exception e) { e.printStackTrace(); }
 		gameLogic = new GameLogic();
-		Dimension d = new Dimension(Game.WIDTH, Game.HEIGHT);
+		Dimension d = new Dimension(WIDTH, HEIGHT);
 		setPreferredSize(d);
 
 		setFocusable(true);		// These two lines allow
@@ -32,11 +32,9 @@ public class Game extends Canvas {
 
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.setUndecorated(true);
-		System.out.println(frame.getContentPane().getHeight());
-		System.out.println(frame.getContentPane().getWidth());
+		frame.setResizable(false);
 		run();
 	}
 
