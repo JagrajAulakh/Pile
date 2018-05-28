@@ -72,7 +72,7 @@ public class World {
 		b.destroy();
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
-			addEntity(new Drop(b.getX(), b.getY(), b.getId()));
+			addEntity(new Drop(b.getX(), b.getY(), b.getId(), Math.random()*16-8, -5));
 		}
 	}
 	public void removeEntity(Entity e) {
@@ -144,10 +144,6 @@ public class World {
 	}
 	public void generateWorld() {
 		addPlayer(new Player(width/2, 0, this));
-		int tmp = 5;
-		for (int i = -tmp; i <= tmp; i++) {
-			addEntity(new Drop(width/2 + i*150, 0, Block.DIRT));
-		}
 
 		int dir = (int)(Math.random()*2) == 0?-1:1;
 		int y = height/Block.HEIGHT/2;

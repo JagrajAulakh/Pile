@@ -41,7 +41,7 @@ public class Drop extends Entity {
 
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
 
-		accX *= velX * World.FRICTION;
+		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
 		updateHitBox();

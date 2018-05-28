@@ -3,6 +3,7 @@ package com.pile;
 import com.pile.entity.player.Player;
 import com.pile.entity.player.inv.Inventory;
 import com.pile.entity.player.inv.Item;
+import com.pile.image.Resources;
 
 import java.awt.*;
 
@@ -13,11 +14,18 @@ public class HUD {
 	public static void render(Graphics g, Player player) {
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getInventory();
-		g.setColor(Color.BLUE);
-		int y = 0;
-		for (int i = 0; i < items.length; i++) {
+		int y = -1;
+		for (int i = 0; i < (player.inventoryState()?items.length:Inventory.WIDTH); i++) {
 			if (i % Inventory.WIDTH == 0) y++;
-			g.fillRect(i*50, 50*y, 40, 40);
+			int bx = (i % Inventory.WIDTH) * 50;
+			int by = y * 50;
+			g.setColor(new Color(0,50,255,100));
+			g.fillRect(bx, by, 40, 40);
+			if (items[i] != null) {
+				g.setColor(Color.BLACK);
+				g.setFont(Resources.getFont(32));
+				g.drawString(""+items[i].getAmount(), bx, by+40);
+			}
 		}
 	}
 }

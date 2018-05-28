@@ -42,6 +42,7 @@ public class Player extends Entity {
 		onGround = false;
 		flipped = true;
 		inventory = new Inventory();
+		inventoryState = false;
 	}
 
 	public boolean inventoryState() { return inventoryState; }
@@ -176,6 +177,6 @@ public class Player extends Entity {
 
 		determineImage();
 
-		System.out.println(Arrays.toString(inventory.getInventory()));
+//		System.out.println(Arrays.toString(inventory.getInventory()));
 	}
 }
