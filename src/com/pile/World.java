@@ -24,7 +24,7 @@ public class World {
 	private int frame;
 
 	// Grid of the World, used to determine where every GameObjects are
-	private LinkedList<GameObject>[][] grid;
+	private LinkedList<Entity>[][] entityGrid;
 	private Block[][] blockGrid;
 
 	private EntityManager entities;
@@ -34,9 +34,9 @@ public class World {
 
 	public World() {
 		camera = new GameCamera(this);
-		entities = new EntityManager(camera);
-		blocks = new BlockManager(camera);
-		grid = new LinkedList[width][height];
+//		entities = new EntityManager(camera);
+//		blocks = new BlockManager(camera);
+		entityGrid = new LinkedList[width][height];
 		blockGrid = new Block[width/Block.WIDTH][height/Block.HEIGHT];
 	}
 	private void addPlayer(Player p) {
@@ -52,10 +52,10 @@ public class World {
 	}
 
 	public void addEntity(Entity e) {
-		if (grid[e.getGridX()][e.getGridY()] == null) {
-			grid[e.getGridX()][e.getGridY()] = new LinkedList<GameObject>();
+		if (entityGrid[e.getGridX()][e.getGridY()] == null) {
+			entityGrid[e.getGridX()][e.getGridY()] = new LinkedList<Entity>();
 		}
-		grid[e.getGridX()][e.getGridY()].add(e);
+		entityGrid[e.getGridX()][e.getGridY()].add(e);
 	}
 
 	public void addBlock(Block b) {
@@ -67,29 +67,23 @@ public class World {
 	public void removeBlock(Block b) {
 		b.destroy();
 		if (b.destroyed()) {
-			blocks.remove(b);
-			blockGrid[b.getGridX()][b.getGridY()].remove(b);
+			blockGrid[b.getGridX()][b.getGridY()] = null;
 		}
 	}
 
 	public void sortEntities(int range) {
 		int px = player.getGridX();
+		int py = player.getGridY();
 		for (int x = px - range; x <= px + range; x++) {
-			for (int y = 0; y <= height/Block.HEIGHT; y++) {
-				if (0 <= x && x <= width/Block.WIDTH) {
-					grid[x][y] = null;
-				}
-			}
-		}
-		for (Entity e:entities.getEntities()) {
-			int ex = e.getGridX();
-			int ey = e.getGridY();
-			if (0 <= ex && ex <= getGridX(width)) {
-				if (px - range < ex && ex < px + range) {
-					if (grid[ex][ey] == null) {
-						grid[ex][ey] = new LinkedList<GameObject>();
+			for (int y = py - range; y <= py + range; y++) {
+				if (0 <= x && x < entityGrid.length && 0 <= y && y < entityGrid[0].length) {
+					LinkedList<Entity> l = entityGrid[x][y];
+					for (Entity e:l) {
+						if (e.getGridX() != x || e.getGridY() != y) {
+							entityGrid[x][y].remove(e);
+							entityGrid[e.getGridX()][e.getGridY()].add(e);
+						}
 					}
-					grid[ex][ey].add(e);
 				}
 			}
 		}
@@ -128,6 +122,7 @@ public class World {
 	}
 
 	public void update() {
+		// TODO FIX THIS!
 		for (GameObject e:getThingsAround(player, blockGrid, 10)) {
 			e.update();
 		}

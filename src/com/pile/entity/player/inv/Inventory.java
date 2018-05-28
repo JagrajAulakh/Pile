@@ -2,8 +2,8 @@ package com.pile.entity.player.inv;
 
 public class Inventory {
 
-	public static final int WIDTH = 9;
-	public static final int HEIGHT = 6;
+	public static final int WIDTH = 10;
+	public static final int HEIGHT = 5;
 
 	private int spot;
 	public static Item[] spots;
