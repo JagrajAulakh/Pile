@@ -24,8 +24,11 @@ public class Inventory {
 		this.inventoryToggle = inventoryToggle;
 	}
 
+
+	//Todo vvv INSTEAD MAKE A HEADS UP DISPLAY (HUD) TO DRAW INVENTORY, HEALTH, CRAFTING, MAP, ETC
 	public static void drawInventory(){
 		//Todo
 		//Todo Access the drawing. Always draw the inventory, but have 2 states (Maybe 3 for crafting)
 	}
+
 }

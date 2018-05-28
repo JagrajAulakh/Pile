@@ -216,6 +216,7 @@ public class World {
 //		System.out.println(b);
 		if (b != null) {
 			g.setColor(Color.GREEN);
+			//Todo Fix block selection
 			int xPos = (int)(b.getX() - camera.getOffsetX());
 			int yPos = (int)(b.getY() - camera.getOffsetY());
 			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
