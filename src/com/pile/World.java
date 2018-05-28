@@ -25,7 +25,7 @@ public class World {
 
 	// Grid of the World, used to determine where every GameObjects are
 	private LinkedList<GameObject>[][] grid;
-	private LinkedList<Block>[][] blockGrid;
+	private Block[][] blockGrid;
 
 	private EntityManager entities;
 	private BlockManager blocks;
@@ -37,7 +37,7 @@ public class World {
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
 		grid = new LinkedList[width][height];
-		blockGrid = new LinkedList[width][height];
+		blockGrid = new Block[width/Block.WIDTH][height/Block.HEIGHT];
 	}
 	private void addPlayer(Player p) {
 		this.player = p;
@@ -50,55 +50,6 @@ public class World {
 	public int getHeight() {
 		return height;
 	}
-	public int getGridX(double wx) { return (int)(wx/GRID_SIZE); }
-	public int getGridY(double wy) { return (int)(wy/GRID_SIZE); }
-	public int getGridX(GameObject e) { return getGridX(e.getX()); }
-	public int getGridY(GameObject e) { return getGridY(e.getY()); }
-	public LinkedList<GameObject> getGameObjectsAtGridSpot(int gx, int gy) { return grid[gx][gy]; }
-
-	public LinkedList<GameObject> getGameObjectsAtSpot(double x, double y) {
-		return getGameObjectsAtGridSpot(getGridX(x), getGridY(y));
-	}
-	public LinkedList<GameObject> getGameObjectsAtSpot(GameObject e) {
-		return getGameObjectsAtSpot(e.getX(), e.getY());
-	}
-	public LinkedList<GameObject> getObjectsAround(GameObject e) {
-		return getObjectsAround(e, 1);
-	}
-	public LinkedList<GameObject> getBlocksAround(GameObject e, int rad) { return getThingsAround(e, blockGrid, rad); }
-	public LinkedList<GameObject> getObjectsAround(GameObject e, int rad) { return getThingsAround(e, grid, rad); }
-	public LinkedList<GameObject> getThingsAround(GameObject e, LinkedList[][] g, int rad) {
-		LinkedList<GameObject> list = new LinkedList<GameObject>();
-		int gx = getGridX(e);
-		int gy = getGridY(e);
-		for (int x = gx - rad; x <= gx + rad; x++) {
-			for (int y = gy - rad; y <= gy + rad; y++) {
-				if (0 <= x && x <= getGridX(width) && 0 <= y && y <= getGridY(height)) {
-					LinkedList<GameObject> l = g[x][y];
-					if (l != null) list.addAll(l);
-				}
-			}
-		}
-		return list;
-	}
-
-	// returns a block if there is a block at position (x,y) in world
-	public Block getBlockAtSpot(double x, double y) {
-		LinkedList<Block> l = blockGrid[getGridX(x)][getGridX(y)];
-		if (l != null) {
-			for (Block b:l) {
-				double screenX, screenY;
-				screenX = b.getX();
-				screenY = b.getY();
-				if (screenX < x && x < screenX + Block.WIDTH) {
-					if (screenY < y && y < screenY + Block.HEIGHT) {
-						return b;
-					}
-				}
-			}
-		}
-		return null;
-	}
 
 	public void addEntity(Entity e) {
 		if (grid[e.getGridX()][e.getGridY()] == null) {
@@ -108,20 +59,17 @@ public class World {
 	}
 
 	public void addBlock(Block b) {
-		Block hit = getBlockAtSpot(b.getX(), b.getY());
-		if (hit == null) {
-			System.out.println("added block");
-			blocks.add(b);
-			if (blockGrid[b.getGridX()][b.getGridY()] == null) {
-				blockGrid[b.getGridX()][b.getGridY()] = new LinkedList<Block>();
-			}
-			blockGrid[b.getGridX()][b.getGridY()].add(b);
+		if (blockGrid[b.getGridX()][b.getGridY()] == null) {
+			blockGrid[b.getGridX()][b.getGridY()] = b;
 		}
 	}
 
 	public void removeBlock(Block b) {
-		blocks.remove(b);
-		blockGrid[b.getGridX()][b.getGridY()].remove(b);
+		b.destroy();
+		if (b.destroyed()) {
+			blocks.remove(b);
+			blockGrid[b.getGridX()][b.getGridY()].remove(b);
+		}
 	}
 
 	public void sortEntities(int range) {

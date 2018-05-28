@@ -36,6 +36,8 @@ public class BlockManager {
 		if (xPos < Game.WIDTH && xPos + b.WIDTH > 0) {
 			if (yPos < Game.HEIGHT && yPos + b.HEIGHT > 0) {
 				g.drawImage(b.getImage(), xPos, yPos, null);
+				g.setColor(new Color(0,0,0,51 * b.getDestroyAmount()));
+				g.fillRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
 			}
 		}
 	}

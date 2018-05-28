@@ -1,10 +1,12 @@
-package com.pile.entity.player;
+package com.pile.entity.player.inv;
 
 public class Inventory {
-	boolean inventoryToggle = false;
 
-	//Todo arraylist of item types
-	//public static ArrayList toolBar<items> = new ArrayList<items>();
+	public static final int WIDTH = 9;
+	public static final int HEIGHT = 6;
+
+	private int spot;
+	public static Item[] spots;
 
 	//Todo have the 0-9 keys point to item selection. COULD ADD Selected item icon.
 	// ^^^ Small square that shows the current item selected. < Faster to implement than animating the item
@@ -15,15 +17,16 @@ public class Inventory {
 	//Inventory should be able to check free slots, find
 	//https://softwareengineering.stackexchange.com/questions/246454/structuring-a-storage-system-for-a-game
 
+	public Inventory() {
+		spots = new Item[WIDTH*HEIGHT];
+		spot = 0;
+	}
+
+	public int getSpot() { return spot; }
+	public void moveSpotLeft() { spot = (spot+1) % WIDTH; }
+	public void moveSpotRight() { spot = spot-1 < 0 ? WIDTH-1 : spot-1; }
+
 	//Todo Work on blocks breaking and inventory pickup
-	public boolean isInventoryToggle() {
-		return inventoryToggle;
-	}
-
-	public void setInventoryToggle(boolean inventoryToggle) {
-		this.inventoryToggle = inventoryToggle;
-	}
-
 
 	//Todo vvv INSTEAD MAKE A HEADS UP DISPLAY (HUD) TO DRAW INVENTORY, HEALTH, CRAFTING, MAP, ETC
 	public static void drawInventory(){

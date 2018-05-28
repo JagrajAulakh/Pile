@@ -6,6 +6,7 @@ import com.pile.World;
 import com.pile.block.Block;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
+import com.pile.entity.player.inv.Inventory;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
 
@@ -21,6 +22,8 @@ public class Player extends Entity {
 	private BodyPart arm, leg, body, head;
 	private double counter;
 	private World world;
+	private boolean inventoryState;
+	private Inventory inventory;
 
 	public Player(double x, double y, World world) {
 		super(x, y);
@@ -35,7 +38,10 @@ public class Player extends Entity {
 		updateHitBox();
 		onGround = false;
 		flipped = true;
+		inventory = new Inventory();
 	}
+
+	public boolean inventoryState() { return inventoryState; }
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
@@ -140,6 +146,8 @@ public class Player extends Entity {
 				onGround = false;
 				velY = -JUMP_HEIGHT;
 			}
+		} if (Input.keyUpOnce(KeyEvent.VK_E)) {
+			inventoryState = !inventoryState;
 		}
 
 		// Starting here is the Y movement

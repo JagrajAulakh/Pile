@@ -1,6 +1,7 @@
 package com.pile.entity;
 
 import com.pile.World;
+import com.pile.block.Block;
 import com.pile.image.Resources;
 
 public class Drop extends Entity {
@@ -10,6 +11,8 @@ public class Drop extends Entity {
 		this(x, y, id);
 		this.velX = velX;
 		this.velY = velY;
+		this.width = Block.WIDTH;
+		this.height = Block.HEIGHT;
 	}
 	public Drop(double x, double y, int id) {
 		super(x, y);
@@ -33,11 +36,13 @@ public class Drop extends Entity {
 
 		accX *= velX * World.FRICTION;
 		velX += accX;
+		x += velX;
 		updateHitBox();
 		collisionX();
 		updateHitBox();
 
 		velY += accY;
+		y += velY;
 		updateHitBox();
 		collisionY();
 		updateHitBox();
