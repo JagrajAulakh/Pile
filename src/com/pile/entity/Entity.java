@@ -29,13 +29,14 @@ public abstract class Entity extends GameObject {
 	public BufferedImage getImage() { return image.getImage(); }
 //	public abstract void update();
 
-	protected void blockCollisionX() {
+	protected void blockCollisionX(LinkedList<Block> blocks) {
 		if (x < 0) {
 			x = 0;
 		} else if (x + width > PlayState.world.getWidth()) {
 			x = PlayState.world.getWidth() - width;
 		}
-		LinkedList<Block> l = PlayState.world.getBlocksAround(this, 5);
+//		LinkedList<Block> l = PlayState.world.getBlocksAround(this, 5);
+		LinkedList<Block> l = blocks;
 		for (Block e:l) {
 			if (collides(e)) {
 				if (velX > 0) {
@@ -48,7 +49,7 @@ public abstract class Entity extends GameObject {
 			}
 		}
 	}
-	protected void blockCollisionY() {
+	protected void blockCollisionY(LinkedList<Block> blocks) {
 		if (y + height > PlayState.world.getHeight()) {
 			y = PlayState.world.getHeight() - height;
 			accY = velY = 0;
@@ -57,7 +58,8 @@ public abstract class Entity extends GameObject {
 			y = 0;
 			accY = velY = 0;
 		}
-		LinkedList<Block> l = PlayState.world.getBlocksAround(this, 5);
+//		LinkedList<Block> l = PlayState.world.getBlocksAround(this, 5);
+		LinkedList<Block> l = blocks;
 		for (GameObject e:l) {
 			if (collides(e)) {
 				if (velY >= 0) {

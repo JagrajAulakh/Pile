@@ -102,14 +102,15 @@ public class Player extends Entity {
 		}
 	}
 
-	private void collisionY() {
-		blockCollisionY();
+	private void collisionY(LinkedList<Block> blocks) {
+		blockCollisionY(blocks);
 	}
-	private void collisionX() {
-		blockCollisionX();
+	private void collisionX(LinkedList<Block> blocks) {
+		blockCollisionX(blocks);
 		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
 			if (e instanceof Drop) {
 				if (collides(e)) {
+					System.out.println("Plop");
 					PlayState.world.removeEntity(e);
 				}
 			}
@@ -138,20 +139,21 @@ public class Player extends Entity {
 			inventoryState = !inventoryState;
 		}
 
+		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
+
 		// Starting here is the Y movement
 		velY += accY;
 		y += velY;
 		updateHitBox();
-		collisionY();
+		collisionY(blocks);
 		updateHitBox();
-
 
 		// Starting here is the X movement
 		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
 		updateHitBox();
-		collisionX();
+		collisionX(blocks);
 		updateHitBox();
 
 		determineImage();

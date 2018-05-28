@@ -4,6 +4,9 @@ import com.pile.World;
 import com.pile.block.Block;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
+import com.pile.state.PlayState;
+
+import java.util.LinkedList;
 
 public class Drop extends Entity {
 	private int id;
@@ -22,12 +25,12 @@ public class Drop extends Entity {
 		this.height = Block.HEIGHT * sc;
 	}
 
-	public void collisionX() {
-		blockCollisionX();
+	public void collisionX(LinkedList<Block> blocks) {
+		blockCollisionX(blocks);
 	}
 
-	public void collisionY() {
-		blockCollisionY();
+	public void collisionY(LinkedList<Block> blocks) {
+		blockCollisionY(blocks);
 	}
 
 	@Override
@@ -36,17 +39,19 @@ public class Drop extends Entity {
 		accY = World.GRAVITY;
 		// TODO maybe do some animation for items on ground
 
+		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
+
 		accX *= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
 		updateHitBox();
-		collisionX();
+		collisionX(blocks);
 		updateHitBox();
 
 		velY += accY;
 		y += velY;
 		updateHitBox();
-		collisionY();
+		collisionY(blocks);
 		updateHitBox();
 	}
 }

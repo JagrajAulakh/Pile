@@ -92,7 +92,7 @@ public class Enemy extends Entity {
 		}
 	}
 
-	private void collisionY() {
+	private void collisionY(LinkedList<Block> blocks) {
 		if (y + height > PlayState.world.getHeight()) {
 			y = PlayState.world.getHeight() - height;
 			accY = velY = 0;
@@ -101,7 +101,7 @@ public class Enemy extends Entity {
 			y = 0;
 			accY = velY = 0;
 		}
-		blockCollisionY();
+		blockCollisionY(blocks);
 		//		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this, 1);
 //		for (GameObject e:l) {
 //			if (e instanceof Block) {
@@ -119,13 +119,13 @@ public class Enemy extends Entity {
 //			}
 //		}
 	}
-	private void collisionX() {
+	private void collisionX(LinkedList<Block> blocks) {
 		if (x < 0) {
 			x = 0;
 		} else if (x + width > PlayState.world.getWidth()) {
 			x = PlayState.world.getWidth() - width;
 		}
-		blockCollisionX();
+		blockCollisionX(blocks);
 	}
 
 	@Override
@@ -150,17 +150,19 @@ public class Enemy extends Entity {
 				velY = -Player.JUMP_HEIGHT;
 			}
 		}
+
+		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
 		velY += accY;
 		y += velY;
 		updateHitBox();
-		collisionY();
+		collisionY(blocks);
 		updateHitBox();
 
 		accX -= velX * World.FRICTION;
 		velX += accX;
 		x += velX;
 		updateHitBox();
-		collisionX();
+		collisionX(blocks);
 		updateHitBox();
 
 		determineImage();

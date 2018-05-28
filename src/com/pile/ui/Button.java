@@ -1,6 +1,5 @@
 package com.pile.ui;
 
-import com.pile.Game;
 import com.pile.GameLogic;
 import com.pile.Input;
 import com.pile.image.Resources;
