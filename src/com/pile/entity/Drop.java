@@ -24,6 +24,7 @@ public class Drop extends Entity {
 		this.width = Block.WIDTH * sc;
 		this.height = Block.HEIGHT * sc;
 	}
+	public int getId() { return id; }
 
 	public void collisionX(LinkedList<Block> blocks) {
 		blockCollisionX(blocks);
@@ -37,7 +38,6 @@ public class Drop extends Entity {
 	public void update() {
 		accX = 0;
 		accY = World.GRAVITY;
-		// TODO maybe do some animation for items on ground
 
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
 

@@ -4,10 +4,8 @@ import com.pile.GameObject;
 import com.pile.image.ImageType;
 import com.pile.image.Resources;
 
-import javax.annotation.Resource;
 import java.awt.image.BufferedImage;
-//Todo Think about how we want Images of Physically in the world, Dropped Blocks and Inventory
-// ^^^ Could use the same Image
+
 public class Block extends GameObject {
 	public static final int WIDTH = (int)(128 * Resources.SCALE);
 	public static final int HEIGHT = (int)(128 * Resources.SCALE);
@@ -42,6 +40,7 @@ public class Block extends GameObject {
 	}
 
 	public BufferedImage getImage() { return image.getImage(); }
+	public int getId() { return id; }
 	public boolean canCollide() { return canCollide; }
 
 	@Override

@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Player extends Entity {
@@ -44,6 +45,7 @@ public class Player extends Entity {
 	}
 
 	public boolean inventoryState() { return inventoryState; }
+	public Inventory getInventory() { return inventory; }
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
@@ -110,8 +112,9 @@ public class Player extends Entity {
 		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
 			if (e instanceof Drop) {
 				if (collides(e)) {
-					System.out.println("Plop");
 					PlayState.world.removeEntity(e);
+					Drop d = (Drop)e;
+					inventory.add(d.getId());
 				}
 			}
 		}
@@ -139,6 +142,21 @@ public class Player extends Entity {
 			inventoryState = !inventoryState;
 		}
 
+		int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
+		int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
+		if (Input.mousePressed(2)) {
+			Block b = new Block(wx, wy, 0);
+			if (!collides(b)) {
+				world.addBlock(b);
+			}
+		}
+		if (Input.mousePressed(0)) {
+			Block b = world.getBlockAtSpot(wx, wy);
+			if (b != null) {
+				world.removeBlock(b);
+			}
+		}
+
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
 
 		// Starting here is the Y movement
@@ -157,6 +175,7 @@ public class Player extends Entity {
 		updateHitBox();
 
 		determineImage();
-		image.tick();
+
+		System.out.println(Arrays.toString(inventory.getInventory()));
 	}
 }

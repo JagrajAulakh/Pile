@@ -18,7 +18,7 @@ public class World {
 	public static final int GRID_SIZE = (int)(200 * Resources.SCALE*2);
 	// Todo Change W & H
 	private int width = 2048*10; // World Width
-	private int height = 1024; // World Height
+	private int height = 1024*2; // World Height
 
 	// Counter that resets every second
 	private int frame;
@@ -27,9 +27,9 @@ public class World {
 	private LinkedList<Entity>[][] entityGrid;
 	private Block[][] blockGrid;
 
+	public GameCamera camera;
 	private EntityManager entities;
 	private BlockManager blocks;
-	private GameCamera camera;
 	private Player player;
 
 	public World() {
@@ -72,6 +72,7 @@ public class World {
 		b.destroy();
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
+			addEntity(new Drop(b.getX(), b.getY(), b.getId()));
 		}
 	}
 	public void removeEntity(Entity e) {
@@ -145,7 +146,6 @@ public class World {
 		addPlayer(new Player(width/2, 0, this));
 		int tmp = 5;
 		for (int i = -tmp; i <= tmp; i++) {
-			addEntity(new Enemy(width/2 + i*150, 0));
 			addEntity(new Drop(width/2 + i*150, 0, Block.DIRT));
 		}
 
@@ -183,19 +183,19 @@ public class World {
 			g.update();
 		}
 		camera.centerOn(player);
-		if (Input.mousePressed(2)) {
-			int wx = (int)((Input.mx + camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
-			int wy = (int)((Input.my + camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
-			Block b = new Block(wx, wy, 0);
-			if (!b.collides(player)) {
-				addBlock(b);
-			}
-		}
+//		if (Input.mousePressed(2)) {
+//			int wx = (int)((Input.mx + camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
+//			int wy = (int)((Input.my + camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
+//			Block b = new Block(wx, wy, 0);
+//			if (!b.collides(player)) {
+//				addBlock(b);
+//			}
+//		}
 		if (frame % 10 == 0) {
 			sortEntities(5);
 		}
-//		inventory.update();
 		frame = (frame + 1) % 600;
+		HUD.update();
 	}
 	public void render(Graphics g) {
 		for (Block e:getBlocksAround(player, Game.WIDTH/2)) {
@@ -215,14 +215,11 @@ public class World {
 			int xPos = (int)(b.getX() - camera.getOffsetX());
 			int yPos = (int)(b.getY() - camera.getOffsetY());
 			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
-			if (Input.mousePressed(0)) {
-				removeBlock(b);
-			}
 		}
 
 		if (player != null) {
 			entities.draw(g, player);
 		}
-//		inventory.render(g);
+		HUD.render(g, player);
 	}
 }

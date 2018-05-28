@@ -1,5 +1,6 @@
 package com.pile.state;
 
+import com.pile.HUD;
 import com.pile.World;
 
 import java.awt.*;
