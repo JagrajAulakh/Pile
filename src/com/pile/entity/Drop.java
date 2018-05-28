@@ -3,6 +3,7 @@ package com.pile.entity;
 import com.pile.World;
 import com.pile.block.Block;
 import com.pile.image.Resources;
+import com.pile.image.SingleImage;
 
 public class Drop extends Entity {
 	private int id;
@@ -11,13 +12,14 @@ public class Drop extends Entity {
 		this(x, y, id);
 		this.velX = velX;
 		this.velY = velY;
-		this.width = Block.WIDTH;
-		this.height = Block.HEIGHT;
 	}
 	public Drop(double x, double y, int id) {
 		super(x, y);
 		this.id = id;
-		this.image = Resources.blocks[id];
+		double sc = 0.7;
+		this.image = new SingleImage(Resources.scale(Resources.blocks[id].getImage(), sc));
+		this.width = Block.WIDTH * sc;
+		this.height = Block.HEIGHT * sc;
 	}
 
 	public void collisionX() {

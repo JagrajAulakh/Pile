@@ -30,35 +30,44 @@ public abstract class Entity extends GameObject {
 //	public abstract void update();
 
 	protected void blockCollisionX() {
-		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this, 1);
-		for (GameObject e:l) {
-			if (e instanceof Block) {
-				if (collides(e)) {
-					if (velX > 0) {
-						x = e.getX() - width;
-						velX = accX = 0;
-					} else if (velX < 0) {
-						x = e.getX() + Block.WIDTH;
-						velX = accX = 0;
-					}
+		if (x < 0) {
+			x = 0;
+		} else if (x + width > PlayState.world.getWidth()) {
+			x = PlayState.world.getWidth() - width;
+		}
+		LinkedList<Block> l = PlayState.world.getBlocksAround(this, 5);
+		for (Block e:l) {
+			if (collides(e)) {
+				if (velX > 0) {
+					x = e.getX() - width;
+					velX = accX = 0;
+				} else if (velX < 0) {
+					x = e.getX() + Block.WIDTH;
+					velX = accX = 0;
 				}
 			}
 		}
 	}
 	protected void blockCollisionY() {
-		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this, 1);
+		if (y + height > PlayState.world.getHeight()) {
+			y = PlayState.world.getHeight() - height;
+			accY = velY = 0;
+			onGround = true;
+		} else if (y < 0) {
+			y = 0;
+			accY = velY = 0;
+		}
+		LinkedList<Block> l = PlayState.world.getBlocksAround(this, 5);
 		for (GameObject e:l) {
-			if (e instanceof Block) {
-				if (collides(e)) {
-					if (velY >= 0) {
-						y = e.getY() - height;
-						velY = accY = 0;
-						onGround = true;
-					}
-					else {
-						y = e.getY() + Block.HEIGHT;
-						velY = 0;
-					}
+			if (collides(e)) {
+				if (velY >= 0) {
+					y = e.getY() - height;
+					velY = accY = 0;
+					onGround = true;
+				}
+				else {
+					y = e.getY() + Block.HEIGHT;
+					velY = accY = 0;
 				}
 			}
 		}

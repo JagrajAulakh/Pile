@@ -22,7 +22,7 @@ public class PlayState implements GameState {
 		});
 		lw.start();
 		while (lw.isAlive()) {
-			System.out.println("LOADING WORLD");
+//			System.out.println("LOADING WORLD");
 		}
 	}
 

@@ -4,6 +4,7 @@ import com.pile.GameObject;
 import com.pile.image.ImageType;
 import com.pile.image.Resources;
 
+import javax.annotation.Resource;
 import java.awt.image.BufferedImage;
 //Todo Think about how we want Images of Physically in the world, Dropped Blocks and Inventory
 // ^^^ Could use the same Image
@@ -35,7 +36,7 @@ public class Block extends GameObject {
 		this.image = Resources.blocks[id];
 		this.canCollide = true;
 		updateHitBox();
-		destroyDelayMax = 50;
+		destroyDelayMax = Resources.blockSpeeds[id];
 		destroyDelay = 0;
 		destroyAmount = 0;
 	}
@@ -62,6 +63,7 @@ public class Block extends GameObject {
 	}
 	public boolean destroyed() { return destroyAmount >= 5; }
 	public int getDestroyAmount() { return destroyAmount; }
+	public void reset() { destroyAmount = destroyDelay = 0; }
 	public int getGridX() { return (int)(x / WIDTH); }
 	public int getGridY() { return (int)(y / HEIGHT); }
 }

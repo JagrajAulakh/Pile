@@ -4,11 +4,13 @@ import com.pile.GameObject;
 import com.pile.Input;
 import com.pile.World;
 import com.pile.block.Block;
+import com.pile.entity.Drop;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.player.inv.Inventory;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
+import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -101,28 +103,14 @@ public class Player extends Entity {
 	}
 
 	private void collisionY() {
-		if (y + height > world.getHeight()) {
-			y = world.getHeight() - height;
-			accY = velY = 0;
-			onGround = true;
-		} else if (y < 0) {
-			y = 0;
-			accY = velY = 0;
-		}
 		blockCollisionY();
 	}
 	private void collisionX() {
-		if (x < 0) {
-			x = 0;
-		} else if (x + width > world.getWidth()) {
-			x = world.getWidth() - width;
-		}
 		blockCollisionX();
-		LinkedList<GameObject> l = world.getBlocksAround(this, 1);
-		for (GameObject e:l) {
-			if (e instanceof Enemy) {
+		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
+			if (e instanceof Drop) {
 				if (collides(e)) {
-					System.out.println("OOF!");
+					PlayState.world.removeEntity(e);
 				}
 			}
 		}

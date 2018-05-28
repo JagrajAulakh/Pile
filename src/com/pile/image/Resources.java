@@ -16,13 +16,21 @@ public class Resources {
 	public static Font mainFont;
 	public static SingleImage[] blocks;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
+	public static int[] blockSpeeds;
 
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
 
+		final int TOTAL_BLOCKS = 50;
 		// All blocks, sorted by ID numbers
-		blocks = new SingleImage[50]; // Random number
+		blocks = new SingleImage[TOTAL_BLOCKS];
 		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
+		blockSpeeds = new int[TOTAL_BLOCKS];
+		int index = 0;
+		for (String num:Reader.readFile("assets/data/block_speeds.txt").split("\n")) {
+			blockSpeeds[index] = Integer.parseInt(num);
+			index++;
+		}
 		for (int i = 0; i < bFile.length; i++) {
 			String path = "assets/images/PNG/Tiles/" + bFile[i] + ".png";
 			blocks[i] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));

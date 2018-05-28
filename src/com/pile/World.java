@@ -34,14 +34,14 @@ public class World {
 
 	public World() {
 		camera = new GameCamera(this);
-//		entities = new EntityManager(camera);
-//		blocks = new BlockManager(camera);
+		entities = new EntityManager(camera);
+		blocks = new BlockManager(camera);
 		entityGrid = new LinkedList[width][height];
-		blockGrid = new Block[width/Block.WIDTH][height/Block.HEIGHT];
+		blockGrid = new Block[width/Block.WIDTH + 1][height/Block.HEIGHT + 1];
 	}
 	private void addPlayer(Player p) {
+		addEntity(p);
 		this.player = p;
-		entities.add(player);
 	}
 
 	public int getWidth() {
@@ -59,8 +59,12 @@ public class World {
 	}
 
 	public void addBlock(Block b) {
-		if (blockGrid[b.getGridX()][b.getGridY()] == null) {
-			blockGrid[b.getGridX()][b.getGridY()] = b;
+		int bx = (int)(b.getX() / Block.WIDTH);
+		int by = (int)(b.getY() / Block.HEIGHT);
+		if (blockGrid[bx][by] == null) {
+			blockGrid[bx][by] = b;
+		} else {
+			blockGrid[bx][by].reset();
 		}
 	}
 
@@ -70,6 +74,9 @@ public class World {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
 		}
 	}
+	public void removeEntity(Entity e) {
+		entityGrid[e.getGridX()][e.getGridY()].remove(e);
+	}
 
 	public void sortEntities(int range) {
 		int px = player.getGridX();
@@ -78,9 +85,18 @@ public class World {
 			for (int y = py - range; y <= py + range; y++) {
 				if (0 <= x && x < entityGrid.length && 0 <= y && y < entityGrid[0].length) {
 					LinkedList<Entity> l = entityGrid[x][y];
-					for (Entity e:l) {
-						if (e.getGridX() != x || e.getGridY() != y) {
+					if (l != null) {
+						LinkedList<Entity> toMove = new LinkedList<Entity>();
+						for (Entity e:l) {
+							if (e.getGridX() != x || e.getGridY() != y) {
+								toMove.add(e);
+							}
+						}
+						for (Entity e:toMove) {
 							entityGrid[x][y].remove(e);
+							if (entityGrid[e.getGridX()][e.getGridY()] == null) {
+								entityGrid[e.getGridX()][e.getGridY()] = new LinkedList<Entity>();
+							}
 							entityGrid[e.getGridX()][e.getGridY()].add(e);
 						}
 					}
@@ -88,12 +104,49 @@ public class World {
 			}
 		}
 	}
+
+	public Block getBlockAtSpot(double wx, double wy) {
+//		Block b = ;
+		return blockGrid[(int)(wx / Block.WIDTH)][(int)(wy / Block.HEIGHT)];
+	}
+
+	public LinkedList<Block> getBlocksAround(Entity e, int rad) {
+		LinkedList<Block> l = new LinkedList<Block>();
+		int px = (int)(e.getX() / Block.WIDTH);
+		int py = (int) (e.getY() / Block.HEIGHT);
+		for (int x = px - rad; x <= px + rad; x++) {
+			for (int y = py - rad; y <= py + rad; y++) {
+				if (0 <= x && x < blockGrid.length && 0 <= y && y < blockGrid[0].length) {
+					if (blockGrid[x][y] != null) {
+						l.add(blockGrid[x][y]);
+					}
+				}
+			}
+		}
+		return l;
+	}
+
+	public LinkedList<Entity> getEntitiesAround(Entity e, int rad) {
+		LinkedList<Entity> l = new LinkedList<Entity>();
+		int px = e.getGridX();
+		int py = e.getGridY();
+		for (int x = px - rad; x <= px + rad; x++) {
+			for (int y = py - rad; y <= py + rad; y++) {
+				if (0 <= x && x < entityGrid.length && 0 <= y && y < entityGrid[0].length) {
+					if (entityGrid[x][y] != null) {
+						l.addAll(entityGrid[x][y]);
+					}
+				}
+			}
+		}
+		return l;
+	}
 	public void generateWorld() {
 		addPlayer(new Player(width/2, 0, this));
 		int tmp = 5;
 		for (int i = -tmp; i <= tmp; i++) {
-			entities.add(new Enemy(width/2 + i*150, 0));
-			entities.add(new Drop(width/2 + i*150, 0, Block.DIRT));
+			addEntity(new Enemy(width/2 + i*150, 0));
+			addEntity(new Drop(width/2 + i*150, 0, Block.DIRT));
 		}
 
 		int dir = (int)(Math.random()*2) == 0?-1:1;
@@ -112,7 +165,7 @@ public class World {
 		final int rad = 100;
 		for (int i = 0; i < (int)(Math.random()*10); i++) {
 			int randX = (int)(Math.random()*width);
-			int randY = (int)(Math.random()*width);
+			int randY = (int)(Math.random()*height);
 			for (int bx = randX - rad; bx < randX + rad; bx += Block.WIDTH) {
 				for (int by = randY - rad; by < randY + rad; by += Block.HEIGHT) {
 
@@ -123,35 +176,34 @@ public class World {
 
 	public void update() {
 		// TODO FIX THIS!
-		for (GameObject e:getThingsAround(player, blockGrid, 10)) {
-			e.update();
-		}
-		for (GameObject e:getThingsAround(player, grid, 10)) {
-			e.update();
+		LinkedList<GameObject> l = new LinkedList<GameObject>();
+		l.addAll(getBlocksAround(player, 10));
+		l.addAll(getEntitiesAround(player, 10));
+		for (GameObject g:l) {
+			g.update();
 		}
 		camera.centerOn(player);
 		if (Input.mousePressed(2)) {
 			int wx = (int)((Input.mx + camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 			int wy = (int)((Input.my + camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
-			addBlock(new Block(wx, wy, 0));
+			Block b = new Block(wx, wy, 0);
+			if (!b.collides(player)) {
+				addBlock(b);
+			}
 		}
 		if (frame % 10 == 0) {
 			sortEntities(5);
 		}
 //		inventory.update();
-		frame = (frame + 1) % 60;
+		frame = (frame + 1) % 600;
 	}
 	public void render(Graphics g) {
-		for (GameObject e:getBlocksAround(player, 10)) {
-			if (e instanceof Block) {
-				blocks.draw(g, (Block)e);
-			}
+		for (Block e:getBlocksAround(player, Game.WIDTH/2)) {
+			blocks.draw(g, e);
 		}
-		for (GameObject e:getObjectsAround(player, 10)) {
-			if (e instanceof Entity) {
-				if (!(e instanceof Player)) {
-					entities.draw(g, (Entity)e);
-				}
+		for (Entity e:getEntitiesAround(player, 10)) {
+			if (!(e instanceof Player)) {
+				entities.draw(g, e);
 			}
 		}
 		// FOR DRAWING BLOCK SELECTION
