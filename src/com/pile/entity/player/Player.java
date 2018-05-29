@@ -110,9 +110,8 @@ public class Player extends Entity {
 		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
 			if (e instanceof Drop) {
 				if (collides(e)) {
-					PlayState.world.removeEntity(e);
 					Drop d = (Drop)e;
-					inventory.add(d.getId());
+					if (inventory.add(d.getId())) PlayState.world.removeEntity(e);
 				}
 			}
 		}

@@ -150,6 +150,5 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 
 	public static void update() {
 		poll();
-		System.out.println(Arrays.toString(mb));
 	}
 }

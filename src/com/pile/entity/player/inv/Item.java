@@ -5,6 +5,7 @@ import com.pile.image.SingleImage;
 import com.pile.image.ImageType;
 
 public class Item {
+	public static final int STACK_MAX = 1;
 	private int id, amount;
 	private ImageType image;
 	public Item(int id) {
@@ -15,7 +16,6 @@ public class Item {
 	}
 
 	public ImageType getImage() { return image; }
-
 	public int getId() { return id; }
 	public int getAmount() { return amount; }
 	public void add() { amount++; }
@@ -23,6 +23,8 @@ public class Item {
 	//Todo relook this.. bad? way of doing things
 	public int getWidth(){ return image.getImage().getWidth();}
 	public int getHeight(){ return image.getImage().getHeight();}
+
+	public int getStackMax() { return STACK_MAX; }
 
 	@Override
 	public String toString() {

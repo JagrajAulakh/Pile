@@ -32,7 +32,7 @@ public class Inventory {
 		for (int i = 0; i < inventory.length; i++) {
 			Item item = inventory[i];
 			if (item != null) {
-				if (item.getId() == id) {
+				if (item.getId() == id && item.getAmount() < item.getStackMax()) {
 					return item;
 				}
 			}
@@ -54,10 +54,10 @@ public class Inventory {
 	public boolean add(int id) {
 		Item find = findItem(id);
 		if (find == null) {
-			int spot = firstEmpty();
-			if (spot == -1) return false;
+			int s = firstEmpty();
+			if (s == -1) return false;
 			else {
-				inventory[spot] = new Item(id);
+				inventory[s] = new Item(id);
 			}
 		} else {
 			find.add();

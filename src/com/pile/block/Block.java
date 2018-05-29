@@ -24,19 +24,18 @@ public class Block extends GameObject {
 	protected int id;
 	protected ImageType image;
 	protected boolean canCollide;
-	protected int destroyDelayMax;
-	protected int destroyDelay;
-	protected int destroyAmount;
+	protected double destroyDelayMax, destroyDelay, destroyAmount;
 
-	public Block(double x, double y, int id) {
+	public Block(double x, double y, int id) { this(x, y, true, id); }
+
+	public Block(double x, double y, boolean canCollide, int id) {
 		super(x, y);
 		this.id = id;
 		this.image = Resources.blocks[id];
 		this.canCollide = true;
 		updateHitBox();
 		destroyDelayMax = Resources.blockSpeeds[id];
-		destroyDelay = 0;
-		destroyAmount = 0;
+		destroyDelay = destroyAmount = 0;
 	}
 
 	public BufferedImage getImage() { return image.getImage(); }
@@ -53,15 +52,15 @@ public class Block extends GameObject {
 		updateHitBox();
 	}
 
-	public void destroy() {
-		destroyDelay++;
+	public void destroy(double amount) {
+		destroyDelay += amount;
 		if (destroyDelay >= destroyDelayMax) {
 			destroyDelay = 0;
 			destroyAmount++;
 		}
 	}
 	public boolean destroyed() { return destroyAmount >= 5; }
-	public int getDestroyAmount() { return destroyAmount; }
+	public double getDestroyAmount() { return destroyAmount; }
 	public void reset() { destroyAmount = destroyDelay = 0; }
 	public int getGridX() { return (int)(x / WIDTH); }
 	public int getGridY() { return (int)(y / HEIGHT); }

@@ -25,9 +25,14 @@ public class HUD {
 			if (i % Inventory.WIDTH == 0) y++;
 			int bx = (i % Inventory.WIDTH) * 50;
 			int by = y * 50;
-			if (i == inventory.getSpot()) g.setColor(new Color(0,0,0));
-			else g.setColor(new Color(0,50,255,100));
+			g.setColor(new Color(0,50,255,100));
 			g.fillRect(bx, by, invBox_Width, invBox_Height);
+			if (i == inventory.getSpot()) {
+				Graphics2D g2 = (Graphics2D)g;
+				g2.setColor(Color.WHITE);
+				g2.setStroke(new BasicStroke(5));
+				g2.drawRect(bx, by, invBox_Width, invBox_Height);
+			}
 			if (items[i] != null) {
 				g.setColor(Color.BLACK);
 				g.setFont(Resources.getFont(32));

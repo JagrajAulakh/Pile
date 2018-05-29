@@ -70,15 +70,22 @@ public class World {
 		}
 	}
 
-	public void removeBlock(Block b) {
-		b.destroy();
+	public void removeBlock(Block b) { removeBlock(b, 1); }
+	public void removeBlock(Block b, int destroyAmount) {
+		b.destroy(destroyAmount);
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
 			addEntity(new Drop(b.getX(), b.getY(), b.getId(), Math.random()*16-8, -5));
 		}
 	}
 	public void removeEntity(Entity e) {
-		entityGrid[e.getGridX()][e.getGridY()].remove(e);
+		if (entityGrid[e.getGridX()][e.getGridY()] == null) {
+			int px = (int)((e.getX() - e.getVelX()) / GRID_SIZE);
+			int py = (int)((e.getY() - e.getVelY()) / GRID_SIZE);
+			entityGrid[px][py].remove(e);
+		} else {
+			entityGrid[e.getGridX()][e.getGridY()].remove(e);
+		}
 	}
 
 	public void sortEntities(int range) {
@@ -109,7 +116,6 @@ public class World {
 	}
 
 	public Block getBlockAtSpot(double wx, double wy) {
-//		Block b = ;
 		return blockGrid[(int)(wx / Block.WIDTH)][(int)(wy / Block.HEIGHT)];
 	}
 
@@ -166,7 +172,8 @@ public class World {
 			int randY = (int)(Math.random()*height);
 			for (int bx = randX - rad; bx < randX + rad; bx += Block.WIDTH) {
 				for (int by = randY - rad; by < randY + rad; by += Block.HEIGHT) {
-
+					Block b = getBlockAtSpot(bx, by);
+					if (b != null) removeBlock(b);
 				}
 			}
 		}

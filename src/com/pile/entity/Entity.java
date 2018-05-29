@@ -20,6 +20,8 @@ public abstract class Entity extends GameObject {
 
 	public double getWidth() { return width; }
 	public double getHeight() { return height; }
+	public double getVelX() { return velX; }
+	public double getVelY() { return velY; }
 	public boolean isFlipped() { return flipped; }
 
 	@Override
@@ -47,6 +49,7 @@ public abstract class Entity extends GameObject {
 					velX = accX = 0;
 				}
 			}
+			updateHitBox();
 		}
 	}
 	protected void blockCollisionY(LinkedList<Block> blocks) {
@@ -58,7 +61,7 @@ public abstract class Entity extends GameObject {
 			y = 0;
 			accY = velY = 0;
 		}
-//		LinkedList<Block> l = PlayState.world.getBlocksAround(this, 5);
+
 		LinkedList<Block> l = blocks;
 		for (GameObject e:l) {
 			if (collides(e)) {
@@ -66,12 +69,12 @@ public abstract class Entity extends GameObject {
 					y = e.getY() - height;
 					velY = accY = 0;
 					onGround = true;
-				}
-				else {
+				} else {
 					y = e.getY() + Block.HEIGHT;
 					velY = accY = 0;
 				}
 			}
+			updateHitBox();
 		}
 	}
 }
