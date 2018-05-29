@@ -25,7 +25,8 @@ public class HUD {
 			if (i % Inventory.WIDTH == 0) y++;
 			int bx = (i % Inventory.WIDTH) * 50;
 			int by = y * 50;
-			g.setColor(new Color(0,50,255,100));
+			if (i == inventory.getSpot()) g.setColor(new Color(0,0,0));
+			else g.setColor(new Color(0,50,255,100));
 			g.fillRect(bx, by, invBox_Width, invBox_Height);
 			if (items[i] != null) {
 				g.setColor(Color.BLACK);

@@ -23,6 +23,7 @@ public class Inventory {
 	}
 
 	public int getSpot() { return spot; }
+	public Item getCurrentItem() { return inventory[spot]; }
 	public Item[] getInventory() { return inventory; }
 	public void moveSpotLeft() { spot = (spot+1) % WIDTH; }
 	public void moveSpotRight() { spot = spot-1 < 0 ? WIDTH-1 : spot-1; }
@@ -62,6 +63,17 @@ public class Inventory {
 			find.add();
 		}
 		return true;
+	}
+
+	public void decrease() { decrease(spot); }
+
+	public void decrease(int spot) {
+		if (inventory[spot] != null) {
+			inventory[spot].decrease();
+			if (inventory[spot].getAmount() == 0) {
+				inventory[spot] = null;
+			}
+		}
 	}
 
 	//Todo Work on blocks breaking and inventory pickup

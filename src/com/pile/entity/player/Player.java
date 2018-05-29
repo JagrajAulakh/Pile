@@ -1,22 +1,19 @@
 package com.pile.entity.player;
-//Todo should have inventory toggle
-import com.pile.GameObject;
+
 import com.pile.Input;
 import com.pile.World;
 import com.pile.block.Block;
 import com.pile.entity.Drop;
-import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.player.inv.Inventory;
+import com.pile.entity.player.inv.Item;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
 import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Player extends Entity {
@@ -147,9 +144,12 @@ public class Player extends Entity {
 		int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 		int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
 		if (Input.mousePressed(2)) {
-			Block b = new Block(wx, wy, 0);
-			if (!collides(b)) {
-				world.addBlock(b);
+			Item item = inventory.getCurrentItem();
+			if (item != null) {
+				Block b = new Block(wx, wy, item.getId());
+				if (!collides(b)) {
+					if (world.addBlock(b)) inventory.decrease();
+				}
 			}
 		}
 		if (Input.mousePressed(0)) {
@@ -157,6 +157,11 @@ public class Player extends Entity {
 			if (b != null) {
 				world.removeBlock(b);
 			}
+		}
+		if (Input.wheelUp()) {
+			inventory.moveSpotLeft();
+		} else if (Input.wheelDown()) {
+			inventory.moveSpotRight();
 		}
 
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);

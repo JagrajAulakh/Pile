@@ -3,7 +3,7 @@ package com.pile;
 import java.awt.event.*;
 import java.util.Arrays;
 
-public class Input implements KeyListener,MouseListener,MouseMotionListener {
+public class Input implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener {
 	// Arrays to keep track of Keys and Mouse
 	private enum KeyState {
 		RELEASED,
@@ -15,7 +15,9 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 		MOUSEUP,
 		MOUSEDOWN,
 		PRESSED,
-		RELEASED
+		RELEASED,
+		WHEELUP,
+		WHEELDOWN
 	}
 	private static boolean[] currentKeys;
 	private static KeyState[] keys;
@@ -32,8 +34,8 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 		for( int i = 0; i < KeyEvent.KEY_LAST; i++) {
 			keys[i] = KeyState.RELEASED;
 		}
-		currmb = new boolean[5];
-		mb = new MouseButtonState[5];
+		currmb = new boolean[6];
+		mb = new MouseButtonState[6];
 		for (int i = 0; i < mb.length; i++) {
 			mb[i] = MouseButtonState.RELEASED;
 		}
@@ -56,16 +58,33 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 			}
 		}
 		for (int i = 0; i < mb.length; i++) {
-			if (currmb[i]) {
-				if (mb[i] == MouseButtonState.RELEASED)
-					mb[i] = MouseButtonState.MOUSEDOWN;
-				else
-					mb[i] = MouseButtonState.PRESSED;
-			} else {
-				if (mb[i] == MouseButtonState.PRESSED || mb[i] == MouseButtonState.MOUSEDOWN)
-					mb[i] = MouseButtonState.MOUSEUP;
-				else
+			if (i == 4) {
+				if (currmb[i]) {
+					mb[i] = MouseButtonState.WHEELDOWN;
+					currmb[i] = false;
+				} else {
 					mb[i] = MouseButtonState.RELEASED;
+				}
+			} else if (i == 5) {
+				if (currmb[i]) {
+					mb[i] = MouseButtonState.WHEELUP;
+					currmb[i] = false;
+				} else {
+					mb[i] = MouseButtonState.RELEASED;
+				}
+			}
+			else {
+				if (currmb[i]) {
+					if (mb[i] == MouseButtonState.RELEASED) {
+						mb[i] = MouseButtonState.MOUSEDOWN;
+					} else
+						mb[i] = MouseButtonState.PRESSED;
+				} else {
+					if (mb[i] == MouseButtonState.PRESSED || mb[i] == MouseButtonState.MOUSEDOWN)
+						mb[i] = MouseButtonState.MOUSEUP;
+					else
+						mb[i] = MouseButtonState.RELEASED;
+				}
 			}
 		}
 	}
@@ -77,10 +96,9 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 
 	public static boolean mouseUp(int button) { return mb[button] == MouseButtonState.MOUSEUP; }
 	public static boolean mouseDown(int button) { return mb[button] == MouseButtonState.MOUSEDOWN; }
-	public static boolean mousePressed(int button) { return mb[button] == MouseButtonState.PRESSED; }
-
-	public static boolean buttonPressed(int button) { return mb[button] == MouseButtonState.MOUSEDOWN || mb[button] == MouseButtonState.PRESSED; }
-
+	public static boolean mousePressed(int button) { return mb[button] == MouseButtonState.PRESSED || mb[button] == MouseButtonState.MOUSEDOWN; }
+	public static boolean wheelUp() { return mb[4] == MouseButtonState.WHEELDOWN; }
+	public static boolean wheelDown() { return mb[5] == MouseButtonState.WHEELUP; }
 	@Override
 	public synchronized void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
@@ -95,39 +113,43 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {}
-
 	@Override
 	public void mousePressed(MouseEvent e) {
 		currmb[e.getButton()-1] = true;
 	}
-
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		currmb[e.getButton()-1] = false;
 	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {}
-
 	@Override
 	public void mouseEntered(MouseEvent e) {}
-
 	@Override
 	public void mouseExited(MouseEvent e) {}
-
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		mx = e.getX();
 		my = e.getY();
 	}
-
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mx = e.getX();
 		my = e.getY();
 	}
 
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		double rot = e.getPreciseWheelRotation();
+		if (rot > 0) {
+			currmb[4] = true;
+		} else {
+			currmb[5] = true;
+		}
+	}
+
 	public static void update() {
 		poll();
+		System.out.println(Arrays.toString(mb));
 	}
 }

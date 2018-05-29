@@ -31,6 +31,7 @@ public class Game extends Canvas {
 		addKeyListener(input);
 		addMouseListener(input);
 		addMouseMotionListener(input);
+		addMouseWheelListener(input);
 
 		frame.add(this, BorderLayout.CENTER);
 		frame.pack();

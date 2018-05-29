@@ -43,7 +43,7 @@ public class Button {
 	public void update() {
 		if (getX() < Input.mx && Input.mx < getX() + width && getY() < Input.my && Input.my < getY() + height) {
 			curColor = hoverColor;
-			if (Input.buttonPressed(0)) {
+			if (Input.mousePressed(0)) {
 				curColor = clickColor;
 			}
 			if (Input.mouseUp(0)) {

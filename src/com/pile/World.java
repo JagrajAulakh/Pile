@@ -58,13 +58,15 @@ public class World {
 		entityGrid[e.getGridX()][e.getGridY()].add(e);
 	}
 
-	public void addBlock(Block b) {
+	public boolean addBlock(Block b) {
 		int bx = (int)(b.getX() / Block.WIDTH);
 		int by = (int)(b.getY() / Block.HEIGHT);
 		if (blockGrid[bx][by] == null) {
 			blockGrid[bx][by] = b;
+			return true;
 		} else {
 			blockGrid[bx][by].reset();
+			return false;
 		}
 	}
 
@@ -171,7 +173,9 @@ public class World {
 	}
 
 	public void update() {
-		// TODO FIX THIS!
+		if (frame % 10 == 0) {
+			sortEntities(5);
+		}
 		LinkedList<GameObject> l = new LinkedList<GameObject>();
 		l.addAll(getBlocksAround(player, 10));
 		l.addAll(getEntitiesAround(player, 10));
@@ -179,17 +183,6 @@ public class World {
 			g.update();
 		}
 		camera.centerOn(player);
-//		if (Input.mousePressed(2)) {
-//			int wx = (int)((Input.mx + camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
-//			int wy = (int)((Input.my + camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
-//			Block b = new Block(wx, wy, 0);
-//			if (!b.collides(player)) {
-//				addBlock(b);
-//			}
-//		}
-		if (frame % 10 == 0) {
-			sortEntities(5);
-		}
 		frame = (frame + 1) % 600;
 		HUD.update();
 	}
