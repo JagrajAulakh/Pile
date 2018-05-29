@@ -5,7 +5,7 @@ import com.pile.image.SingleImage;
 import com.pile.image.ImageType;
 
 public class Item {
-	public static final int STACK_MAX = 1;
+	public static final int STACK_MAX = 99;
 	private int id, amount;
 	private ImageType image;
 	public Item(int id) {

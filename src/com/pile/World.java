@@ -162,7 +162,7 @@ public class World {
 			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT, Block.DIRT));
 			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT*2, Block.DIRT));
 			for (int i = 0; i <= y-3; i++) {
-				addBlock(new Block(x, height - i*Block.HEIGHT, Block.STONE));
+				addBlock(new Block(x, height - i*Block.HEIGHT, (int)(Math.random()*8)));
 			}
 		}
 
@@ -194,6 +194,9 @@ public class World {
 		HUD.update();
 	}
 	public void render(Graphics g) {
+		// Todo draw background
+		g.setColor(new Color(176, 233, 252));
+		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		for (Block e:getBlocksAround(player, Game.WIDTH/2)) {
 			blocks.draw(g, e);
 		}
