@@ -5,7 +5,7 @@ public class Inventory {
 	public static final int WIDTH = 10;
 	public static final int HEIGHT = 5;
 
-	private int hotBar; //Holds selection in hotBar
+	private int spot; //Holds selection in hotBar
 	public static Item[] inventory;
 
 	//Todo have the 0-9 keys point to item selection. COULD ADD Selected item icon.
@@ -19,7 +19,7 @@ public class Inventory {
 
 	public Inventory() {
 		inventory = new Item[WIDTH*HEIGHT];
-		hotBar = 0;
+		spot = 0;
 	}
 
 	public int getSpot() { return spot; }

@@ -140,6 +140,7 @@ public class Player extends Entity {
 				velY = -JUMP_HEIGHT;
 			}
 		} if (Input.keyUpOnce(KeyEvent.VK_E)) {
+			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
 		}
 
