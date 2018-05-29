@@ -79,6 +79,7 @@ public class Inventory {
 	//Todo Work on blocks breaking and inventory pickup
 
 	//Todo vvv INSTEAD MAKE A HEADS UP DISPLAY (HUD) TO DRAW INVENTORY, HEALTH, CRAFTING, MAP, ETC
+	//Map -> Draw blocks onto a diff "surface" then copy that surface, make it smaller and blit onto map
 	public static void drawInventory(){
 		//Todo Access the drawing. Always draw the inventory, but have 2 states (Maybe 3 for crafting)
 	}
