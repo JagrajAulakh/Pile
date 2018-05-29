@@ -7,7 +7,9 @@ import com.pile.image.Resources;
 import com.pile.image.SingleImage;
 
 import java.awt.*;
-
+//Todo think of drawling health, idea: Row of hearts drawn, opacity changes & length to shown health
+//Basically a standard health bar except with heart graphics replacing a solid bar
+//Todo add selected item box? Pretty pointless --> Add selection indicator on hotBar <-- better idea
 //Keep track of drawing player's information
 public class HUD {
 	//Todo look at these 2 variables
@@ -31,7 +33,6 @@ public class HUD {
 				//Todo also draw images for block
 				g.drawImage(items[i].getImage().getImage(), bx + invBox_Width/2 - (int)(items[i].getWidth()/2), by + invBox_Height/2 - (int)(items[i].getHeight()/2), null);
 				g.drawString(""+items[i].getAmount(), bx, by+invBox_Height);
-
 			}
 		}
 	}
