@@ -140,10 +140,10 @@ public class Input implements KeyListener,MouseListener,MouseMotionListener,Mous
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		double rot = e.getPreciseWheelRotation();
+		int rot = e.getUnitsToScroll();
 		if (rot > 0) {
 			currmb[4] = true;
-		} else {
+		} else if (rot < 0) {
 			currmb[5] = true;
 		}
 	}

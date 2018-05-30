@@ -54,8 +54,8 @@ public class Block extends GameObject {
 
 	public void destroy(double amount) {
 		destroyDelay += amount;
-		if (destroyDelay >= destroyDelayMax) {
-			destroyDelay = 0;
+		while (destroyDelay >= destroyDelayMax) {
+			destroyDelay -= destroyDelayMax;
 			destroyAmount++;
 		}
 	}

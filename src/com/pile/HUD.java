@@ -13,9 +13,35 @@ import java.awt.*;
 //Keep track of drawing player's information
 public class HUD {
 	//Todo look at these 2 variables
-	static int invBox_Width = 40;
-	static int invBox_Height = 40;
-	public static void update() {}
+	public static final int INV_BOX_WIDTH = 40;
+	public static final int INV_BOX_HEIGHT = 40;
+	public static final int SPACING = 5;
+
+	private static Item inHand = null;
+
+	public static void update(Player player) {
+		Inventory inventory = player.getInventory();
+		Item[] items = inventory.getInventory();
+		if (0 <= Input.mx && Input.mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT) {
+			int ix = Input.mx / (INV_BOX_WIDTH+SPACING);
+			int iy = Input.my / (INV_BOX_HEIGHT+SPACING);
+			int spot = iy*Inventory.WIDTH + ix;
+			if (Input.mouseUp(0)) {
+				if (inHand != null) {
+					Item tmp = items[spot];
+					items[spot] = inHand;
+					inHand = tmp;
+				} else {
+					inHand = items[spot];
+					items[spot] = null;
+				}
+			}
+		} else {
+			if (Input.mouseUp(0)) {
+
+			}
+		}
+	}
 
 	public static void render(Graphics g, Player player) {
 		Inventory inventory = player.getInventory();
@@ -23,23 +49,30 @@ public class HUD {
 		int y = -1;
 		for (int i = 0; i < (player.inventoryState()?items.length:Inventory.WIDTH); i++) {
 			if (i % Inventory.WIDTH == 0) y++;
-			int bx = (i % Inventory.WIDTH) * 50;
-			int by = y * 50;
-			g.setColor(new Color(0,50,255,100));
-			g.fillRect(bx, by, invBox_Width, invBox_Height);
+			int bx = (i % Inventory.WIDTH) * (INV_BOX_WIDTH+SPACING);
+			int by = y * (INV_BOX_HEIGHT+SPACING);
+			g.setColor(y==0 ? new Color(255,0,0,100) : new Color(0,50,255,100));
+			g.fillRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT);
 			if (i == inventory.getSpot()) {
 				Graphics2D g2 = (Graphics2D)g;
 				g2.setColor(Color.WHITE);
 				g2.setStroke(new BasicStroke(5));
-				g2.drawRect(bx, by, invBox_Width, invBox_Height);
+				g2.drawRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT);
 			}
+			g.setColor(Color.BLACK);
+			g.setFont(Resources.getFont(32));
+			// Todo get rid of this string thingy
+			g.drawString(""+i, bx+10, by+20);
 			if (items[i] != null) {
-				g.setColor(Color.BLACK);
-				g.setFont(Resources.getFont(32));
 				//Todo also draw images for block
-				g.drawImage(items[i].getImage().getImage(), bx + invBox_Width/2 - (int)(items[i].getWidth()/2), by + invBox_Height/2 - (int)(items[i].getHeight()/2), null);
-				g.drawString(""+items[i].getAmount(), bx, by+invBox_Height);
+				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
+				g.drawString(""+items[i].getAmount(), bx, by+INV_BOX_HEIGHT);
 			}
+		}
+		if (inHand != null) {
+			g.setColor(Color.BLACK);
+			g.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
+			g.drawString(""+inHand.getAmount(), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
 		}
 	}
 }

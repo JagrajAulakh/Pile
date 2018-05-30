@@ -9,7 +9,16 @@ public class Reader {
 		String tot = "";
 		Scanner file = new Scanner(new File(path));
 		while (file.hasNextLine()) {
-			tot += file.nextLine() + "\n";
+			String line = file.nextLine();
+			for (int i = 0; i < line.length(); i++) {
+				if (i < line.length()-1) {
+					if (line.charAt(i) == '/' && line.charAt(i+1) == '/') {
+						continue;
+					}
+				}
+				tot += "" + line.charAt(i);
+			}
+			tot += "\n";
 		}
 		return tot;
 	}

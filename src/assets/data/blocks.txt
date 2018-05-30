@@ -1,10 +1,10 @@
-dirt
-dirt_grass
-stone
-oven
-stone_coal
-stone_silver
-stone_iron
-stone_browniron
-stone_gold
-stone_diamond
+dirt 4 true 999
+dirt_grass 4 true 999
+stone 10 true 999
+oven 3 true 1
+stone_coal 3 true 99
+stone_silver 4 true 99
+stone_iron 4 true 99
+stone_browniron 4 true 99
+stone_gold 4 true 99
+stone_diamond 5 true 99

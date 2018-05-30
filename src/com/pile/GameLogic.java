@@ -1,9 +1,11 @@
 package com.pile;
 
+import com.pile.image.Resources;
 import com.pile.state.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class GameLogic {
 	public static GameStateManager gsm; // Used to manage different screens
@@ -14,6 +16,14 @@ public class GameLogic {
 
 	public void refresh() {
 		Input.update();
+		if (Input.keyUpOnce(KeyEvent.VK_R)) {
+			try {
+				Resources.readFiles();
+				System.out.println("RELOAD");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		if (gsm.currentState() instanceof MenuState) {
 			if (Input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
 				System.exit(0);

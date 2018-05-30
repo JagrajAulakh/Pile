@@ -22,7 +22,7 @@ public class Player extends Entity {
 	private BodyPart arm, leg, body, head;
 	private double counter;
 	private World world;
-	private boolean inventoryState;
+	private boolean inventoryState, mining;
 	private Inventory inventory;
 
 	public Player(double x, double y, World world) {
@@ -85,10 +85,10 @@ public class Player extends Entity {
 			if (Math.abs(velX) > 0.8) {
 				counter = (counter + 10) % 360;
 				double angle = 30*Math.sin(Math.toRadians(counter));
-				image = drawImage(angle, -angle, -angle, angle);
+				image = drawImage(angle, mining ? counter : -angle, -angle, angle);
 			} else {
-				counter = 0;
-				image = drawImage(0, 0, 0, 0);
+				counter = (counter + 10) % 360;
+				image = drawImage(mining ? -counter : 0, 0, 0, 0);
 			}
 		} else {
 			counter = (counter + 10) % 360;
@@ -140,21 +140,25 @@ public class Player extends Entity {
 			inventoryState = !inventoryState;
 		}
 
-		int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
-		int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
-		if (Input.mousePressed(2)) {
-			Item item = inventory.getCurrentItem();
-			if (item != null) {
-				Block b = new Block(wx, wy, item.getId());
-				if (!collides(b)) {
-					if (world.addBlock(b)) inventory.decrease();
+		if (!inventoryState) {
+			int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
+			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
+			if (Input.mousePressed(2)) {
+				Item item = inventory.getCurrentItem();
+				if (item != null) {
+					Block b = new Block(wx, wy, item.getId());
+					if (!collides(b)) {
+						if (world.addBlock(b)) inventory.decrease();
+					}
 				}
 			}
-		}
-		if (Input.mousePressed(0)) {
-			Block b = world.getBlockAtSpot(wx, wy);
-			if (b != null) {
-				world.removeBlock(b);
+			mining = false;
+			if (Input.mousePressed(0)) {
+				Block b = world.getBlockAtSpot(wx, wy);
+				if (b != null) {
+					mining = true;
+					world.removeBlock(b);
+				}
 			}
 		}
 		if (Input.wheelUp()) {
@@ -162,6 +166,11 @@ public class Player extends Entity {
 		} else if (Input.wheelDown()) {
 			inventory.moveSpotRight();
 		}
+		for (int i = 0; i <= 8; i++) {
+			if (Input.keyDown('1'+i)) {
+				inventory.setSpot(i);
+			}
+		} if (Input.keyDown('0')) inventory.setSpot(9);
 
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
 
@@ -181,7 +190,5 @@ public class Player extends Entity {
 		updateHitBox();
 
 		determineImage();
-
-//		System.out.println(Arrays.toString(inventory.getInventory()));
 	}
 }

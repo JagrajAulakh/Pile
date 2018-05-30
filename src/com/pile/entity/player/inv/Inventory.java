@@ -23,6 +23,7 @@ public class Inventory {
 	}
 
 	public int getSpot() { return spot; }
+	public void setSpot(int spot) { this.spot = spot; }
 	public Item getCurrentItem() { return inventory[spot]; }
 	public Item[] getInventory() { return inventory; }
 	public void moveSpotLeft() { spot = (spot+1) % WIDTH; }

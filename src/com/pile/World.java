@@ -70,19 +70,24 @@ public class World {
 		}
 	}
 
+	public void removeBlockPermanent(Block b) {
+		blockGrid[b.getGridX()][b.getGridY()] = null;
+	}
 	public void removeBlock(Block b) { removeBlock(b, 1); }
 	public void removeBlock(Block b, int destroyAmount) {
 		b.destroy(destroyAmount);
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
-			addEntity(new Drop(b.getX(), b.getY(), b.getId(), Math.random()*16-8, -5));
+			addEntity(new Drop(b.getX(), b.getY(), b.getId(), player, Math.random()*16-8, -5));
 		}
 	}
 	public void removeEntity(Entity e) {
 		if (entityGrid[e.getGridX()][e.getGridY()] == null) {
 			int px = (int)((e.getX() - e.getVelX()) / GRID_SIZE);
 			int py = (int)((e.getY() - e.getVelY()) / GRID_SIZE);
-			entityGrid[px][py].remove(e);
+			try {
+				entityGrid[px][py].remove(e);
+			} catch (NullPointerException error) {}
 		} else {
 			entityGrid[e.getGridX()][e.getGridY()].remove(e);
 		}
@@ -116,7 +121,9 @@ public class World {
 	}
 
 	public Block getBlockAtSpot(double wx, double wy) {
-		return blockGrid[(int)(wx / Block.WIDTH)][(int)(wy / Block.HEIGHT)];
+		int x = (int)(wx / Block.WIDTH);
+		int y = (int)(wy / Block.HEIGHT);
+		return blockGrid[x][y];
 	}
 
 	public LinkedList<Block> getBlocksAround(Entity e, int rad) {
@@ -150,19 +157,22 @@ public class World {
 		}
 		return l;
 	}
-	public void generateWorld() {
-		addPlayer(new Player(width/2, 0, this));
+	public synchronized void generateWorld() {
 
 		int dir = (int)(Math.random()*2) == 0?-1:1;
 		int y = height/Block.HEIGHT/2;
 		for (int x = 0; x < width; x += Block.WIDTH) {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
-			y = Math.max(3, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
+			y = Math.max(30, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
 			addBlock(new Block(x, height - y*Block.HEIGHT, Block.GRASS));
 			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT, Block.DIRT));
 			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT*2, Block.DIRT));
 			for (int i = 0; i <= y-3; i++) {
-				addBlock(new Block(x, height - i*Block.HEIGHT, (int)(Math.random()*8)));
+//				addBlock(new Block(x, height - i*Block.HEIGHT, (int)(Math.random()*8)));
+				addBlock(new Block(x, height - i*Block.HEIGHT, Block.STONE));
+			}
+			if (x == width/Block.WIDTH) {
+				addPlayer(new Player(width/2, y*Block.HEIGHT - 200, this));
 			}
 		}
 
@@ -172,8 +182,10 @@ public class World {
 			int randY = (int)(Math.random()*height);
 			for (int bx = randX - rad; bx < randX + rad; bx += Block.WIDTH) {
 				for (int by = randY - rad; by < randY + rad; by += Block.HEIGHT) {
-					Block b = getBlockAtSpot(bx, by);
-					if (b != null) removeBlock(b);
+					if (0 <= bx && bx < blockGrid.length && 0 <= by && by < blockGrid[0].length) {
+						Block b = getBlockAtSpot(bx, by);
+						if (b != null) removeBlockPermanent(b);
+					}
 				}
 			}
 		}
@@ -191,7 +203,7 @@ public class World {
 		}
 		camera.centerOn(player);
 		frame = (frame + 1) % 600;
-		HUD.update();
+		HUD.update(player);
 	}
 	public void render(Graphics g) {
 		// Todo draw background
@@ -205,15 +217,16 @@ public class World {
 				entities.draw(g, e);
 			}
 		}
-		// FOR DRAWING BLOCK SELECTION
-		Block b = getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
-//		System.out.println(b);
-		if (b != null) {
-			g.setColor(Color.GREEN);
-			//Todo Fix block selection
-			int xPos = (int)(b.getX() - camera.getOffsetX());
-			int yPos = (int)(b.getY() - camera.getOffsetY());
-			g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
+		if (!player.inventoryState()) {
+			// FOR DRAWING BLOCK SELECTION
+			Block b = getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
+			if (b != null) {
+				g.setColor(Color.GREEN);
+				//Todo Fix block selection
+				int xPos = (int)(b.getX() - camera.getOffsetX());
+				int yPos = (int)(b.getY() - camera.getOffsetY());
+				g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
+			}
 		}
 
 		if (player != null) {

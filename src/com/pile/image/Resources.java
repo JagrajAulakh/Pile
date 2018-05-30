@@ -14,32 +14,38 @@ import java.util.HashMap;
 public class Resources {
 	public static double SCALE = 0.25;
 	public static Font mainFont;
-	public static SingleImage[] blocks;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
-	public static int[] blockSpeeds;
+	public static SingleImage[] blocks;
+	public static int[] blockSpeeds, blockStack;
+	public static boolean[] blockPlacable;
 
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
 
-		final int TOTAL_BLOCKS = 50;
-		// All blocks, sorted by ID numbers
-		blocks = new SingleImage[TOTAL_BLOCKS];
-		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
-		blockSpeeds = new int[TOTAL_BLOCKS];
-		int index = 0;
-		for (String num:Reader.readFile("assets/data/block_speeds.txt").split("\n")) {
-			blockSpeeds[index] = Integer.parseInt(num);
-			index++;
-		}
-		for (int i = 0; i < bFile.length; i++) {
-			String path = "assets/images/PNG/Tiles/" + bFile[i] + ".png";
-			blocks[i] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
-		}
+		readFiles();
 
 		partsMale = getParts("male");
 		partsFemale = getParts("female");
 		partsZombie = getParts("zombie");
 
+	}
+
+	public static void readFiles() throws IOException {
+		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
+		final int TOTAL_BLOCKS = bFile.length;
+		// All blocks, sorted by ID numbers
+		blocks = new SingleImage[TOTAL_BLOCKS];
+		blockSpeeds = new int[TOTAL_BLOCKS];
+		blockStack = new int[TOTAL_BLOCKS];
+		blockPlacable = new boolean[TOTAL_BLOCKS];
+		for (int i = 0; i < bFile.length; i++) {
+			String[] parts = bFile[i].split(" ");
+			String path = "assets/images/PNG/Tiles/" + parts[0] + ".png";
+			blocks[i] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
+			blockSpeeds[i] = Integer.parseInt(parts[1]);
+			blockPlacable[i] = parts[2].toLowerCase().equals("true");
+			blockStack[i] = Integer.parseInt(parts[3]);
+		}
 	}
 	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {
 		ch = ch.toLowerCase();
