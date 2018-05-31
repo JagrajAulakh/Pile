@@ -61,8 +61,6 @@ public class HUD {
 			}
 			g.setColor(Color.BLACK);
 			g.setFont(Resources.getFont(32));
-			// Todo get rid of this string thingy
-			g.drawString(""+i, bx+10, by+20);
 			if (items[i] != null) {
 				//Todo also draw images for block
 				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);

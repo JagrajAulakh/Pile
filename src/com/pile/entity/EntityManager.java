@@ -47,9 +47,6 @@ public class EntityManager {
 		if (screenX <= Game.WIDTH && screenX + e.getWidth() >= 0) {
 			if (screenY <= Game.HEIGHT && screenY + e.getHeight() >= 0) {
 				g.drawImage(img, (int)(realX), (int)(realY), null);
-				Rectangle2D box = e.getHitBox();
-				g.setColor(Color.BLUE);
-				g.drawRect((int)(box.getX() - camera.getOffsetX()), (int)(box.getY() - camera.getOffsetY()), (int)box.getWidth(), (int)box.getHeight());
 			}
 		}
 	}

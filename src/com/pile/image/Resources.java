@@ -1,5 +1,6 @@
 package com.pile.image;
 
+import com.pile.block.Block;
 import com.pile.io.Reader;
 
 import javax.imageio.ImageIO;
@@ -16,6 +17,7 @@ public class Resources {
 	public static Font mainFont;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
 	public static SingleImage[] blocks;
+	public static BufferedImage[] blockStages;
 	public static int[] blockSpeeds, blockStack;
 	public static boolean[] blockPlacable;
 
@@ -23,6 +25,15 @@ public class Resources {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
 
 		readFiles();
+		blockStages = new BufferedImage[Block.STAGES];
+		for (int i = 0; i < Block.STAGES; i++) {
+			String path = "assets/images/destroy/" + i + ".png";
+			BufferedImage img = ImageIO.read(new File(path));
+			double sx = Block.WIDTH;
+			double sy = Block.HEIGHT;
+			System.out.println(sx + " " + sy);
+			blockStages[i] = scale(img, (int)(sx), (int)(sy));
+		}
 
 		partsMale = getParts("male");
 		partsFemale = getParts("female");

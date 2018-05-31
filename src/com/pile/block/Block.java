@@ -10,6 +10,8 @@ public class Block extends GameObject {
 	public static final int WIDTH = (int)(128 * Resources.SCALE);
 	public static final int HEIGHT = (int)(128 * Resources.SCALE);
 
+	public static final int STAGES = 9;
+
 	public static final int DIRT = 0;
 	public static final int GRASS = 1;
 	public static final int STONE = 2;
@@ -59,7 +61,7 @@ public class Block extends GameObject {
 			destroyAmount++;
 		}
 	}
-	public boolean destroyed() { return destroyAmount >= 5; }
+	public boolean destroyed() { return destroyAmount >= STAGES+1; }
 	public double getDestroyAmount() { return destroyAmount; }
 	public void reset() { destroyAmount = destroyDelay = 0; }
 	public int getGridX() { return (int)(x / WIDTH); }

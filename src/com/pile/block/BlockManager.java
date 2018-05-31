@@ -3,6 +3,7 @@ package com.pile.block;
 import com.pile.Game;
 import com.pile.GameCamera;
 import com.pile.Input;
+import com.pile.image.Resources;
 import com.pile.state.PlayState;
 
 import java.awt.*;
@@ -25,7 +26,6 @@ public class BlockManager {
 
 	public void update() {
 		for (Block b:blocks) {
-//			b.updateHitBox();
 			b.update();
 		}
 	}
@@ -36,8 +36,10 @@ public class BlockManager {
 		if (xPos < Game.WIDTH && xPos + b.WIDTH > 0) {
 			if (yPos < Game.HEIGHT && yPos + b.HEIGHT > 0) {
 				g.drawImage(b.getImage(), xPos, yPos, null);
-				g.setColor(new Color(0,0,0, (int) (51 * b.getDestroyAmount())));
-				g.fillRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);
+				double da = b.getDestroyAmount();
+				if (da >= 1) {
+					g.drawImage(Resources.blockStages[(int)da-1], xPos, yPos, null);
+				}
 			}
 		}
 	}
