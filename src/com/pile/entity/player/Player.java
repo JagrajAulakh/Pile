@@ -22,7 +22,7 @@ public class Player extends Entity {
 	private BodyPart arm, leg, body, head;
 	private double counter;
 	private World world;
-	private boolean inventoryState, mining;
+	private boolean inventoryState, mining, godMode;
 	private Inventory inventory;
 
 	public Player(double x, double y, World world) {
@@ -40,6 +40,7 @@ public class Player extends Entity {
 		flipped = true;
 		inventory = new Inventory();
 		inventoryState = false;
+		godMode = true;
 	}
 
 	public boolean inventoryState() { return inventoryState; }
@@ -157,7 +158,8 @@ public class Player extends Entity {
 				Block b = world.getBlockAtSpot(wx, wy);
 				if (b != null) {
 					mining = true;
-					world.removeBlock(b);
+					if(godMode) world.removeBlockPermanent(b);
+					else world.removeBlock(b);
 				}
 			}
 		}
