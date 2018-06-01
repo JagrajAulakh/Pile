@@ -47,6 +47,7 @@ public class HUD {
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getInventory();
 		int y = -1;
+		g.setFont(Resources.getFont(32));
 		for (int i = 0; i < (player.inventoryState()?items.length:Inventory.WIDTH); i++) {
 			if (i % Inventory.WIDTH == 0) y++;
 			int bx = (i % Inventory.WIDTH) * (INV_BOX_WIDTH+SPACING);
