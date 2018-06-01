@@ -16,16 +16,9 @@ public class GameLogic {
 
 	public void refresh() {
 		Input.update();
-		if (Input.keyUpOnce(KeyEvent.VK_R)) {
-			try {
-				Resources.readFiles();
-				System.out.println("RELOAD");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		if (gsm.currentState() instanceof MenuState) {
 			if (Input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
+				//todo don't exit on menu
 				System.exit(0);
 			}
 		} else if (gsm.currentState() instanceof PlayState) {
@@ -33,8 +26,8 @@ public class GameLogic {
 				gsm.push(new PauseState());
 			}
 		} else if (gsm.currentState() instanceof PauseState) {
-			if (Input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
-				System.exit(0);
+			if (Input.keyUpOnce(KeyEvent.VK_ESCAPE)) {
+				gsm.pop();
 			}
 		}
 		gsm.currentState().update();
