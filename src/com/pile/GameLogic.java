@@ -38,3 +38,4 @@ public class GameLogic {
 		gsm.currentState().render(g);
 	}
 }
+
