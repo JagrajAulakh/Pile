@@ -38,7 +38,8 @@ public class EntityManager {
 	}
 
 	public void draw(Graphics g, Entity e) {
-		BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false) : e.getImage();
+//		BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false) : e.getImage();
+		BufferedImage img = e.getImage();
 		double realX, realY, screenX, screenY;
 		realX = (e.getX()+e.getWidth()/2) - (e.getImage().getWidth()/2) - camera.getOffsetX();
 		realY = e.getY() - camera.getOffsetY();

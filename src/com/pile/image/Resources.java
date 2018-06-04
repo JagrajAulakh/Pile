@@ -50,7 +50,7 @@ public class Resources {
 		for (int i = 0; i < bFile.length; i++) {
 			String[] parts = bFile[i].split(" ");
 			int id = Integer.parseInt(parts[0]);
-			String path = "assets/images/PNG/Tiles/" + parts[1] + ".png";
+			String path = "assets/images/REAL/" + parts[1] + ".png";
 			blocks[id] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
 			blockDrop[id] = Integer.parseInt(parts[2]);
 			blockSpeeds[id] = Integer.parseInt(parts[3]);

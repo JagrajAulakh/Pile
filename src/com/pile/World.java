@@ -162,16 +162,21 @@ public class World {
 		for (int x = 0; x < width; x += Block.WIDTH) {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
 			y = Math.max(30, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
-			addBlock(new Block(x, height - y*Block.HEIGHT, Block.GRASS));
+			addBlock(new Block(x, height - y*Block.HEIGHT, 0));
 			int dirtUnder = 5;
 			for (int rd = 0; rd < dirtUnder; rd++) {
-				addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT * (rd+1), Block.DIRT));
+				addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT * (rd+1), 1));
 			}
 			for (int i = 0; i <= y - dirtUnder; i++) {
-				addBlock(new Block(x, height - i*Block.HEIGHT, Block.STONE));
+				addBlock(new Block(x, height - i*Block.HEIGHT, 2));
 			}
-			if (x == width/Block.WIDTH) {
+			if (x == width/Block.WIDTH/2) {
 				addPlayer(new Player(width/2, y*Block.HEIGHT - 200, this));
+				addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
+				addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
+				addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
+				addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
+				addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
 			}
 		}
 

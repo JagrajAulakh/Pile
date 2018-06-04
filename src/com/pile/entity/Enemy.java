@@ -90,6 +90,9 @@ public class Enemy extends Entity {
 				image = drawImage(angle+150, -angle+150, -angle, angle);
 			}
 		}
+		if (flipped) {
+			image = new SingleImage(Resources.flip(image.getImage(), true, false));
+		}
 	}
 
 	private void collisionY(LinkedList<Block> blocks) {

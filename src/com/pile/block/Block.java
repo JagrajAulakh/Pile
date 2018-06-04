@@ -12,17 +12,6 @@ public class Block extends GameObject {
 
 	public static final int STAGES = 9;
 
-	public static final int DIRT = 0;
-	public static final int GRASS = 1;
-	public static final int STONE = 2;
-	public static final int OVEN = 3;
-	public static final int COAL_ORE = 4;
-	public static final int SILVER_ORE = 5;
-	public static final int IRON_ORE = 6;
-	public static final int IRON_ORE_BROWN = 7;
-	public static final int GOLD_ORE = 8;
-	public static final int DIAMOND_ORE = 9;
-
 	protected int id;
 	protected ImageType image;
 	protected boolean canCollide;

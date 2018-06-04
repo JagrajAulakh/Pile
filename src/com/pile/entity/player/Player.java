@@ -87,7 +87,7 @@ public class Player extends Entity {
 		double wy = Input.my + world.camera.getOffsetY();
 		Block b = world.getBlockAtSpot(wx, wy);
 		if (b != null) {
-			double rad = Math.hypot(b.getX() - x - width/2, b.getY() - y - height) / Block.WIDTH;
+			double rad = Math.hypot(b.getX() - x - width/2, b.getY() - y - height/2) / Block.WIDTH;
 			if (rad <= REACH) return b;
 		}
 		return null;
@@ -99,10 +99,12 @@ public class Player extends Entity {
 			if (Math.abs(velX) > 0.8) {
 				counter = (counter + 10) % 360;
 				double angle = 30*Math.sin(Math.toRadians(counter));
-				image = drawImage(angle, mining ? counter : -angle, -angle, angle);
+				if (flipped) image = drawImage(mining ? -counter%180 + 180: -angle, angle, -angle, angle);
+				else image = drawImage(angle, mining ? -counter%180 + 180: -angle, -angle, angle);
 			} else {
 				counter = (counter + 10) % 360;
-				image = drawImage(mining ? -counter : 0, 0, 0, 0);
+				if (flipped) image = drawImage(mining ? -counter%180 + 180 : 0, 0, 0, 0);
+				else image = drawImage(0, mining ? -counter%180 + 180 : 0, 0, 0);
 			}
 		} else {
 			counter = (counter + 10) % 360;
@@ -113,6 +115,9 @@ public class Player extends Entity {
 			else if (velY > 0) {
 				image = drawImage(angle+150, -angle+150, -angle, angle);
 			}
+		}
+		if (flipped) {
+			image = new SingleImage(Resources.flip(image.getImage(), true, false));
 		}
 	}
 
