@@ -65,7 +65,6 @@ public class World {
 			blockGrid[bx][by] = b;
 			return true;
 		} else {
-			blockGrid[bx][by].reset();
 			return false;
 		}
 	}
@@ -78,7 +77,7 @@ public class World {
 		b.destroy(destroyAmount);
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
-			addEntity(new Drop(b.getX(), b.getY(), b.getId(), player, Math.random()*16-8, -5));
+			addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
 		}
 	}
 	public void removeEntity(Entity e) {
@@ -158,17 +157,17 @@ public class World {
 		return l;
 	}
 	public synchronized void generateWorld() {
-
 		int dir = (int)(Math.random()*2) == 0?-1:1;
 		int y = height/Block.HEIGHT/2;
 		for (int x = 0; x < width; x += Block.WIDTH) {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
 			y = Math.max(30, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
 			addBlock(new Block(x, height - y*Block.HEIGHT, Block.GRASS));
-			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT, Block.DIRT));
-			addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT*2, Block.DIRT));
-			for (int i = 0; i <= y-3; i++) {
-//				addBlock(new Block(x, height - i*Block.HEIGHT, (int)(Math.random()*8)));
+			int dirtUnder = 5;
+			for (int rd = 0; rd < dirtUnder; rd++) {
+				addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT * (rd+1), Block.DIRT));
+			}
+			for (int i = 0; i <= y - dirtUnder; i++) {
 				addBlock(new Block(x, height - i*Block.HEIGHT, Block.STONE));
 			}
 			if (x == width/Block.WIDTH) {
@@ -219,10 +218,9 @@ public class World {
 		}
 		if (!player.inventoryState()) {
 			// FOR DRAWING BLOCK SELECTION
-			Block b = getBlockAtSpot(Input.mx + camera.getOffsetX(), Input.my + camera.getOffsetY());
+			Block b = player.getSelectedBlock();
 			if (b != null) {
 				g.setColor(Color.GREEN);
-				//Todo Fix block selection
 				int xPos = (int)(b.getX() - camera.getOffsetX());
 				int yPos = (int)(b.getY() - camera.getOffsetY());
 				g.drawRect(xPos, yPos, Block.WIDTH, Block.HEIGHT);

@@ -26,7 +26,7 @@ public class Block extends GameObject {
 	protected int id;
 	protected ImageType image;
 	protected boolean canCollide;
-	protected double destroyDelayMax, destroyDelay, destroyAmount;
+	protected double destroyDelayMax, resetDelay, destroyDelay, destroyAmount;
 
 	public Block(double x, double y, int id) { this(x, y, true, id); }
 
@@ -51,10 +51,16 @@ public class Block extends GameObject {
 
 	@Override
 	public void update() {
+		if (resetDelay < 3) {
+			resetDelay++;
+		} else {
+			reset();
+		}
 		updateHitBox();
 	}
 
 	public void destroy(double amount) {
+		resetDelay = 0;
 		destroyDelay += amount;
 		while (destroyDelay >= destroyDelayMax) {
 			destroyDelay -= destroyDelayMax;

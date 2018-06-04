@@ -21,6 +21,8 @@ public class Item {
 	public BufferedImage getImage() { return image.getImage(); }
 	public int getId() { return id; }
 	public int getAmount() { return amount; }
+	public void setAmount(int amount) { this.amount = amount; }
+
 	public void add() { amount++; }
 	public void decrease() { amount--; }
 	//Todo relook this.. bad? way of doing things

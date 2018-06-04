@@ -19,6 +19,7 @@ import java.util.LinkedList;
 public class Player extends Entity {
 	public static final double SPEED = 4 * Resources.SCALE*2;
 	public static final double JUMP_HEIGHT = Block.HEIGHT * Resources.SCALE;
+	public static final int REACH = 5;
 	private BodyPart arm, leg, body, head;
 	private double counter;
 	private World world;
@@ -44,6 +45,7 @@ public class Player extends Entity {
 	}
 
 	public boolean inventoryState() { return inventoryState; }
+	public void toggleInventory() { inventoryState = !inventoryState; }
 	public Inventory getInventory() { return inventory; }
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
@@ -78,6 +80,17 @@ public class Player extends Entity {
 
 		g.dispose();
 		return new SingleImage(img);
+	}
+
+	public Block getSelectedBlock() {
+		double wx = Input.mx + world.camera.getOffsetX();
+		double wy = Input.my + world.camera.getOffsetY();
+		Block b = world.getBlockAtSpot(wx, wy);
+		if (b != null) {
+			double rad = Math.hypot(b.getX() - x - width/2, b.getY() - y - height) / Block.WIDTH;
+			if (rad <= REACH) return b;
+		}
+		return null;
 	}
 
 	// Offscreen drawing for player's image
@@ -139,6 +152,8 @@ public class Player extends Entity {
 		} if (Input.keyUpOnce(KeyEvent.VK_E)) {
 			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
+		} if (Input.keyUpOnce(KeyEvent.VK_G)) {
+			godMode = !godMode;
 		}
 
 		if (!inventoryState) {
@@ -153,12 +168,13 @@ public class Player extends Entity {
 					}
 				}
 			}
+			// MINING
 			mining = false;
 			if (Input.mousePressed(0)) {
-				Block b = world.getBlockAtSpot(wx, wy);
+				Block b = getSelectedBlock();
 				if (b != null) {
 					mining = true;
-					if(godMode) world.removeBlockPermanent(b);
+					if(godMode) world.removeBlock(b, 100);
 					else world.removeBlock(b);
 				}
 			}

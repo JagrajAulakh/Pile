@@ -29,11 +29,9 @@ public class Drop extends Entity {
 		this.height = Block.HEIGHT * sc;
 	}
 	public int getId() { return id; }
-
 	public void collisionX(LinkedList<Block> blocks) {
 		blockCollisionX(blocks);
 	}
-
 	public void collisionY(LinkedList<Block> blocks) {
 		blockCollisionY(blocks);
 	}

@@ -18,8 +18,8 @@ public class Resources {
 	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
 	public static SingleImage[] blocks;
 	public static BufferedImage[] blockStages;
-	public static int[] blockSpeeds, blockStack;
-	public static boolean[] blockPlacable;
+	public static int[] blockSpeeds, blockStack, blockDrop;
+	public static boolean[] blockPlaceable;
 
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
@@ -29,10 +29,7 @@ public class Resources {
 		for (int i = 0; i < Block.STAGES; i++) {
 			String path = "assets/images/destroy/" + i + ".png";
 			BufferedImage img = ImageIO.read(new File(path));
-			double sx = Block.WIDTH;
-			double sy = Block.HEIGHT;
-			System.out.println(sx + " " + sy);
-			blockStages[i] = scale(img, (int)(sx), (int)(sy));
+			blockStages[i] = scale(img, Block.WIDTH, Block.HEIGHT);
 		}
 
 		partsMale = getParts("male");
@@ -48,14 +45,16 @@ public class Resources {
 		blocks = new SingleImage[TOTAL_BLOCKS];
 		blockSpeeds = new int[TOTAL_BLOCKS];
 		blockStack = new int[TOTAL_BLOCKS];
-		blockPlacable = new boolean[TOTAL_BLOCKS];
+		blockDrop = new int[TOTAL_BLOCKS];
+		blockPlaceable = new boolean[TOTAL_BLOCKS];
 		for (int i = 0; i < bFile.length; i++) {
 			String[] parts = bFile[i].split(" ");
-			String path = "assets/images/PNG/Tiles/" + parts[0] + ".png";
-			blocks[i] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
-			blockSpeeds[i] = Integer.parseInt(parts[1]);
-			blockPlacable[i] = parts[2].toLowerCase().equals("true");
-			blockStack[i] = Integer.parseInt(parts[3]);
+			int id = Integer.parseInt(parts[0]);
+			String path = "assets/images/PNG/Tiles/" + parts[1] + ".png";
+			blocks[id] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
+			blockDrop[id] = Integer.parseInt(parts[2]);
+			blockSpeeds[id] = Integer.parseInt(parts[3]);
+			blockStack[id] = Integer.parseInt(parts[4]);
 		}
 	}
 	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {

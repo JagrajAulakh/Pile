@@ -19,27 +19,24 @@ public class HUD {
 
 	private static Item inHand = null;
 
+	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getInventory();
-		if (0 <= Input.mx && Input.mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT) {
-			int ix = Input.mx / (INV_BOX_WIDTH+SPACING);
-			int iy = Input.my / (INV_BOX_HEIGHT+SPACING);
-			int spot = iy*Inventory.WIDTH + ix;
-			if (Input.mouseUp(0)) {
-				if (inHand != null) {
-					Item tmp = items[spot];
-					items[spot] = inHand;
-					inHand = tmp;
-				} else {
-					inHand = items[spot];
-					items[spot] = null;
-				}
-			}
-		} else {
-			if (Input.mouseUp(0)) {
 
-			}
+		if (player.inventoryState()) {
+			if (0 <= Input.mx && Input.mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH) {
+				if (0 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT) {
+					int ix = Input.mx / (INV_BOX_WIDTH+SPACING);
+					int iy = Input.my / (INV_BOX_HEIGHT+SPACING);
+					int spot = iy*Inventory.WIDTH + ix;
+					if (Input.mouseUp(0)) {
+						Item tmp = items[spot];
+						items[spot] = inHand;
+						inHand = tmp;
+					}
+				} else if (Input.mouseUp(0)) player.toggleInventory();
+			} else if (Input.mouseUp(0)) player.toggleInventory();
 		}
 	}
 
@@ -65,13 +62,13 @@ public class HUD {
 			if (items[i] != null) {
 				//Todo also draw images for block
 				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
-				g.drawString(""+items[i].getAmount(), bx, by+INV_BOX_HEIGHT);
+				g.drawString(amountToString(items[i]), bx, by+INV_BOX_HEIGHT);
 			}
 		}
 		if (inHand != null) {
 			g.setColor(Color.BLACK);
 			g.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
-			g.drawString(""+inHand.getAmount(), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
+			g.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
 		}
 	}
 }

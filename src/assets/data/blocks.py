@@ -1,4 +1,3 @@
-from pprint import pprint
 file = open("block_names.txt", 'r').read().strip().split("\n")
 blocks = {}
 ids = [""*i for i in range(len(file))]
@@ -16,4 +15,4 @@ while True:
 		if (0 <= user < len(ids)):
 			print(ids[user])
 		else:
-			print("THATS NOT A VALID BLOCK")
+			print("THAT'S NOT A VALID BLOCK")
