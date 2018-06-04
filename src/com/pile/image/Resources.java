@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
@@ -39,7 +38,7 @@ public class Resources {
 	}
 
 	public static void readFiles() throws IOException {
-		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
+		String[] bFile = Reader.readFile("assets/data/items.txt").split("\n");
 		final int TOTAL_BLOCKS = bFile.length;
 		// All blocks, sorted by ID numbers
 		blocks = new SingleImage[TOTAL_BLOCKS];

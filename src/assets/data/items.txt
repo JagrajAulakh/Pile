@@ -1,1 +1,11 @@
-name id
+0 dirt_grass 1 6 99
+1 dirt 1 6 99
+2 stone 2 25 99
+3 oven 3 3 1
+4 ore_coal 4 25 99
+5 ore_iron 5 25 99
+6 ore_gold 6 25 99
+7 ore_diamond 7 5 99
+8 wood 8 25 99
+9 wood_plank 9 25 99
+10 chest 10 25 99
