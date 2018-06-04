@@ -41,7 +41,7 @@ public class Player extends Entity {
 		flipped = true;
 		inventory = new Inventory();
 		inventoryState = false;
-		godMode = true;
+		godMode = false;
 	}
 
 	public boolean inventoryState() { return inventoryState; }
