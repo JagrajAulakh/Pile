@@ -3,6 +3,7 @@ package com.pile.entity.player;
 import com.pile.Input;
 import com.pile.World;
 import com.pile.block.Block;
+import com.pile.block.Chest;
 import com.pile.entity.Drop;
 import com.pile.entity.Entity;
 import com.pile.entity.player.inv.Inventory;
@@ -26,6 +27,8 @@ public class Player extends Entity {
 	private boolean inventoryState, mining, godMode;
 	private Inventory inventory;
 
+	private Chest currentChest;
+
 	public Player(double x, double y, World world) {
 		super(x, y);
 		this.world = world;
@@ -42,11 +45,13 @@ public class Player extends Entity {
 		inventory = new Inventory();
 		inventoryState = false;
 		godMode = false;
+		currentChest = null;
 	}
 
 	public boolean inventoryState() { return inventoryState; }
 	public void toggleInventory() { inventoryState = !inventoryState; }
 	public Inventory getInventory() { return inventory; }
+	public Chest getChest() { return currentChest; }
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
@@ -186,6 +191,8 @@ public class Player extends Entity {
 		//godMode
 		if (Input.keyUpOnce(KeyEvent.VK_G)) {
 			godMode = !godMode;
+		} if (Input.keyUpOnce(KeyEvent.VK_C)) {
+			inventory.add(10);
 		}
 
 		if (!inventoryState) {

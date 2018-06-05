@@ -10,9 +10,14 @@ public class Item {
 	private int id, amount;
 	private ImageType image;
 	private int stack;
+
 	public Item(int id) {
+		this(id, 1);
+	}
+
+	public Item(int id, int amount) {
 		this.id = id;
-		amount = 1;
+		this.amount = amount;
 		double sc = 0.7;
 		this.image = new SingleImage(Resources.scale(Resources.blocks[id].getImage(), sc));
 		this.stack = Resources.blockStack[id];

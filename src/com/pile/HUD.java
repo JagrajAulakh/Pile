@@ -1,10 +1,12 @@
 package com.pile;
 
+import com.pile.entity.Drop;
 import com.pile.entity.player.Player;
 import com.pile.entity.player.inv.Inventory;
 import com.pile.entity.player.inv.Item;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
+import com.pile.state.PlayState;
 
 import java.awt.*;
 //Todo think of drawling health, idea: Row of hearts drawn, opacity changes & length to shown health
@@ -20,23 +22,36 @@ public class HUD {
 	private static Item inHand = null;
 
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
+
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getInventory();
 
 		if (player.inventoryState()) {
-			if (0 <= Input.mx && Input.mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH) {
-				if (0 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT) {
-					int ix = Input.mx / (INV_BOX_WIDTH+SPACING);
-					int iy = Input.my / (INV_BOX_HEIGHT+SPACING);
-					int spot = iy*Inventory.WIDTH + ix;
-					if (Input.mouseUp(0)) {
-						Item tmp = items[spot];
-						items[spot] = inHand;
-						inHand = tmp;
+			if (0 <= Input.mx && Input.mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT) {
+				int ix = Input.mx / (INV_BOX_WIDTH+SPACING);
+				int iy = Input.my / (INV_BOX_HEIGHT+SPACING);
+				int spot = iy*Inventory.WIDTH + ix;
+				if (Input.mouseUp(0)) {
+//					if (items[spot].getId() == inHand.getId())
+					Item tmp = items[spot];
+					items[spot] = inHand;
+					inHand = tmp;
+				}
+			} else {
+				if (Input.mouseUp(0)) {
+					if (inHand != null) {
+						int a = inHand.getAmount();
+						for (int i = 0; i < a; i++) {
+							int id = inHand.getId();
+							PlayState.world.addEntity(new Drop(player.getX(), player.getY(), id, player, 50, -5));
+							inHand = null;
+						}
+					} else {
+						player.toggleInventory();
 					}
-				} else if (Input.mouseUp(0)) player.toggleInventory();
-			} else if (Input.mouseUp(0)) player.toggleInventory();
+				}
+			}
 		}
 	}
 
