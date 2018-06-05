@@ -20,6 +20,7 @@ public class Inventory {
 	public Inventory() {
 		inventory = new Item[WIDTH*HEIGHT];
 		spot = 0;
+		add(10);
 	}
 
 	public int getSpot() { return spot; }

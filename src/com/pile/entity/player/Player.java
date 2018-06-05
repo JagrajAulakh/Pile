@@ -141,6 +141,29 @@ public class Player extends Entity {
 		accX = 0;
 		accY = World.GRAVITY;
 
+		playerInput();
+
+		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
+
+		// Starting here is the Y movement
+		velY += accY;
+		y += velY;
+		updateHitBox();
+		collisionY(blocks);
+		updateHitBox();
+
+		// Starting here is the X movement
+		accX -= velX * World.FRICTION;
+		velX += accX;
+		x += velX;
+		updateHitBox();
+		collisionX(blocks);
+		updateHitBox();
+
+		determineImage();
+	}
+	private void playerInput(){
+		//Movement
 		if (Input.keyDown(KeyEvent.VK_D)) {
 			accX = SPEED;
 			velX = Math.min(velX, 3);
@@ -149,15 +172,19 @@ public class Player extends Entity {
 			accX = -SPEED;
 			velX = Math.max(velX, -3);
 			flipped = false;
-		} if (Input.keyDown(KeyEvent.VK_SPACE)) {
+		} if (Input.keyDown(KeyEvent.VK_SPACE) || Input.keyDown(KeyEvent.VK_W)) {
 			if (onGround) {
 				onGround = false;
 				velY = -JUMP_HEIGHT;
 			}
-		} if (Input.keyUpOnce(KeyEvent.VK_E)) {
+		}
+		//Inventory
+		if (Input.keyUpOnce(KeyEvent.VK_E)) {
 			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
-		} if (Input.keyUpOnce(KeyEvent.VK_G)) {
+		}
+		//godMode
+		if (Input.keyUpOnce(KeyEvent.VK_G)) {
 			godMode = !godMode;
 		}
 
@@ -194,24 +221,5 @@ public class Player extends Entity {
 				inventory.setSpot(i);
 			}
 		} if (Input.keyDown('0')) inventory.setSpot(9);
-
-		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
-
-		// Starting here is the Y movement
-		velY += accY;
-		y += velY;
-		updateHitBox();
-		collisionY(blocks);
-		updateHitBox();
-
-		// Starting here is the X movement
-		accX -= velX * World.FRICTION;
-		velX += accX;
-		x += velX;
-		updateHitBox();
-		collisionX(blocks);
-		updateHitBox();
-
-		determineImage();
 	}
 }
