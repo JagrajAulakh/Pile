@@ -1,1 +1,1 @@
-itemId amount:id
+10 10:9
