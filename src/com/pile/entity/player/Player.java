@@ -128,7 +128,7 @@ public class Player extends Entity {
 
 	private void collisionY(LinkedList<Block> blocks) {
 		blockCollisionY(blocks);
-	}
+	}//Todo this adding is causing multiple block add glitch
 	private void collisionX(LinkedList<Block> blocks) {
 		blockCollisionX(blocks);
 		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
