@@ -12,14 +12,14 @@ import java.util.LinkedList;
 public class Drop extends Entity {
 	public static final int DESPAWN_TIME = 60 * 60 * 5;
 	private int id, despawnCounter;
+	private boolean canPick;
 	private Player player;
+	private int pickDelayMax;
 
 	public Drop(double x, double y, int id, Player player, double velX, double velY) {
-		this(x, y, id, player);
-		this.velX = velX;
-		this.velY = velY;
+		this(x, y, id, player, velX, velY, 10);
 	}
-	public Drop(double x, double y, int id, Player player) {
+	public Drop(double x, double y, int id, Player player, double velX, double velY, int pickDelay) {
 		super(x, y);
 		this.id = id;
 		this.player = player;
@@ -27,8 +27,13 @@ public class Drop extends Entity {
 		this.image = new SingleImage(Resources.scale(Resources.blocks[id].getImage(), sc));
 		this.width = Block.WIDTH * sc;
 		this.height = Block.HEIGHT * sc;
+		this.velX = velX;
+		this.velY = velY;
+		this.pickDelayMax = pickDelay;
+		canPick = false;
 	}
 	public int getId() { return id; }
+	public boolean canPick() { return canPick; }
 	public void collisionX(LinkedList<Block> blocks) {
 		blockCollisionX(blocks);
 	}
@@ -40,6 +45,7 @@ public class Drop extends Entity {
 	public void update() {
 		despawnCounter++;
 		if (despawnCounter > DESPAWN_TIME) PlayState.world.removeEntity(this);
+		if (despawnCounter > pickDelayMax) canPick = true;
 		accX = 0;
 		accY = World.GRAVITY;
 

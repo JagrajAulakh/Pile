@@ -125,7 +125,7 @@ public class World {
 		return blockGrid[x][y];
 	}
 
-	public LinkedList<Block> getBlocksAround(Entity e, int rad) {
+	public LinkedList<Block> getBlocksAround(GameObject e, int rad) {
 		LinkedList<Block> l = new LinkedList<Block>();
 		int px = (int)(e.getX() / Block.WIDTH);
 		int py = (int) (e.getY() / Block.HEIGHT);
@@ -141,7 +141,7 @@ public class World {
 		return l;
 	}
 
-	public LinkedList<Entity> getEntitiesAround(Entity e, int rad) {
+	public LinkedList<Entity> getEntitiesAround(GameObject e, int rad) {
 		LinkedList<Entity> l = new LinkedList<Entity>();
 		int px = e.getGridX();
 		int py = e.getGridY();
