@@ -51,7 +51,7 @@ public class Button {
 				if (text.toLowerCase().equals("play")) {
 					GameLogic.gsm.set(new PlayState());
 				} else if (text.toLowerCase().equals("exit")) {
-					Writer.writeDataFile("test1", PlayState.world);
+//					Writer.writeDataFile("test1", PlayState.world);
 					GameLogic.gsm.pop();
 					GameLogic.gsm.set(new MenuState());
 				} else if (text.toLowerCase().equals("resume")) {

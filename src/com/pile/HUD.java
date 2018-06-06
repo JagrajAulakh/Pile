@@ -1,5 +1,6 @@
 package com.pile;
 
+import com.pile.block.Block;
 import com.pile.entity.Drop;
 import com.pile.entity.player.Player;
 import com.pile.entity.player.inv.Inventory;
@@ -42,9 +43,11 @@ public class HUD {
 				if (Input.mouseUp(0)) {
 					if (inHand != null) {
 						int a = inHand.getAmount();
+						int id = inHand.getId();
 						for (int i = 0; i < a; i++) {
-							int id = inHand.getId();
-							PlayState.world.addEntity(new Drop(player.getX(), player.getY(), id, player, 50, -5));
+							double x = player.getVelX() > 0 ? player.getX() + player.getWidth() : player.getX() - Block.WIDTH;
+							double y = player.getY() - player.getHealth() / 2;
+							PlayState.world.addEntity(new Drop(x, y, id, player, 4 * (player.getVelX()>0 ? 1 : -1), -5, 60));
 							inHand = null;
 						}
 					} else {
@@ -56,6 +59,11 @@ public class HUD {
 	}
 
 	public static void render(Graphics g, Player player) {
+		for (int i = 0; i < player.getHealth()/2; i++) {
+			int hw = Resources.heart2.getWidth();
+			g.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 50, null);
+		}
+
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getInventory();
 		int y = -1;

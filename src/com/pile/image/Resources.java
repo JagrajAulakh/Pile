@@ -17,6 +17,7 @@ public class Resources {
 	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
 	public static SingleImage[] blocks;
 	public static BufferedImage[] blockStages;
+	public static BufferedImage heart0, heart1, heart2;
 	public static int[] blockSpeeds, blockStack, blockDrop;
 	public static boolean[] blockPlaceable;
 
@@ -30,10 +31,13 @@ public class Resources {
 			BufferedImage img = ImageIO.read(new File(path));
 			blockStages[i] = scale(img, Block.WIDTH, Block.HEIGHT);
 		}
-
 		partsMale = getParts("male");
 		partsFemale = getParts("female");
 		partsZombie = getParts("zombie");
+
+		heart0 = ImageIO.read(new File("assets/images/REAL/heart0.png"));
+		heart1 = ImageIO.read(new File("assets/images/REAL/heart1.png"));
+		heart2 = ImageIO.read(new File("assets/images/REAL/heart2.png"));
 
 	}
 

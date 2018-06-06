@@ -22,6 +22,7 @@ public class Player extends Entity {
 	public static final double JUMP_HEIGHT = Block.HEIGHT * Resources.SCALE;
 	public static final int REACH = 5;
 	private BodyPart arm, leg, body, head;
+	private int health, maxHealth;
 	private double counter;
 	private World world;
 	private boolean inventoryState, mining, godMode;
@@ -39,19 +40,21 @@ public class Player extends Entity {
 		image = drawImage(0, 0, 0, 0);
 		width = 60 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
-		updateHitBox();
-		onGround = false;
+		maxHealth = health = 10;
+		onGround = inventoryState = godMode = false;
 		flipped = true;
 		inventory = new Inventory();
-		inventoryState = false;
-		godMode = false;
 		currentChest = null;
+		updateHitBox();
 	}
 
 	public boolean inventoryState() { return inventoryState; }
 	public void toggleInventory() { inventoryState = !inventoryState; }
 	public Inventory getInventory() { return inventory; }
 	public Chest getChest() { return currentChest; }
+
+	public int getHealth() { return health; }
+	public int getMaxHealth() { return maxHealth; }
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
@@ -133,8 +136,8 @@ public class Player extends Entity {
 		blockCollisionX(blocks);
 		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
 			if (e instanceof Drop) {
-				if (collides(e)) {
-					Drop d = (Drop)e;
+				Drop d = (Drop)e;
+				if (collides(d) && d.canPick()) {
 					if (inventory.add(d.getId())) PlayState.world.removeEntity(e);
 				}
 			}
@@ -193,6 +196,14 @@ public class Player extends Entity {
 			godMode = !godMode;
 		} if (Input.keyUpOnce(KeyEvent.VK_C)) {
 			inventory.add(10);
+		} if (Input.keyUpOnce(KeyEvent.VK_Q)) {
+			if (inventory.getCurrentItem() != null) {
+				double x = getVelX() > 0 ? getX() + getWidth() : getX() - Block.WIDTH;
+				double y = getY() - getHealth() / 2;
+				Item spot = inventory.getCurrentItem();
+				world.addEntity(new Drop(x, y, spot.getId(), this, (Math.random()*2+2) * (getVelX()>0 ? 1 : -1), -5, 60));
+				inventory.decrease();
+			}
 		}
 
 		if (!inventoryState) {
