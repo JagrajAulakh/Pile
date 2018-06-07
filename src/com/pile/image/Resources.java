@@ -66,14 +66,14 @@ public class Resources {
 			}
 		}
 		String[] recipe_lines = Reader.readFile("assets/data/crafting.txt").split("\n");
-		recipes = new Recipe[100];
+		recipes = new Recipe[TOTAL_BLOCKS];
 		for (String line:recipe_lines) {
 			String[] parts = line.split(" ");
 			int id = Integer.parseInt(parts[0]);
 			Recipe r = new Recipe(id);
 			for (int i = 1; i < parts.length; i++) {
-				String[] parts2 = parts[i].split(":");
-				r.addItem(Integer.parseInt(parts2[0]), Integer.parseInt(parts2[1]));
+				String[] ingredients = parts[i].split(":");
+				r.addItem(Integer.parseInt(ingredients[0]), Integer.parseInt(ingredients[1]));
 			}
 			recipes[id] = r;
 		}

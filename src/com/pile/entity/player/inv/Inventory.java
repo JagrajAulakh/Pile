@@ -1,5 +1,7 @@
 package com.pile.entity.player.inv;
 
+import com.pile.image.Resources;
+
 public class Inventory {
 
 	public static final int WIDTH = 10;
@@ -55,7 +57,8 @@ public class Inventory {
 			int s = firstEmpty();
 			if (s == -1) return false;
 			else {
-				inventory[s] = new Item(id);
+				if (Resources.blocks[id] != null) inventory[s] = new com.pile.entity.player.inv.Block(id);
+				else inventory[s] = new Tool(id);
 			}
 		} else {
 			find.add();

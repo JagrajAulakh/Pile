@@ -12,7 +12,7 @@ public class Recipe {
         items = new LinkedList<Item>();
     }
 
-    public void addItem(int id, int amount) {
+    public void addItem(int amount, int id) {
     	items.add(new Item(id, amount));
     }
 
@@ -21,7 +21,7 @@ public class Recipe {
 		String tot = "{";
 
 		for (Item i:items) {
-			tot += i.getId() + ":" + i.getAmount() + ", ";
+			tot += i.getAmount() + ":" + i.getId() + ", ";
 		}
 
 		return tot.substring(0, tot.length() - 2) + "}";

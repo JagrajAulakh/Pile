@@ -9,4 +9,3 @@
 8 wood 8 25 99
 9 wood_plank 9 25 99
 10 chest 10 25 99
-11 pick_wood 10 25 1
