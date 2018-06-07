@@ -1,6 +1,7 @@
 package com.pile.image;
 
 import com.pile.block.Block;
+import com.pile.crafting.Recipe;
 import com.pile.io.Reader;
 
 import javax.imageio.ImageIO;
@@ -9,6 +10,8 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Resources {
@@ -20,6 +23,7 @@ public class Resources {
 	public static BufferedImage heart0, heart1, heart2;
 	public static int[] blockSpeeds, blockStack, blockDrop;
 	public static boolean[] blockPlaceable;
+	public static Recipe[] recipes;
 
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
@@ -54,11 +58,26 @@ public class Resources {
 			String[] parts = bFile[i].split(" ");
 			int id = Integer.parseInt(parts[0]);
 			String path = "assets/images/REAL/" + parts[1] + ".png";
-			blocks[id] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
-			blockDrop[id] = Integer.parseInt(parts[2]);
-			blockSpeeds[id] = Integer.parseInt(parts[3]);
-			blockStack[id] = Integer.parseInt(parts[4]);
+			if (parts.length == 5) {
+				blocks[id] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
+				blockDrop[id] = Integer.parseInt(parts[2]);
+				blockSpeeds[id] = Integer.parseInt(parts[3]);
+				blockStack[id] = Integer.parseInt(parts[4]);
+			}
 		}
+		String[] recipe_lines = Reader.readFile("assets/data/crafting.txt").split("\n");
+		recipes = new Recipe[TOTAL_BLOCKS];
+		for (String line:recipe_lines) {
+			String[] parts = line.split(" ");
+			int id = Integer.parseInt(parts[0]);
+			Recipe r = new Recipe(id);
+			for (int i = 1; i < parts.length; i++) {
+				String[] ingredients = parts[i].split(":");
+				r.addItem(Integer.parseInt(ingredients[0]), Integer.parseInt(ingredients[1]));
+			}
+			recipes[id] = r;
+		}
+		System.out.println(Arrays.toString(recipes));
 	}
 	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {
 		ch = ch.toLowerCase();

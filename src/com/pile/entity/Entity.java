@@ -29,7 +29,6 @@ public abstract class Entity extends GameObject {
 		hitBox.setRect(x, y, width, height);
 	}
 	public BufferedImage getImage() { return image.getImage(); }
-//	public abstract void update();
 
 	protected void blockCollisionX(LinkedList<Block> blocks) {
 		if (x < 0) {
@@ -63,8 +62,10 @@ public abstract class Entity extends GameObject {
 		}
 
 		LinkedList<Block> l = blocks;
+		boolean hit = false;
 		for (GameObject e:l) {
 			if (collides(e)) {
+				hit = true;
 				if (velY >= 0) {
 					y = e.getY() - height;
 					velY = accY = 0;
@@ -76,5 +77,6 @@ public abstract class Entity extends GameObject {
 			}
 			updateHitBox();
 		}
+		if (!hit) onGround = false;
 	}
 }

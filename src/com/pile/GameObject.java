@@ -2,12 +2,10 @@ package com.pile;
 
 import com.pile.image.ImageType;
 
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
 
 // Takes care of all Entities & Blocks
-public abstract class GameObject implements Serializable {
+public abstract class GameObject {
 	protected double x, y, width, height; // Location & Size of Object
 	protected Rectangle2D hitBox; // Hitbox of GameObject
 	protected ImageType image; // Visual display of GameObject
@@ -27,8 +25,6 @@ public abstract class GameObject implements Serializable {
 		Rectangle2D enemyHit = other.getHitBox();
 		return hitBox.intersects(enemyHit);
 	}
-//	public abstract void update();
 	public abstract void updateHitBox();
-
 	public abstract void update();
 }
