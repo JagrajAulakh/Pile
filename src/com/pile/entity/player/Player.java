@@ -25,7 +25,7 @@ public class Player extends Entity {
 	private int health, maxHealth;
 	private double counter;
 	private World world;
-	private boolean inventoryState, mining, godMode;
+	private boolean inventoryState, mining, godMode, invinsible;
 	private Inventory inventory;
 
 	private Chest currentChest;
@@ -41,7 +41,7 @@ public class Player extends Entity {
 		width = 60 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
 		maxHealth = health = 10;
-		onGround = inventoryState = godMode = false;
+		onGround = inventoryState = godMode = invinsible = false;
 		flipped = true;
 		inventory = new Inventory();
 		currentChest = null;
@@ -49,6 +49,7 @@ public class Player extends Entity {
 	}
 
 	public boolean inventoryState() { return inventoryState; }
+	public boolean isInvinsible() { return invinsible; }
 	public void toggleInventory() { inventoryState = !inventoryState; }
 	public Inventory getInventory() { return inventory; }
 	public Chest getChest() { return currentChest; }
@@ -90,13 +91,17 @@ public class Player extends Entity {
 		return new SingleImage(img);
 	}
 
+	public boolean withinReach(Block b) { return withinReach(b.getX(), b.getY()); }
+	public boolean withinReach(double wx, double wy) {
+		return Math.hypot(wx - x - width/2, wy - y - height/2) / Block.WIDTH <= REACH;
+	}
+
 	public Block getSelectedBlock() {
 		double wx = Input.mx + world.camera.getOffsetX();
 		double wy = Input.my + world.camera.getOffsetY();
 		Block b = world.getBlockAtSpot(wx, wy);
 		if (b != null) {
-			double rad = Math.hypot(b.getX() - x - width/2, b.getY() - y - height/2) / Block.WIDTH;
-			if (rad <= REACH) return b;
+			if (withinReach(b)) return b;
 		}
 		return null;
 	}
@@ -213,8 +218,10 @@ public class Player extends Entity {
 				Item item = inventory.getCurrentItem();
 				if (item != null) {
 					Block b = new Block(wx, wy, item.getId());
-					if (!collides(b)) {
-						if (world.addBlock(b)) inventory.decrease();
+					if (withinReach(b) && !collides(b)) {
+						if (world.getBlockAtSpot(b.getX() - Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX() + Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX(), b.getY() - Block.HEIGHT) != null || world.getBlockAtSpot(b.getX(), b.getY() + Block.HEIGHT) != null) {
+							if (world.addBlock(b)) inventory.decrease();
+						}
 					}
 				}
 			}
