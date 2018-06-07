@@ -15,4 +15,15 @@ public class Recipe {
     public void addItem(int id, int amount) {
     	items.add(new Item(id, amount));
     }
+
+	@Override
+	public String toString() {
+		String tot = "{";
+
+		for (Item i:items) {
+			tot += i.getId() + ":" + i.getAmount() + ", ";
+		}
+
+		return tot.substring(0, tot.length() - 2) + "}";
+	}
 }

@@ -29,7 +29,6 @@ public abstract class Entity extends GameObject {
 		hitBox.setRect(x, y, width, height);
 	}
 	public BufferedImage getImage() { return image.getImage(); }
-//	public abstract void update();
 
 	protected void blockCollisionX(LinkedList<Block> blocks) {
 		if (x < 0) {
