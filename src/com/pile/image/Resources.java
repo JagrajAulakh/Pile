@@ -98,7 +98,6 @@ public class Resources {
 			}
 			recipes[id] = r;
 		}
-		System.out.println(Arrays.toString(toolBlocks));
 	}
 	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {
 		ch = ch.toLowerCase();

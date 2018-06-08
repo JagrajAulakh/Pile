@@ -50,6 +50,7 @@ public class Player extends Entity {
 		updateHitBox();
 		inventory.add(15);
 		inventory.add(20);
+		inventory.add(25);
 	}
 
 	public boolean inventoryState() { return inventoryState; }
