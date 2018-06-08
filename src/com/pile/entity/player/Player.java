@@ -72,9 +72,7 @@ public class Player extends Entity {
 				g.drawImage(Resources.flip(item.getImage(), true, false), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2, null);
 				g.rotate(Math.toRadians(45), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
 			} else if (item instanceof com.pile.entity.player.inv.Block) {
-//				g.rotate(Math.toRadians(-45), item.getImage().getWidth()/2 + item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
 				g.drawImage(Resources.flip(item.getImage(), true, false), (int)(item.getImage().getWidth()/2 + item.getImage().getWidth()*0.8), (int)(item.getImage().getHeight()/2 + arm.getImage().getHeight()*1.2), null);
-//				g.rotate(Math.toRadians(45), item.getImage().getWidth()/2 + item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
 			}
 		}
 	}

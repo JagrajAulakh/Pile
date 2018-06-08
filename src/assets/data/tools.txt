@@ -1,3 +1,4 @@
+id pic_name mine_delay [id]
 11 pick_wood 5 2
 12 pick_stone 10 2
 13 pick_iron 20 2
@@ -8,8 +9,8 @@
 18 shovel_iron 6 0 1
 19 shovel_gold 8 0 1
 20 shovel_diamond 10 0 1
-21 axe_wood 5 9
-22 axe_stone 10 9
-23 axe_iron 20 9
-24 axe_gold 25 9
-25 axe_diamond 30 9
+21 axe_wood 5 8 9 10
+22 axe_stone 10 8 9 10
+23 axe_iron 20 8 9 10
+24 axe_gold 25 8 9 10
+25 axe_diamond 30 8 9 10

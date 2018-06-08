@@ -158,6 +158,13 @@ public class World {
 		}
 		return l;
 	}
+
+	private synchronized void makeTree(double wx, double wy) {
+		int size = (int)((Math.random() * 6) + 4);
+		for (double i = wy; i >= wy-size*Block.HEIGHT; i-=Block.HEIGHT) {
+			addBlock(new Block(wx, i, 8));
+		}
+	}
 	public synchronized void generateWorld() {
 		int dir = (int)(Math.random()*2) == 0?-1:1;
 		int y = height/Block.HEIGHT/2;
@@ -165,6 +172,7 @@ public class World {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
 			y = Math.max(30, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
 			addBlock(new Block(x, height - y*Block.HEIGHT, 0));
+			if (Math.random()*100 < 10) makeTree(x, height - y*Block.HEIGHT - Block.HEIGHT);
 			int dirtUnder = 5;
 			for (int rd = 0; rd < dirtUnder; rd++) {
 				addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT * (rd+1), 1));
@@ -244,7 +252,7 @@ public class World {
 		}
 		if(player.ruler()){
 			Graphics2D g2 = (Graphics2D)g;
-			g2.setColor(Color.WHITE);
+			g2.setColor(new Color(255,255,255,50));
 			g2.setStroke(new BasicStroke(1));
 			for(int x = 0; x <= Game.WIDTH; x += Block.WIDTH){
 				g.drawLine((int) (x - camera.getOffsetX() % Block.WIDTH),0,(int) (x - camera.getOffsetX() % Block.WIDTH),Game.HEIGHT);

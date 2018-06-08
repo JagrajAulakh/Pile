@@ -8,7 +8,7 @@ public class Inventory {
 	public static final int HEIGHT = 5;
 
 	private int spot; //Holds selection in hotBar
-	public static Item[] inventory;
+	private Item[] inventory;
 
 	//Todo use items to search for it's crafting recipes. Remember each recipe calls for a number of items
 	//Have different types of items, stackable, material,

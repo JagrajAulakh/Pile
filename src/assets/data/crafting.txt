@@ -1,1 +1,3 @@
+id_to_craft [amount:id]
+9 4:9
 10 10:9

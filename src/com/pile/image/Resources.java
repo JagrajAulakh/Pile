@@ -47,7 +47,7 @@ public class Resources {
 	}
 
 	private static void readFiles() throws IOException {
-		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
+		String[] bFile = Reader.readDataFile("assets/data/blocks.txt").split("\n");
 		final int TOTAL_BLOCKS = 50;
 		// All blocks, sorted by ID numbers
 		itemImages = new SingleImage[TOTAL_BLOCKS];
@@ -56,11 +56,11 @@ public class Resources {
 		blockDrop = new int[TOTAL_BLOCKS];
 		blockPlaceable = new boolean[TOTAL_BLOCKS];
 
-		String[] tFile = Reader.readFile("assets/data/tools.txt").split("\n");
+		String[] tFile = Reader.readDataFile("assets/data/tools.txt").split("\n");
 		toolSpeeds = new int[TOTAL_BLOCKS];
 		toolBlocks = new LinkedList[TOTAL_BLOCKS];
 
-		String[] rFile = Reader.readFile("assets/data/crafting.txt").split("\n");
+		String[] rFile = Reader.readDataFile("assets/data/crafting.txt").split("\n");
 		recipes = new Recipe[TOTAL_BLOCKS];
 
 		for (String line:bFile) {
