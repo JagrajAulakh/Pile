@@ -57,8 +57,13 @@ public class Inventory {
 			int s = firstEmpty();
 			if (s == -1) return false;
 			else {
-				if (Resources.blocks[id] != null) inventory[s] = new com.pile.entity.player.inv.Block(id);
-				else inventory[s] = new Tool(id);
+				if (Resources.blockSpeeds[id] != 0) {
+					inventory[s] = new Block(id);
+				} else if (Resources.toolSpeeds[id] != 0) {
+					inventory[s] = new Tool(id);
+				} else {
+					inventory[s] = new Item(id);
+				}
 			}
 		} else {
 			find.add();

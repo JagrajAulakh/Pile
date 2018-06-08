@@ -24,7 +24,7 @@ public class Drop extends Entity {
 		this.id = id;
 		this.player = player;
 		double sc = 0.7;
-		this.image = new SingleImage(Resources.scale(Resources.blocks[id].getImage(), sc));
+		this.image = new SingleImage(Resources.scale(Resources.itemImages[id].getImage(), sc));
 		this.width = Block.WIDTH * sc;
 		this.height = Block.HEIGHT * sc;
 		this.velX = velX;

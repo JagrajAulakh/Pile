@@ -8,4 +8,4 @@
 7 ore_diamond 7 5 99
 8 wood 8 25 99
 9 wood_plank 9 25 99
-10 chest 10 25 99
+10 chest 15 25 99

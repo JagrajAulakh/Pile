@@ -19,7 +19,7 @@ public class Item {
 		this.id = id;
 		this.amount = amount;
 		double sc = 0.7;
-		this.image = new SingleImage(Resources.scale(Resources.blocks[id].getImage(), sc));
+		this.image = new SingleImage(Resources.scale(Resources.itemImages[id].getImage(), sc));
 		this.stack = Resources.blockStack[id];
 	}
 
