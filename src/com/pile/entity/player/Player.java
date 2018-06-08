@@ -35,6 +35,10 @@ public class Player extends Entity {
 	public Player(double x, double y, World world) {
 		super(x, y);
 		this.world = world;
+		inventory = new Inventory();
+		inventory.add(15);
+		inventory.add(20);
+		inventory.add(25);
 		head = new Head(Resources.partsMale.get("head"));
 		body = new Body(Resources.partsMale.get("body"));
 		arm = new Arm(Resources.partsMale.get("arm"));
@@ -45,12 +49,8 @@ public class Player extends Entity {
 		maxHealth = health = 10;
 		onGround = inventoryState = godMode = ruler = invinsible = false;
 		flipped = true;
-		inventory = new Inventory();
 		currentChest = null;
 		updateHitBox();
-		inventory.add(15);
-		inventory.add(20);
-		inventory.add(25);
 	}
 
 	public boolean inventoryState() { return inventoryState; }
@@ -63,6 +63,21 @@ public class Player extends Entity {
 
 	public int getHealth() { return health; }
 	public int getMaxHealth() { return maxHealth; }
+
+	private void drawItem(Graphics2D g) {
+		Item item = inventory.getCurrentItem();
+		if (item != null) {
+			if (item instanceof Tool) {
+				g.rotate(Math.toRadians(-45), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
+				g.drawImage(Resources.flip(item.getImage(), true, false), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2, null);
+				g.rotate(Math.toRadians(45), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
+			} else if (item instanceof com.pile.entity.player.inv.Block) {
+//				g.rotate(Math.toRadians(-45), item.getImage().getWidth()/2 + item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
+				g.drawImage(Resources.flip(item.getImage(), true, false), (int)(item.getImage().getWidth()/2 + item.getImage().getWidth()*0.8), (int)(item.getImage().getHeight()/2 + arm.getImage().getHeight()*1.2), null);
+//				g.rotate(Math.toRadians(45), item.getImage().getWidth()/2 + item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
+			}
+		}
+	}
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
@@ -77,6 +92,9 @@ public class Player extends Entity {
 
 		g.rotate(Math.toRadians(armFront), img.getWidth()/2, headHeight + 4);
 		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 4, null);
+		if (!flipped) {
+			drawItem(g);
+		}
 		g.rotate(Math.toRadians(-armFront), img.getWidth()/2, headHeight + 4);
 
 		g.rotate(Math.toRadians(legFront), img.getWidth()/2, headHeight + b.getHeight() - 8);
@@ -91,6 +109,10 @@ public class Player extends Entity {
 		g.drawImage(b, img.getWidth()/2 - b.getWidth()/2, headHeight, null);
 
 		g.rotate(Math.toRadians(armBack), img.getWidth()/2, headHeight + 4);
+		if (flipped) {
+			drawItem(g);
+		}
+
 		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 4, null);
 		g.rotate(Math.toRadians(-armBack), img.getWidth()/2, headHeight + 4);
 
@@ -142,10 +164,10 @@ public class Player extends Entity {
 	}
 
 	private void collisionY(LinkedList<Block> blocks) {
-		blockCollisionY(blocks);
-	}//Todo this adding is causing multiple block add glitch
+		if (!godMode) blockCollisionY(blocks);
+	}
 	private void collisionX(LinkedList<Block> blocks) {
-		blockCollisionX(blocks);
+		if (!godMode) blockCollisionX(blocks);
 		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
 			if (e instanceof Drop) {
 				Drop d = (Drop)e;
@@ -158,8 +180,12 @@ public class Player extends Entity {
 
 	@Override
 	public void update() {
+		if (!godMode) {
+			accY = World.GRAVITY;
+		} else {
+			accY = 0;
+		}
 		accX = 0;
-		accY = World.GRAVITY;
 
 		playerInput();
 
@@ -184,6 +210,13 @@ public class Player extends Entity {
 	}
 	private void playerInput(){
 		//Movement
+		if (godMode) {
+			if (Input.keyDown(KeyEvent.VK_W)) {
+				velY = -5;
+			} if (Input.keyDown(KeyEvent.VK_S)) {
+				velY = 5;
+			}
+		}
 		if (Input.keyDown(KeyEvent.VK_D)) {
 			accX = SPEED;
 			velX = Math.min(velX, 3);
@@ -233,12 +266,17 @@ public class Player extends Entity {
 				//Right clicked block
 				Block rcB = getSelectedBlock();
 				System.out.println(rcB);
-				if(rcB != null && rcB instanceof Chest){
+				if(rcB != null && rcB instanceof Chest) {
 					System.out.println("CHEST OPEN");
 				}
 				Item item = inventory.getCurrentItem();
 				if (item != null && item instanceof com.pile.entity.player.inv.Block) {
-					Block b = new Block(wx, wy, item.getId());
+					Block b;
+					if (item.getId() == 10) {
+						b = new Chest(wx, wy);
+					} else {
+						b = new Block(wx, wy, item.getId());
+					}
 					boolean hitting = false;
 					for (Entity e:world.getEntitiesAround(this, 2)) {
 						if ((e instanceof Player || e instanceof Enemy) && e.collides(b)) {

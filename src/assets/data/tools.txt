@@ -8,8 +8,8 @@
 18 shovel_iron 6 0 1
 19 shovel_gold 8 0 1
 20 shovel_diamond 10 0 1
-21 axe_wood 5 0 1
-22 axe_stone 10 0 1
-23 axe_iron 20 0 1
-24 axe_gold 25 0 1
-25 axe_diamond 30 0 1
+21 axe_wood 5 9
+22 axe_stone 10 9
+23 axe_iron 20 9
+24 axe_gold 25 9
+25 axe_diamond 30 9

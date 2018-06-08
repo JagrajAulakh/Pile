@@ -86,7 +86,9 @@ public class World {
 			int py = (int)((e.getY() - e.getVelY()) / GRID_SIZE);
 			try {
 				entityGrid[px][py].remove(e);
-			} catch (NullPointerException error) {}
+			} catch (NullPointerException error) {
+				System.out.println("ERROR");
+			}
 		} else {
 			entityGrid[e.getGridX()][e.getGridY()].remove(e);
 		}
@@ -170,32 +172,31 @@ public class World {
 			for (int i = 0; i <= y - dirtUnder; i++) {
 				addBlock(new Block(x, height - i*Block.HEIGHT, 2));
 			}
-			if (x == width/Block.WIDTH/2) {
-				addPlayer(new Player(width/2, y*Block.HEIGHT - 200, this));
-				addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
-				addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
-				addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
-				addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
-				addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
-			}
 		}
+		addPlayer(new Player(width/2, y*Block.HEIGHT - 200, this));
+		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
 
 		final int rad = 100;
-		for (int i = 0; i < (int)(Math.random()*10); i++) {
+		for (int i = 0; i < (int)(Math.random()*1000); i++) {
 			int randX = (int)(Math.random()*width);
 			int randY = (int)(Math.random()*height);
 			for (int bx = randX - rad; bx < randX + rad; bx += Block.WIDTH) {
 				for (int by = randY - rad; by < randY + rad; by += Block.HEIGHT) {
 					if (0 <= bx && bx < blockGrid.length && 0 <= by && by < blockGrid[0].length) {
 						Block b = getBlockAtSpot(bx, by);
-						if (b != null) removeBlockPermanent(b);
+						if (b != null && b.getId() == 2) removeBlockPermanent(b);
 					}
 				}
 			}
 		}
 
+		// Todo get rid of this
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -254,7 +255,5 @@ public class World {
 		}
 
 		HUD.render(g, player);
-
-
 	}
 }

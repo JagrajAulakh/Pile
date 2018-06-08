@@ -50,7 +50,7 @@ public class PlayState implements GameState {
 			g.drawString(loadingText, x, y);
 			Graphics2D g2 = (Graphics2D)(g);
 			g2.setStroke(new BasicStroke(10));
-			g.drawArc(Game.WIDTH/2 - 50, Game.HEIGHT - 150, 100, 100, 0, counter%360);
+			g.drawArc(Game.WIDTH/2 - 50, Game.HEIGHT - 150, 100, 100, 90, -counter%360);
 		} else {
 			world.render(g);
 		}
