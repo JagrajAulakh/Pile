@@ -36,8 +36,7 @@ public abstract class Entity extends GameObject {
 		} else if (x + width > PlayState.world.getWidth()) {
 			x = PlayState.world.getWidth() - width;
 		}
-		LinkedList<Block> l = blocks;
-		for (Block e:l) {
+		for (Block e:blocks) {
 			if (e.canCollide() && collides(e)) {
 				if (velX > 0) {
 					x = e.getX() - width;
@@ -60,9 +59,8 @@ public abstract class Entity extends GameObject {
 			accY = velY = 0;
 		}
 
-		LinkedList<Block> l = blocks;
 		boolean hit = false;
-		for (Block e:l) {
+		for (Block e:blocks) {
 			if (e.canCollide() && collides(e)) {
 				hit = true;
 				if (velY >= 0) {

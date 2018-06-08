@@ -24,25 +24,12 @@ public class EntityManager {
 		entities = new ArrayList<Entity>();
 	}
 
-	public void add(Entity e) {
-		entities.add(e);
-	}
-
-	public ArrayList<Entity> getEntities() { return entities; }
-
-	public void update() {
-		for (Entity e:entities) {
-			e.update();
-		}
-		camera.centerOn(player);
-	}
-
 	public void draw(Graphics g, Entity e) {
 //		BufferedImage img = e.isFlipped() ? Resources.flip(e.getImage(), true, false) : e.getImage();
 		BufferedImage img = e.getImage();
 		double realX, realY, screenX, screenY;
-		realX = (e.getX()+e.getWidth()/2) - (e.getImage().getWidth()/2) - camera.getOffsetX();
-		realY = e.getY() - camera.getOffsetY();
+		realX = (e.getX() + e.getWidth()/2) - (e.getImage().getWidth()/2) - camera.getOffsetX();
+		realY = e.getY() + e.getHeight() - e.getImage().getHeight() - camera.getOffsetY();
 		screenX = e.getX() - camera.getOffsetX();
 		screenY = e.getY() - camera.getOffsetY();
 		if (screenX <= Game.WIDTH && screenX + e.getWidth() >= 0) {

@@ -25,7 +25,7 @@ public class Block extends GameObject {
 		super(x, y);
 		this.id = id;
 		this.image = Resources.itemImages[id];
-		this.canCollide = true;
+		this.canCollide = Resources.blockCanCollide[id];
 		updateHitBox();
 		destroyDelayMax = Resources.blockSpeeds[id];
 		destroyDelay = destroyAmount = 0;

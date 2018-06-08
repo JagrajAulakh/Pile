@@ -68,12 +68,13 @@ public class World {
 	public boolean addBlock(Block b) {
 		int bx = (int)(b.getX() / Block.WIDTH);
 		int by = (int)(b.getY() / Block.HEIGHT);
-		if (blockGrid[bx][by] == null) {
-			blockGrid[bx][by] = b;
-			return true;
-		} else {
-			return false;
+		if (0 <= bx && bx < blockGrid.length && 0 <= by && by < blockGrid[0].length) {
+			if (blockGrid[bx][by] == null) {
+				blockGrid[bx][by] = b;
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public void removeBlockPermanent(Block b) {
@@ -85,7 +86,7 @@ public class World {
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
 			System.out.println("Block broken id " + b.getId());
-			addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
+			if (Resources.blockDrop[b.getId()] != -1) addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
 		}
 	}
 	public void removeEntity(Entity e) {
@@ -171,6 +172,13 @@ public class World {
 		int size = (int)((Math.random() * 6) + 4);
 		for (double i = wy; i >= wy-size*Block.HEIGHT; i-=Block.HEIGHT) {
 			addBlock(new Block(wx, i, 8));
+		}
+		double rad = 2*Block.WIDTH;
+		double top = (int)(wy - size*Block.HEIGHT);
+		for (double x = wx - rad; x <= wx + rad; x++) {
+			for (double y = top - rad; y <= top + rad; y++) {
+				addBlock(new Block(x, y, 26));
+			}
 		}
 	}
 	public synchronized void generateWorld() {

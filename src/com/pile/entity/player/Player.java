@@ -45,7 +45,7 @@ public class Player extends Entity {
 		leg = new Leg(Resources.partsMale.get("leg"));
 		image = drawImage(0, 0, 0, 0);
 		width = 56 * Resources.SCALE*2;
-		height = image.getImage().getHeight();
+		height = 180 * Resources.SCALE * 2;
 		maxHealth = health = 10;
 		onGround = inventoryState = godMode = ruler = invinsible = false;
 		flipped = true;
@@ -64,22 +64,22 @@ public class Player extends Entity {
 	public int getHealth() { return health; }
 	public int getMaxHealth() { return maxHealth; }
 
-	private void drawItem(Graphics2D g) {
+	private void drawItem(Graphics2D g, int hi) {
 		Item item = inventory.getCurrentItem();
 		if (item != null) {
 			if (item instanceof Tool) {
-				g.rotate(Math.toRadians(-45), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
-				g.drawImage(Resources.flip(item.getImage(), true, false), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2, null);
-				g.rotate(Math.toRadians(45), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, item.getImage().getHeight()/2 + arm.getImage().getHeight()*3/2);
+				g.rotate(Math.toRadians(-45), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, hi - leg.getImage().getHeight()*0.2 - item.getHeight()/2);
+				g.drawImage(Resources.flip(item.getImage(), true, false), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, (int)(hi - leg.getImage().getHeight()*0.2 - item.getHeight()/2), null);
+				g.rotate(Math.toRadians(45), item.getImage().getWidth()/2 - item.getImage().getWidth()/2, hi - leg.getImage().getHeight()*0.2 - item.getHeight()/2);
 			} else if (item instanceof com.pile.entity.player.inv.Block) {
-				g.drawImage(Resources.flip(item.getImage(), true, false), (int)(item.getImage().getWidth()/2 + item.getImage().getWidth()*0.8), (int)(item.getImage().getHeight()/2 + arm.getImage().getHeight()*1.2), null);
+				g.drawImage(Resources.flip(item.getImage(), true, false), (int)(item.getImage().getWidth()/2 + item.getImage().getWidth()*0.8), hi - leg.getImage().getHeight() - item.getImage().getHeight()/2, null);
 			}
 		}
 	}
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
-		int hi = (int)(180*Resources.SCALE * 2);
+		int hi = (int)(200*Resources.SCALE * 2);
 		BufferedImage img = new BufferedImage(w, hi, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
 		int headHeight = (int)(64 * Resources.SCALE * 2);
@@ -88,31 +88,34 @@ public class Player extends Entity {
 		BufferedImage a = arm.getImage();
 		BufferedImage l = leg.getImage();
 
-		g.rotate(Math.toRadians(armFront), img.getWidth()/2, headHeight + 4);
-		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 4, null);
+		// ARM
+		g.rotate(Math.toRadians(armFront), img.getWidth()/2, hi - l.getHeight() - b.getHeight() + 4);
+		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, hi - l.getHeight() - b.getHeight() + 4, null);
 		if (!flipped) {
-			drawItem(g);
+			drawItem(g, hi);
 		}
-		g.rotate(Math.toRadians(-armFront), img.getWidth()/2, headHeight + 4);
+		g.rotate(Math.toRadians(-armFront), img.getWidth()/2, hi - l.getHeight() - b.getHeight() + 4);
 
-		g.rotate(Math.toRadians(legFront), img.getWidth()/2, headHeight + b.getHeight() - 8);
-		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, headHeight + b.getHeight(), null);
-		g.rotate(Math.toRadians(-legFront), img.getWidth()/2, headHeight + b.getHeight() - 8);
-		g.rotate(Math.toRadians(legBack), img.getWidth()/2, headHeight + b.getHeight() - 8);
-		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, headHeight + b.getHeight(), null);
-		g.rotate(Math.toRadians(-legBack), img.getWidth()/2, headHeight + b.getHeight() - 8);
+		// LEGS
+		g.rotate(Math.toRadians(legFront), img.getWidth()/2, hi - l.getHeight() - 8);
+		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, hi - l.getHeight(), null);
+		g.rotate(Math.toRadians(-legFront), img.getWidth()/2, hi - l.getHeight() - 8);
+		g.rotate(Math.toRadians(legBack), img.getWidth()/2, hi - l.getHeight() - 8);
+		g.drawImage(l, img.getWidth()/2 - l.getWidth()/2, hi - l.getHeight(), null);
+		g.rotate(Math.toRadians(-legBack), img.getWidth()/2, hi - l.getHeight() - 8);
 
-		int hpos = img.getWidth()/2 - headHeight/2;
-		g.drawImage(h, hpos, 0, null);
-		g.drawImage(b, img.getWidth()/2 - b.getWidth()/2, headHeight, null);
+		// HEAD
+		g.drawImage(h, img.getWidth()/2 - headHeight/2, hi - l.getHeight() - b.getHeight() - headHeight, null);
+		// BODY
+		g.drawImage(b, img.getWidth()/2 - b.getWidth()/2, hi - l.getHeight() - b.getHeight(), null);
 
-		g.rotate(Math.toRadians(armBack), img.getWidth()/2, headHeight + 4);
+		// ARM
+		g.rotate(Math.toRadians(armBack), img.getWidth()/2, hi - l.getHeight() - b.getHeight() + 4);
 		if (flipped) {
-			drawItem(g);
+			drawItem(g, hi);
 		}
-
-		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 4, null);
-		g.rotate(Math.toRadians(-armBack), img.getWidth()/2, headHeight + 4);
+		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, hi - l.getHeight() - b.getHeight() + 4, null);
+		g.rotate(Math.toRadians(-armBack), img.getWidth()/2, hi - l.getHeight() - b.getHeight() + 4);
 
 		g.dispose();
 		return new SingleImage(img);
@@ -260,6 +263,12 @@ public class Player extends Entity {
 		if (!inventoryState) {
 			int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
+			if (Input.mouseDown(2)) {
+				Block b = getSelectedBlock();
+				if (b != null && b instanceof Chest) {
+					System.out.println("OPEN SESAME!");
+				}
+			}
 			if (Input.mousePressed(2)) {
 				//Placing blocks
 				Item item = inventory.getCurrentItem();
@@ -271,19 +280,16 @@ public class Player extends Entity {
 						b = new Block(wx, wy, item.getId());
 					}
 					boolean hitting = false;
-					for (Entity e:world.getEntitiesAround(this, 2)) {
+					for (Entity e:world.getEntitiesAround(this, 4)) {
 						if ((e instanceof Player || e instanceof Enemy) && e.collides(b)) {
 							hitting = true;
 							break;
 						}
 					}
-					if (withinReach(b) && !hitting) {
+					if (withinReach(b) && !hitting && !collides(b)) {
+						// Checks surrounding blocks to place next to (can't place floating blocks)
 						if (world.getBlockAtSpot(b.getX() - Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX() + Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX(), b.getY() - Block.HEIGHT) != null || world.getBlockAtSpot(b.getX(), b.getY() + Block.HEIGHT) != null) {
-							if(item.getId() == 10){
-									inventory.decrease();
-									System.out.println("chest place");
-							}
-							else if (world.addBlock(b)) inventory.decrease();
+							if (world.addBlock(b)) inventory.decrease();
 						}
 					}
 				}
@@ -307,7 +313,7 @@ public class Player extends Entity {
 			}
 		}
 
-		//Hotbar Inventory Selection
+		// Hotbar Inventory Selection
 		if (Input.wheelUp()) {
 			inventory.moveSpotLeft();
 		} else if (Input.wheelDown()) {

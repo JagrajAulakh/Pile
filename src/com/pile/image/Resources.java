@@ -23,7 +23,7 @@ public class Resources {
 	public static SingleImage[] itemImages;
 	public static int[] blockSpeeds, blockStack, blockDrop, toolSpeeds;
 	public static LinkedList[] toolBlocks;
-	public static boolean[] blockPlaceable;
+	public static boolean[] blockCanCollide;
 	public static Recipe[] recipes;
 
 	public static void load() throws IOException,FontFormatException {
@@ -54,7 +54,7 @@ public class Resources {
 		blockSpeeds = new int[TOTAL_BLOCKS];
 		blockStack = new int[TOTAL_BLOCKS];
 		blockDrop = new int[TOTAL_BLOCKS];
-		blockPlaceable = new boolean[TOTAL_BLOCKS];
+		blockCanCollide = new boolean[TOTAL_BLOCKS];
 
 		String[] tFile = Reader.readDataFile("assets/data/tools.txt").split("\n");
 		toolSpeeds = new int[TOTAL_BLOCKS];
@@ -69,8 +69,9 @@ public class Resources {
 			String path = "assets/images/REAL/" + parts[1] + ".png";
 			itemImages[id] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
 			blockDrop[id] = Integer.parseInt(parts[2]);
-			blockSpeeds[id] = Integer.parseInt(parts[3]);
-			blockStack[id] = Integer.parseInt(parts[4]);
+			blockCanCollide[id] = !parts[3].equals("false");
+			blockSpeeds[id] = Integer.parseInt(parts[4]);
+			blockStack[id] = Integer.parseInt(parts[5]);
 		}
 
 
@@ -105,7 +106,7 @@ public class Resources {
 		String[] p = new String[] {"head", "arm", "leg", "body"};
 		for (String part:p) {
 			String folder = ch.equals("male")||ch.equals("female")?"Player "+ch:ch.substring(0, 1).toUpperCase()+ch.substring(1);
-			String path = String.format("assets/images/PNG/Characters/%s/%s_%s.png", folder, ch, part);
+			String path = String.format("assets/images/REAL/%s/%s_%s.png", folder, ch, part);
 			map.put(part, scale(ImageIO.read(new File(path)), Resources.SCALE*2));
 		}
 		return map;
