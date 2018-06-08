@@ -25,7 +25,7 @@ public class Player extends Entity {
 	private int health, maxHealth;
 	private double counter;
 	private World world;
-	private boolean inventoryState, mining, godMode;
+	private boolean inventoryState, mining, godMode, ruler;
 	private Inventory inventory;
 
 	private Chest currentChest;
@@ -41,7 +41,7 @@ public class Player extends Entity {
 		width = 60 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
 		maxHealth = health = 10;
-		onGround = inventoryState = godMode = false;
+		onGround = inventoryState = godMode = ruler = false;
 		flipped = true;
 		inventory = new Inventory();
 		currentChest = null;
@@ -49,6 +49,8 @@ public class Player extends Entity {
 	}
 
 	public boolean inventoryState() { return inventoryState; }
+	public boolean ruler() { return ruler; }
+
 	public void toggleInventory() { inventoryState = !inventoryState; }
 	public Inventory getInventory() { return inventory; }
 	public Chest getChest() { return currentChest; }
@@ -194,9 +196,17 @@ public class Player extends Entity {
 		//godMode
 		if (Input.keyUpOnce(KeyEvent.VK_G)) {
 			godMode = !godMode;
-		} if (Input.keyUpOnce(KeyEvent.VK_C)) {
+		}
+		//ruler
+		if(Input.keyDownOnce(KeyEvent.VK_R)){
+			ruler = !ruler;
+		}
+
+		if (Input.keyUpOnce(KeyEvent.VK_C)) {
 			inventory.add(10);
-		} if (Input.keyUpOnce(KeyEvent.VK_Q)) {
+		}
+
+		if (Input.keyUpOnce(KeyEvent.VK_Q)) {
 			if (inventory.getCurrentItem() != null) {
 				double x = getVelX() > 0 ? getX() + getWidth() : getX() - Block.WIDTH;
 				double y = getY() - getHealth() / 2;
@@ -218,7 +228,7 @@ public class Player extends Entity {
 					}
 				}
 			}
-			// MINING
+			//Mining
 			mining = false;
 			if (Input.mousePressed(0)) {
 				Block b = getSelectedBlock();
@@ -229,6 +239,8 @@ public class Player extends Entity {
 				}
 			}
 		}
+
+		//Hotbar Inventory Selection
 		if (Input.wheelUp()) {
 			inventory.moveSpotLeft();
 		} else if (Input.wheelDown()) {

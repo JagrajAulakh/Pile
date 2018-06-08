@@ -235,6 +235,20 @@ public class World {
 		if (player != null) {
 			entities.draw(g, player);
 		}
+		if(player.ruler()){
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setColor(Color.WHITE);
+			g2.setStroke(new BasicStroke(1));
+			for(int x = 0; x <= Game.WIDTH; x += Block.WIDTH){
+				g.drawLine((int) (x - camera.getOffsetX() % Block.WIDTH),0,(int) (x - camera.getOffsetX() % Block.WIDTH),Game.HEIGHT);
+			}
+			for(int y = 0; y <= Game.HEIGHT; y += Block.WIDTH){
+				g.drawLine(0,(int) (y - camera.getOffsetY() % Block.HEIGHT),Game.WIDTH,(int) (y - camera.getOffsetY() % Block.HEIGHT));
+			}
+		}
+
 		HUD.render(g, player);
+
+
 	}
 }
