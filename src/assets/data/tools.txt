@@ -1,1 +1,15 @@
-11 pick_wood 4 
+11 pick_wood 5 2
+12 pick_stone 10 2
+13 pick_iron 20 2
+14 pick_gold 25 2
+15 pick_diamond 30 2
+16 shovel_wood 2 0 1
+17 shovel_stone 4 0 1
+18 shovel_iron 6 0 1
+19 shovel_gold 8 0 1
+20 shovel_diamond 10 0 1
+21 axe_wood 5 0 1
+22 axe_stone 10 0 1
+23 axe_iron 20 0 1
+24 axe_gold 25 0 1
+25 axe_diamond 30 0 1

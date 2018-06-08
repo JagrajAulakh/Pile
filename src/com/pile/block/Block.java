@@ -24,7 +24,7 @@ public class Block extends GameObject {
 	public Block(double x, double y, boolean canCollide, int id) {
 		super(x, y);
 		this.id = id;
-		this.image = Resources.blocks[id];
+		this.image = Resources.itemImages[id];
 		this.canCollide = true;
 		updateHitBox();
 		destroyDelayMax = Resources.blockSpeeds[id];
@@ -37,7 +37,7 @@ public class Block extends GameObject {
 
 	private void changeBlockTo(int id) {
 		this.id = id;
-		image = Resources.blocks[id];
+		image = Resources.itemImages[id];
 	}
 
 	@Override

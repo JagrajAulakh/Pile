@@ -10,18 +10,19 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Resources {
 	public static double SCALE = 0.25;
-	public static Font mainFont;
+	private static Font mainFont;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
-	public static SingleImage[] blocks;
 	public static BufferedImage[] blockStages;
 	public static BufferedImage heart0, heart1, heart2;
-	public static int[] blockSpeeds, blockStack, blockDrop;
+	public static SingleImage[] itemImages;
+	public static int[] blockSpeeds, blockStack, blockDrop, toolSpeeds;
+	public static LinkedList[] toolBlocks;
 	public static boolean[] blockPlaceable;
 	public static Recipe[] recipes;
 
@@ -45,29 +46,49 @@ public class Resources {
 
 	}
 
-	public static void readFiles() throws IOException {
-		String[] bFile = Reader.readFile("assets/data/items.txt").split("\n");
-		final int TOTAL_BLOCKS = bFile.length;
+	private static void readFiles() throws IOException {
+		String[] bFile = Reader.readFile("assets/data/blocks.txt").split("\n");
+		final int TOTAL_BLOCKS = 50;
 		// All blocks, sorted by ID numbers
-		blocks = new SingleImage[TOTAL_BLOCKS];
+		itemImages = new SingleImage[TOTAL_BLOCKS];
 		blockSpeeds = new int[TOTAL_BLOCKS];
 		blockStack = new int[TOTAL_BLOCKS];
 		blockDrop = new int[TOTAL_BLOCKS];
 		blockPlaceable = new boolean[TOTAL_BLOCKS];
-		for (int i = 0; i < bFile.length; i++) {
-			String[] parts = bFile[i].split(" ");
+
+		String[] tFile = Reader.readFile("assets/data/tools.txt").split("\n");
+		toolSpeeds = new int[TOTAL_BLOCKS];
+		toolBlocks = new LinkedList[TOTAL_BLOCKS];
+
+		String[] rFile = Reader.readFile("assets/data/crafting.txt").split("\n");
+		recipes = new Recipe[TOTAL_BLOCKS];
+
+		for (String line:bFile) {
+			String[] parts = line.split(" ");
 			int id = Integer.parseInt(parts[0]);
 			String path = "assets/images/REAL/" + parts[1] + ".png";
-			if (parts.length == 5) {
-				blocks[id] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
-				blockDrop[id] = Integer.parseInt(parts[2]);
-				blockSpeeds[id] = Integer.parseInt(parts[3]);
-				blockStack[id] = Integer.parseInt(parts[4]);
+			itemImages[id] = new SingleImage(scale(ImageIO.read(new File(path)), SCALE));
+			blockDrop[id] = Integer.parseInt(parts[2]);
+			blockSpeeds[id] = Integer.parseInt(parts[3]);
+			blockStack[id] = Integer.parseInt(parts[4]);
+		}
+
+
+		for (String line:tFile) {
+			String[] parts = line.split(" ");
+			int id = Integer.parseInt(parts[0]);
+			String path = "assets/images/REAL/" + parts[1] + ".png";
+			itemImages[id] = new SingleImage(scale(ImageIO.read(new File(path)), 0.4));
+			toolSpeeds[id] = Integer.parseInt(parts[2]);
+			for (int i = 3; i < parts.length; i++) {
+				if (toolBlocks[id] == null) {
+					toolBlocks[id] = new LinkedList<Integer>();
+				}
+				toolBlocks[id].add(Integer.parseInt(parts[i]));
 			}
 		}
-		String[] recipe_lines = Reader.readFile("assets/data/crafting.txt").split("\n");
-		recipes = new Recipe[TOTAL_BLOCKS];
-		for (String line:recipe_lines) {
+
+		for (String line:rFile) {
 			String[] parts = line.split(" ");
 			int id = Integer.parseInt(parts[0]);
 			Recipe r = new Recipe(id);
@@ -77,7 +98,6 @@ public class Resources {
 			}
 			recipes[id] = r;
 		}
-		System.out.println(Arrays.toString(recipes));
 	}
 	private static HashMap<String, BufferedImage> getParts(String ch) throws IOException {
 		ch = ch.toLowerCase();

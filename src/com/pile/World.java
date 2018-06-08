@@ -193,6 +193,12 @@ public class World {
 				}
 			}
 		}
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void update() {

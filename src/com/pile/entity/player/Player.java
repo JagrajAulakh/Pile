@@ -5,9 +5,11 @@ import com.pile.World;
 import com.pile.block.Block;
 import com.pile.block.Chest;
 import com.pile.entity.Drop;
+import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
 import com.pile.entity.player.inv.Inventory;
 import com.pile.entity.player.inv.Item;
+import com.pile.entity.player.inv.Tool;
 import com.pile.image.Resources;
 import com.pile.image.SingleImage;
 import com.pile.state.PlayState;
@@ -46,6 +48,9 @@ public class Player extends Entity {
 		inventory = new Inventory();
 		currentChest = null;
 		updateHitBox();
+		inventory.add(15);
+		inventory.add(20);
+		inventory.add(25);
 	}
 
 	public boolean inventoryState() { return inventoryState; }
@@ -93,8 +98,8 @@ public class Player extends Entity {
 		return new SingleImage(img);
 	}
 
-	public boolean withinReach(Block b) { return withinReach(b.getX(), b.getY()); }
-	public boolean withinReach(double wx, double wy) {
+	private boolean withinReach(Block b) { return withinReach(b.getX(), b.getY()); }
+	private boolean withinReach(double wx, double wy) {
 		return Math.hypot(wx - x - width/2, wy - y - height/2) / Block.WIDTH <= REACH;
 	}
 
@@ -226,9 +231,16 @@ public class Player extends Entity {
 			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
 			if (Input.mousePressed(2)) {
 				Item item = inventory.getCurrentItem();
-				if (item != null) {
+				if (item != null && item instanceof com.pile.entity.player.inv.Block) {
 					Block b = new Block(wx, wy, item.getId());
-					if (withinReach(b) && !collides(b)) {
+					boolean hitting = false;
+					for (Entity e:world.getEntitiesAround(this, 2)) {
+						if ((e instanceof Player || e instanceof Enemy) && e.collides(b)) {
+							hitting = true;
+							break;
+						}
+					}
+					if (withinReach(b) && !hitting) {
 						if (world.getBlockAtSpot(b.getX() - Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX() + Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX(), b.getY() - Block.HEIGHT) != null || world.getBlockAtSpot(b.getX(), b.getY() + Block.HEIGHT) != null) {
 							if (world.addBlock(b)) inventory.decrease();
 						}
@@ -242,7 +254,14 @@ public class Player extends Entity {
 				if (b != null) {
 					mining = true;
 					if(godMode) world.removeBlock(b, 100);
-					else world.removeBlock(b);
+					else {
+						Item item = inventory.getCurrentItem();
+						if (item != null && item instanceof Tool && Resources.toolBlocks[item.getId()].contains(b.getId())) {
+							world.removeBlock(b, Resources.toolSpeeds[item.getId()]);
+						} else {
+							world.removeBlock(b);
+						}
+					}
 				}
 			}
 		}

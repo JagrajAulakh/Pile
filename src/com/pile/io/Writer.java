@@ -21,7 +21,6 @@ public class Writer {
 			worldDir.mkdirs();
 		}
 		ObjectOutputStream ous;
-		System.out.println("HERE");
 		try {
 			// Todo write data file
 			ous = new ObjectOutputStream(new FileOutputStream("data/" + worldname + "/data.dat"));
