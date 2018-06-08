@@ -261,12 +261,7 @@ public class Player extends Entity {
 			int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
 			if (Input.mousePressed(2)) {
-				//Right clicked block
-				Block rcB = getSelectedBlock();
-				System.out.println(rcB);
-				if(rcB != null && rcB instanceof Chest) {
-					System.out.println("CHEST OPEN");
-				}
+				//Placing blocks
 				Item item = inventory.getCurrentItem();
 				if (item != null && item instanceof com.pile.entity.player.inv.Block) {
 					Block b;
@@ -284,7 +279,11 @@ public class Player extends Entity {
 					}
 					if (withinReach(b) && !hitting) {
 						if (world.getBlockAtSpot(b.getX() - Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX() + Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX(), b.getY() - Block.HEIGHT) != null || world.getBlockAtSpot(b.getX(), b.getY() + Block.HEIGHT) != null) {
-							if (world.addBlock(b)) inventory.decrease();
+							if(item.getId() == 10){
+									inventory.decrease();
+									System.out.println("chest place");
+							}
+							else if (world.addBlock(b)) inventory.decrease();
 						}
 					}
 				}

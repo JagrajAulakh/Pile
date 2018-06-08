@@ -1,5 +1,5 @@
 package com.pile.entity.player.inv;
-
+//Todo I don't think player should hold inventory, problems with chest
 import com.pile.image.Resources;
 
 public class Inventory {
@@ -17,7 +17,12 @@ public class Inventory {
 	//https://softwareengineering.stackexchange.com/questions/246454/structuring-a-storage-system-for-a-game
 
 	public Inventory() {
+		System.out.println("Inventory Created");
 		inventory = new Item[WIDTH*HEIGHT];
+		spot = 0;
+	}
+	public Inventory(int W, int H){
+		inventory = new Item[W*H];
 		spot = 0;
 	}
 
@@ -74,6 +79,8 @@ public class Inventory {
 	public void decrease() { decrease(spot); }
 
 	public void decrease(int spot) {
+		System.out.println("This is spot " + spot);
+		System.out.println(inventory);
 		if (inventory[spot] != null) {
 			inventory[spot].decrease();
 			if (inventory[spot].getAmount() == 0) {

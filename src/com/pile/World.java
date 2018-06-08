@@ -9,6 +9,7 @@ import com.pile.entity.player.Player;
 import com.pile.image.Resources;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class World {
@@ -26,6 +27,8 @@ public class World {
 	// Grid of the World, used to determine where every GameObjects are
 	private LinkedList<Entity>[][] entityGrid;
 	private Block[][] blockGrid;
+
+	private ArrayList<Chest> chests = new ArrayList<Chest>();
 
 	public GameCamera camera;
 	private EntityManager entities;
@@ -58,6 +61,10 @@ public class World {
 		entityGrid[e.getGridX()][e.getGridY()].add(e);
 	}
 
+	public void addChest(Chest c){
+		System.out.println("out");
+	}
+
 	public boolean addBlock(Block b) {
 		int bx = (int)(b.getX() / Block.WIDTH);
 		int by = (int)(b.getY() / Block.HEIGHT);
@@ -77,6 +84,7 @@ public class World {
 		b.destroy(destroyAmount);
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
+			System.out.println("Block broken id " + b.getId());
 			addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
 		}
 	}

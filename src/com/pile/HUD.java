@@ -6,7 +6,6 @@ import com.pile.entity.player.Player;
 import com.pile.entity.player.inv.Inventory;
 import com.pile.entity.player.inv.Item;
 import com.pile.image.Resources;
-import com.pile.image.SingleImage;
 import com.pile.state.PlayState;
 
 import java.awt.*;
