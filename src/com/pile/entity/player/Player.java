@@ -40,7 +40,7 @@ public class Player extends Entity {
 		arm = new Arm(Resources.partsMale.get("arm"));
 		leg = new Leg(Resources.partsMale.get("leg"));
 		image = drawImage(0, 0, 0, 0);
-		width = 60 * Resources.SCALE*2;
+		width = 56 * Resources.SCALE*2;
 		height = image.getImage().getHeight();
 		maxHealth = health = 10;
 		onGround = inventoryState = godMode = ruler = invinsible = false;
@@ -230,6 +230,12 @@ public class Player extends Entity {
 			int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
 			if (Input.mousePressed(2)) {
+				//Right clicked block
+				Block rcB = getSelectedBlock();
+				System.out.println(rcB);
+				if(rcB != null && rcB instanceof Chest){
+					System.out.println("CHEST OPEN");
+				}
 				Item item = inventory.getCurrentItem();
 				if (item != null && item instanceof com.pile.entity.player.inv.Block) {
 					Block b = new Block(wx, wy, item.getId());
