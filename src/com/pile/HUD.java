@@ -9,7 +9,6 @@ import com.pile.image.Resources;
 import com.pile.state.PlayState;
 
 import java.awt.*;
-import java.util.Map;
 
 //Todo think of drawling health, idea: Row of hearts drawn, opacity changes & length to shown health
 //Basically a standard health bar except with heart graphics replacing a solid bar
@@ -26,27 +25,39 @@ public class HUD {
 
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 
-	private static boolean inInventoryArea(int mx, int my) {
+	private static boolean inInventoryArea(int mx, int my, Inventory inv) {
 		boolean area;
-		area = 0 <= mx && mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= my && my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT;
-		area = area || 0 <= mx && mx <= INV_BOX_WIDTH;
+		int posX = inv.getInvX();
+		int posY = inv.getInvY();
+		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT + posY;
 		return area;
+	}
+	private static void pickUpItem(Inventory inv){
+		Item[] items = inv.getItems();
+		int posX = inv.getInvX();
+		int posY = inv.getInvY();
+		int ix = (Input.mx - posX) / (INV_BOX_WIDTH+SPACING);
+		int iy = (Input.my - posY) / (INV_BOX_HEIGHT+SPACING);
+		int spot = iy*Inventory.WIDTH + ix;
+		if (Input.mouseUp(0)) {
+			Item tmp = items[spot];
+			items[spot] = inHand;
+			inHand = tmp;
+		}
 	}
 
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
-		Item[] items = inventory.getInventory();
+		Item[] items = inventory.getItems();
+		Inventory chest = null;
+		if(player.getChest() != null){
+			chest = player.getChest().getStorage();
+			Item[] chest_items = chest.getItems();
+		}
 
 		if (player.inventoryState()) {
-			if (inInventoryArea(Input.mx, Input.my)) {
-				int ix = Input.mx / (INV_BOX_WIDTH+SPACING);
-				int iy = Input.my / (INV_BOX_HEIGHT+SPACING);
-				int spot = iy*Inventory.WIDTH + ix;
-				if (Input.mouseUp(0)) {
-					Item tmp = items[spot];
-					items[spot] = inHand;
-					inHand = tmp;
-				}
+			if (inInventoryArea(Input.mx, Input.my,inventory)) {
+				pickUpItem(inventory);
 			} else {
 				if (Input.mouseUp(0)) {
 					if (inHand != null) {
@@ -76,38 +87,60 @@ public class HUD {
 			g2.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 50, null);
 		}
 
-		Inventory inventory = player.getInventory();
-		Item[] items = inventory.getInventory();
-		int y = -1;
-		g2.setFont(Resources.getFont(32));
-		for (int i = 0; i < (player.inventoryState()?items.length:Inventory.WIDTH); i++) {
-			if (i % Inventory.WIDTH == 0) y++;
-			int bx = (i % Inventory.WIDTH) * (INV_BOX_WIDTH+SPACING);
-			int by = y * (INV_BOX_HEIGHT+SPACING);
-			int alpha = inInventoryArea(Input.mx, Input.my) ? 255 : 100;
-			g2.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
-			g2.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
-			if (i == inventory.getSpot()) {
-				g2.setColor(Color.WHITE);
-				g2.setStroke(new BasicStroke(5));
-				g2.drawRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
-			}
-			g2.setColor(Color.BLACK);
-			g2.setFont(Resources.getFont(32));
-			if (items[i] != null) {
-				//Todo also draw images for block
-				g2.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
-				g2.drawString(amountToString(items[i]), bx, by+INV_BOX_HEIGHT);
-			}
+		drawInventory(g2,player,player.getInventory(),Inventory.P_INV);
+		if(player.getChest() != null){
+			drawInventory(g2,player,player.getChest().getStorage(),Inventory.INV);
 		}
+
 		if (inHand != null) {
 			g2.setColor(Color.BLACK);
 			g2.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
 			g2.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
+			g2.setStroke(new BasicStroke(5));
 		}
 
 		if (player.inventoryState()) {
 			g2.setColor(new Color(0,0,255,100));
 		}
+	}
+	private static void drawInventory(Graphics2D g, Player player, Inventory inv, int type){
+		Item[] items = inv.getItems();
+		int inventorySquares = items.length;
+		int posX = inv.getInvX();
+		int posY = inv.getInvY();
+		int y = -1;
+		g.setFont(Resources.getFont(32));
+		if(type == Inventory.P_INV){
+			inventorySquares = player.inventoryState() ? items.length:Inventory.WIDTH;
+		}
+//		for (int i = 0; i < (player.inventoryState()?items.length:Inventory.WIDTH); i++) {
+		for (int i = 0; i < inventorySquares; i++) {
+			if (i % Inventory.WIDTH == 0) y++;
+			int bx = posX + (i % Inventory.WIDTH) * (INV_BOX_WIDTH+SPACING);
+			int by = posY + y * (INV_BOX_HEIGHT+SPACING);
+			if(type == Inventory.P_INV){
+				int alpha = inInventoryArea(Input.mx, Input.my,inv) ? 255 : 100;
+				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
+				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
+				//Hotbar selection (Player Inv only)
+				if (i == inv.getSpot()) {
+					g.setColor(Color.WHITE);
+					g.setStroke(new BasicStroke(5));
+					g.drawRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
+				}
+			}
+			else{
+				g.setColor(new Color(0,50,255,100));
+				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
+			}
+
+			g.setColor(Color.BLACK);
+			g.setFont(Resources.getFont(32));
+			if (items[i] != null) {
+				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
+				g.drawString(amountToString(items[i]), bx, by+INV_BOX_HEIGHT);
+			}
+		}
+
 	}
 }

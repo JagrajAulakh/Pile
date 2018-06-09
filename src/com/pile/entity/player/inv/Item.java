@@ -30,7 +30,6 @@ public class Item {
 
 	public void add() { amount++; }
 	public void decrease() { amount--; }
-	//Todo relook this.. bad? way of doing things
 	public int getWidth(){ return image.getImage().getWidth();}
 	public int getHeight(){ return image.getImage().getHeight();}
 

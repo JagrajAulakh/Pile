@@ -1,14 +1,17 @@
 package com.pile.entity.player.inv;
-//Todo I don't think player should hold inventory, problems with chest
+
 import com.pile.image.Resources;
 
 public class Inventory {
 
 	public static final int WIDTH = 10;
 	public static final int HEIGHT = 5;
+	public static final int P_INV = 0;
+	public static final int INV = 1;
 
 	private int spot; //Holds selection in hotBar
 	private Item[] inventory;
+	private int invX, invY;
 
 	//Todo use items to search for it's crafting recipes. Remember each recipe calls for a number of items
 	//Have different types of items, stackable, material,
@@ -16,11 +19,15 @@ public class Inventory {
 	//Inventory should be able to check free slots, find
 	//https://softwareengineering.stackexchange.com/questions/246454/structuring-a-storage-system-for-a-game
 
-	public Inventory() {
+	public Inventory(int x, int y) {
+		invX = x;
+		invY = y;
 		inventory = new Item[WIDTH*HEIGHT];
 		spot = 0;
 	}
-	public Inventory(int W, int H){
+	public Inventory(int x, int y, int W, int H){
+		invX = x;
+		invY = y;
 		inventory = new Item[W*H];
 		spot = 0;
 	}
@@ -28,9 +35,11 @@ public class Inventory {
 	public int getSpot() { return spot; }
 	public void setSpot(int spot) { this.spot = spot; }
 	public Item getCurrentItem() { return inventory[spot]; }
-	public Item[] getInventory() { return inventory; }
+	public Item[] getItems() { return inventory; }
 	public void moveSpotLeft() { spot = (spot+1) % WIDTH; }
 	public void moveSpotRight() { spot = spot-1 < 0 ? WIDTH-1 : spot-1; }
+	public int getInvX() { return invX; }
+	public int getInvY() { return invY; }
 
 	public Item findItem(int id) {
 		for (int i = 0; i < inventory.length; i++) {
