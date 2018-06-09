@@ -45,6 +45,21 @@ public class HUD {
 			inHand = tmp;
 		}
 	}
+	private static void dropInHand(Player player){
+		if (inHand != null) {
+			int a = inHand.getAmount();
+			int id = inHand.getId();
+			for (int i = 0; i < a; i++) {
+				double x = player.getVelX() > 0 ? player.getX() + player.getWidth() : player.getX() - Block.WIDTH;
+				double y = player.getY() - player.getHealth() / 2;
+				PlayState.world.addEntity(new Drop(x, y, id, player, (Math.random()*5 + 1) * (player.getVelX()>0 ? 1 : -1), -5, 60));
+				inHand = null;
+			}
+		}
+		else{
+			player.toggleInventory();
+		}
+	}
 
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
@@ -60,18 +75,16 @@ public class HUD {
 				pickUpItem(inventory);
 			} else {
 				if (Input.mouseUp(0)) {
-					if (inHand != null) {
-						int a = inHand.getAmount();
-						int id = inHand.getId();
-						for (int i = 0; i < a; i++) {
-							double x = player.getVelX() > 0 ? player.getX() + player.getWidth() : player.getX() - Block.WIDTH;
-							double y = player.getY() - player.getHealth() / 2;
-							PlayState.world.addEntity(new Drop(x, y, id, player, (Math.random()*5 + 1) * (player.getVelX()>0 ? 1 : -1), -5, 60));
-							inHand = null;
-						}
-					} else {
-						player.toggleInventory();
-					}
+					dropInHand(player);
+				}
+			}
+		}
+		if(player.chestState()){
+			if(inInventoryArea(Input.mx, Input.my, chest)){
+				pickUpItem(chest);
+			} else {
+				if (Input.mouseUp(0)){
+					dropInHand(player);
 				}
 			}
 		}
