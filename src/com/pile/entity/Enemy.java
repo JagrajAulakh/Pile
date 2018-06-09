@@ -24,8 +24,6 @@ public class Enemy extends Entity {
 
 	public Enemy(double x, double y) {
 		super(x, y);
-		width = 50;
-		height = 172;
 
 		image = drawImage(0, 0, 0, 0);
 		width = 60 * Resources.SCALE*2;

@@ -32,7 +32,7 @@ public class Resources {
 		readFiles();
 		blockStages = new BufferedImage[Block.STAGES];
 		for (int i = 0; i < Block.STAGES; i++) {
-			String path = "assets/images/destroy/" + i + ".png";
+			String path = "assets/images/REAL/destroy/" + i + ".png";
 			BufferedImage img = ImageIO.read(new File(path));
 			blockStages[i] = scale(img, Block.WIDTH, Block.HEIGHT);
 		}

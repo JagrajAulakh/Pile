@@ -50,14 +50,6 @@ public abstract class Entity extends GameObject {
 		}
 	}
 	protected void blockCollisionY(LinkedList<Block> blocks) {
-		if (y + height > PlayState.world.getHeight()) {
-			y = PlayState.world.getHeight() - height;
-			accY = velY = 0;
-			onGround = true;
-		} else if (y < 0) {
-			y = 0;
-			accY = velY = 0;
-		}
 
 		boolean hit = false;
 		for (Block e:blocks) {
@@ -75,5 +67,14 @@ public abstract class Entity extends GameObject {
 			updateHitBox();
 		}
 		if (!hit) onGround = false;
+		// todo make this if statement different for different entities
+		if (y + height > PlayState.world.getHeight()) {
+			y = PlayState.world.getHeight() - height;
+			accY = velY = 0;
+			onGround = true;
+		} else if (y < 0) {
+			y = 0;
+			accY = velY = 0;
+		}
 	}
 }

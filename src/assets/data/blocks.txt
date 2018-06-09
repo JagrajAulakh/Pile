@@ -12,3 +12,4 @@ id pic_name drops can_collide mine_delay stack_amount
 10 chest 10 true 25 99
 26 leaves -1 false 5 99
 27 wood 27 true 25 99
+28 sand 28 true 6 99

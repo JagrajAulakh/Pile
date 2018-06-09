@@ -17,6 +17,7 @@ import com.pile.state.PlayState;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Player extends Entity {
@@ -268,6 +269,7 @@ public class Player extends Entity {
 			if (Input.mouseDown(2)) {
 				Block b = getSelectedBlock();
 				if (b != null && b instanceof Chest) {
+//					currentChest = (Chest)b;
 					System.out.println("OPEN SESAME!");
 				}
 			}

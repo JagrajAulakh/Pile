@@ -1,10 +1,7 @@
 package com.pile;
 
 import com.pile.block.*;
-import com.pile.entity.Drop;
-import com.pile.entity.Enemy;
-import com.pile.entity.Entity;
-import com.pile.entity.EntityManager;
+import com.pile.entity.*;
 import com.pile.entity.player.Player;
 import com.pile.image.Resources;
 
@@ -29,6 +26,8 @@ public class World {
 	private Block[][] blockGrid;
 
 	private ArrayList<Chest> chests = new ArrayList<Chest>();
+	private ArrayList<Particle> particles = new ArrayList<Particle>();
+	private ArrayList<Particle> particlesToRemove = new ArrayList<Particle>();
 
 	public GameCamera camera;
 	private EntityManager entities;
@@ -53,6 +52,8 @@ public class World {
 	public int getHeight() {
 		return height;
 	}
+
+	public void removeParticle(Particle p) { particlesToRemove.add(p); }
 
 	public void addEntity(Entity e) {
 		if (entityGrid[e.getGridX()][e.getGridY()] == null) {
@@ -79,6 +80,7 @@ public class World {
 	public void removeBlock(Block b) { removeBlock(b, 1); }
 	public void removeBlock(Block b, int destroyAmount) {
 		b.destroy(destroyAmount);
+		particles.add(new Particle(b.getX(), b.getY()));
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
 			if (Resources.blockDrop[b.getId()] != -1) addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
@@ -192,6 +194,7 @@ public class World {
 				addBlock(new Block(x, height - i*Block.HEIGHT, 2));
 			}
 		}
+		addBlock(new Block(width / 2, 0, 28));
 		addPlayer(new Player(width/2, y*Block.HEIGHT - 200, this));
 		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
 		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
@@ -224,11 +227,13 @@ public class World {
 	public void update() {
 		sortEntities(5);
 		LinkedList<GameObject> l = new LinkedList<GameObject>();
-		l.addAll(getBlocksAround(player, 10));
+		l.addAll(getBlocksAround(player, width/2 / Block.WIDTH));
 		l.addAll(getEntitiesAround(player, 10));
 		for (GameObject g:l) {
 			g.update();
 		}
+		for (Particle p:particles) { p.update(); }
+		for (Particle p:particlesToRemove) { particles.remove(p); }
 		camera.centerOn(player);
 		frame = (frame + 1) % 600;
 		HUD.update(player);
@@ -258,6 +263,10 @@ public class World {
 
 		if (player != null) {
 			entities.draw(g, player);
+		}
+		for (Particle p:particles) {
+			g.setColor(p.getColor());
+			g.fillRect((int)(p.getX() - camera.getOffsetX()), (int)(p.getY() - camera.getOffsetY()), p.getSize(), p.getSize());
 		}
 		if (player.ruler()){
 			Graphics2D g2 = (Graphics2D)g;

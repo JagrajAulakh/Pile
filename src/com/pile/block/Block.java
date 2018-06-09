@@ -1,6 +1,7 @@
 package com.pile.block;
 
 import com.pile.GameObject;
+import com.pile.entity.FallingSand;
 import com.pile.image.ImageType;
 import com.pile.image.Resources;
 import com.pile.state.PlayState;
@@ -69,7 +70,14 @@ public class Block extends GameObject {
 				}
 			}
 		} else if (id == 0) {
+			// If there is a block above a grass, change it to dirt
 			if (PlayState.world.getBlockAtSpot(x, y - 10) != null) changeBlockTo(1);
+		} else if (id == 28) { // SAND
+			if (PlayState.world.getBlockAtSpot(x, y + HEIGHT + 10) == null) {
+				System.out.println("GOING TO FALL");
+				PlayState.world.addEntity(new FallingSand(x, y));
+				PlayState.world.removeBlockPermanent(this);
+			}
 		}
 	}
 
