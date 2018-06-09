@@ -36,7 +36,7 @@ public class Player extends Entity {
 	public Player(double x, double y, World world) {
 		super(x, y);
 		this.world = world;
-		inventory = new Inventory();
+		inventory = new Inventory(0, 0);
 		inventory.add(15);
 		inventory.add(20);
 		inventory.add(25);
@@ -269,7 +269,8 @@ public class Player extends Entity {
 			if (Input.mouseDown(2)) {
 				Block b = getSelectedBlock();
 				if (b != null && b instanceof Chest) {
-//					currentChest = (Chest)b;
+					inventoryState = !inventoryState;
+					currentChest = (Chest)b;
 					System.out.println("OPEN SESAME!");
 				}
 			}
