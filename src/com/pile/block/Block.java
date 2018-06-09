@@ -74,7 +74,6 @@ public class Block extends GameObject {
 			if (PlayState.world.getBlockAtSpot(x, y - 10) != null) changeBlockTo(1);
 		} else if (id == 28) { // SAND
 			if (PlayState.world.getBlockAtSpot(x, y + HEIGHT + 10) == null) {
-				System.out.println("GOING TO FALL");
 				PlayState.world.addEntity(new FallingSand(x, y));
 				PlayState.world.removeBlockPermanent(this);
 			}

@@ -24,7 +24,6 @@ public class FallingSand extends Entity {
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 2);
 		blockCollisionY(blocks);
 		if (PlayState.world.getBlockAtSpot(x, y + height + 10) != null) {
-			System.out.println("GOING TO BLOCK");
 			PlayState.world.addBlock(new Block(Math.round(x/Block.WIDTH)*Block.WIDTH, Math.round(y/Block.HEIGHT)*Block.HEIGHT, 28));
 			PlayState.world.removeEntity(this);
 		}

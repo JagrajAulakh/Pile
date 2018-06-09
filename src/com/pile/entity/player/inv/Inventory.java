@@ -4,14 +4,12 @@ import com.pile.image.Resources;
 
 public class Inventory {
 
-	public static final int WIDTH = 10;
-	public static final int HEIGHT = 5;
 	public static final int P_INV = 0;
 	public static final int INV = 1;
 
 	private int spot; //Holds selection in hotBar
 	private Item[] inventory;
-	private int invX, invY;
+	private int invX, invY, invW, invH;
 
 	//Todo use items to search for it's crafting recipes. Remember each recipe calls for a number of items
 	//Have different types of items, stackable, material,
@@ -20,15 +18,14 @@ public class Inventory {
 	//https://softwareengineering.stackexchange.com/questions/246454/structuring-a-storage-system-for-a-game
 
 	public Inventory(int x, int y) {
-		invX = x;
-		invY = y;
-		inventory = new Item[WIDTH*HEIGHT];
-		spot = 0;
+		this(x, y, 10, 5);
 	}
-	public Inventory(int x, int y, int W, int H){
+	public Inventory(int x, int y, int w, int h){
 		invX = x;
 		invY = y;
-		inventory = new Item[W*H];
+		invW = w;
+		invH = h;
+		inventory = new Item[w*h];
 		spot = 0;
 	}
 
@@ -36,8 +33,8 @@ public class Inventory {
 	public void setSpot(int spot) { this.spot = spot; }
 	public Item getCurrentItem() { return inventory[spot]; }
 	public Item[] getItems() { return inventory; }
-	public void moveSpotLeft() { spot = (spot+1) % WIDTH; }
-	public void moveSpotRight() { spot = spot-1 < 0 ? WIDTH-1 : spot-1; }
+	public void moveSpotLeft() { spot = (spot+1) % invW; }
+	public void moveSpotRight() { spot = spot-1 < 0 ? invW-1 : spot-1; }
 	public int getInvX() { return invX; }
 	public int getInvY() { return invY; }
 
