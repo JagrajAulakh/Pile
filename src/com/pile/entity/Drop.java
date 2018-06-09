@@ -10,7 +10,7 @@ import com.pile.entity.player.Player;
 import java.util.LinkedList;
 
 public class Drop extends Entity {
-	public static final int DESPAWN_TIME = 60 * 60 * 5;
+	public static final int DESPAWN_TIME = 60 * 60 * 5; // 5 minutes
 	private int id, despawnCounter;
 	private boolean canPick;
 	private Player player;

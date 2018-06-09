@@ -16,7 +16,7 @@ public class World {
 	public static final double GRAVITY = 0.4;
 	public static final double FRICTION = 0.2;
 	// Used for detecting collisions within 1 Grid Space of Entities
-	public static final int GRID_SIZE = (int)(200 * Resources.SCALE*2);
+	public static final int GRID_SIZE = (int)(256 * Resources.SCALE*2);
 	// Todo Change W & H
 	private int width = 2048*10; // World Width
 	private int height = 1024*2; // World Height
@@ -61,10 +61,6 @@ public class World {
 		entityGrid[e.getGridX()][e.getGridY()].add(e);
 	}
 
-	public void addChest(Chest c){
-		System.out.println("out");
-	}
-
 	public boolean addBlock(Block b) {
 		int bx = (int)(b.getX() / Block.WIDTH);
 		int by = (int)(b.getY() / Block.HEIGHT);
@@ -85,7 +81,6 @@ public class World {
 		b.destroy(destroyAmount);
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
-			System.out.println("Block broken id " + b.getId());
 			if (Resources.blockDrop[b.getId()] != -1) addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
 		}
 	}
@@ -266,15 +261,21 @@ public class World {
 		if (player != null) {
 			entities.draw(g, player);
 		}
-		if(player.ruler()){
+		if (player.ruler()){
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setColor(new Color(255,255,255,50));
 			g2.setStroke(new BasicStroke(1));
-			for(int x = 0; x <= Game.WIDTH; x += Block.WIDTH){
-				g.drawLine((int) (x - camera.getOffsetX() % Block.WIDTH),0,(int) (x - camera.getOffsetX() % Block.WIDTH),Game.HEIGHT);
+//			for(int x = 0; x <= Game.WIDTH; x += Block.WIDTH){
+//				g.drawLine((int) (x - camera.getOffsetX() % Block.WIDTH),0,(int) (x - camera.getOffsetX() % Block.WIDTH),Game.HEIGHT);
+//			}
+//			for(int y = 0; y <= Game.HEIGHT; y += Block.HEIGHT){
+//				g.drawLine(0,(int) (y - camera.getOffsetY() % Block.HEIGHT),Game.WIDTH,(int) (y - camera.getOffsetY() % Block.HEIGHT));
+//			}
+			for(int x = 0; x <= Game.WIDTH; x += GRID_SIZE){
+				g.drawLine((int) (x - camera.getOffsetX() % GRID_SIZE),0,(int) (x - camera.getOffsetX() % GRID_SIZE),Game.HEIGHT);
 			}
-			for(int y = 0; y <= Game.HEIGHT; y += Block.WIDTH){
-				g.drawLine(0,(int) (y - camera.getOffsetY() % Block.HEIGHT),Game.WIDTH,(int) (y - camera.getOffsetY() % Block.HEIGHT));
+			for(int y = 0; y <= Game.HEIGHT; y += GRID_SIZE){
+				g.drawLine(0,(int) (y - camera.getOffsetY() % GRID_SIZE),Game.WIDTH,(int) (y - camera.getOffsetY() % GRID_SIZE));
 			}
 		}
 

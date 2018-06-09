@@ -169,11 +169,15 @@ public class Player extends Entity {
 	}
 	private void collisionX(LinkedList<Block> blocks) {
 		if (!godMode) blockCollisionX(blocks);
-		for (Entity e:PlayState.world.getEntitiesAround(this, 1)) {
+		LinkedList<Entity> l = PlayState.world.getEntitiesAround(this, 1);
+		System.out.println(l.size()-1);
+		for (Entity e:l) {
 			if (e instanceof Drop) {
 				Drop d = (Drop)e;
 				if (collides(d) && d.canPick()) {
-					if (inventory.add(d.getId())) PlayState.world.removeEntity(e);
+					boolean added = inventory.add(d.getId());
+					System.out.println(added);
+					if (added) PlayState.world.removeEntity(d);
 				}
 			}
 		}

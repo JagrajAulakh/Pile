@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Resources {
-	public static double SCALE = 0.25;
+	public static final double SCALE = 0.25;
 	private static Font mainFont;
 	public static HashMap<String, BufferedImage> partsMale, partsFemale, partsZombie;
 	public static BufferedImage[] blockStages;

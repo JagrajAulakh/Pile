@@ -17,7 +17,6 @@ public class Inventory {
 	//https://softwareengineering.stackexchange.com/questions/246454/structuring-a-storage-system-for-a-game
 
 	public Inventory() {
-		System.out.println("Inventory Created");
 		inventory = new Item[WIDTH*HEIGHT];
 		spot = 0;
 	}
@@ -61,26 +60,26 @@ public class Inventory {
 		if (find == null) {
 			int s = firstEmpty();
 			if (s == -1) return false;
-			else {
-				if (Resources.blockSpeeds[id] != 0) {
-					inventory[s] = new Block(id);
-				} else if (Resources.toolSpeeds[id] != 0) {
-					inventory[s] = new Tool(id);
-				} else {
-					inventory[s] = new Item(id);
-				}
+
+			if (Resources.blockSpeeds[id] != 0) { // Check if it's a block
+				inventory[s] = new Block(id);
+				return true;
+			} else if (Resources.toolSpeeds[id] != 0) { // Check if it's a tool
+				inventory[s] = new Tool(id);
+				return true;
+			} else {
+//				inventory[s] = new Item(id);
+				return false;
 			}
 		} else {
 			find.add();
+			return true;
 		}
-		return true;
 	}
 
 	public void decrease() { decrease(spot); }
 
 	public void decrease(int spot) {
-		System.out.println("This is spot " + spot);
-		System.out.println(inventory);
 		if (inventory[spot] != null) {
 			inventory[spot].decrease();
 			if (inventory[spot].getAmount() == 0) {
