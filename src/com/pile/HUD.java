@@ -23,17 +23,18 @@ public class HUD {
 
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 
+	private static boolean inInventoryArea(int mx, int my) { return 0 <= mx && mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= my && my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT; }
+
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getInventory();
 
 		if (player.inventoryState()) {
-			if (0 <= Input.mx && Input.mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT) {
+			if (inInventoryArea(Input.mx, Input.my)) {
 				int ix = Input.mx / (INV_BOX_WIDTH+SPACING);
 				int iy = Input.my / (INV_BOX_HEIGHT+SPACING);
 				int spot = iy*Inventory.WIDTH + ix;
 				if (Input.mouseUp(0)) {
-//					if (items[spot].getId() == inHand.getId())
 					Item tmp = items[spot];
 					items[spot] = inHand;
 					inHand = tmp;
@@ -71,13 +72,14 @@ public class HUD {
 			if (i % Inventory.WIDTH == 0) y++;
 			int bx = (i % Inventory.WIDTH) * (INV_BOX_WIDTH+SPACING);
 			int by = y * (INV_BOX_HEIGHT+SPACING);
-			g.setColor(y==0 ? new Color(255,0,0,100) : new Color(0,50,255,100));
-			g.fillRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT);
+			int alpha = inInventoryArea(Input.mx, Input.my) ? 255 : 100;
+			g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
+			g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 			if (i == inventory.getSpot()) {
 				Graphics2D g2 = (Graphics2D)g;
 				g2.setColor(Color.WHITE);
 				g2.setStroke(new BasicStroke(5));
-				g2.drawRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT);
+				g2.drawRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 			}
 			g.setColor(Color.BLACK);
 			g.setFont(Resources.getFont(32));
@@ -91,6 +93,10 @@ public class HUD {
 			g.setColor(Color.BLACK);
 			g.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
 			g.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
+		}
+
+		if (player.inventoryState()) {
+			g.setColor(new Color(0,0,255,100));
 		}
 	}
 }
