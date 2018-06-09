@@ -222,9 +222,7 @@ public class World {
 	}
 
 	public void update() {
-		if (frame % 10 == 0) {
-			sortEntities(5);
-		}
+		sortEntities(5);
 		LinkedList<GameObject> l = new LinkedList<GameObject>();
 		l.addAll(getBlocksAround(player, 10));
 		l.addAll(getEntitiesAround(player, 10));

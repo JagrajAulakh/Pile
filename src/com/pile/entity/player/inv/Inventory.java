@@ -67,10 +67,8 @@ public class Inventory {
 			} else if (Resources.toolSpeeds[id] != 0) { // Check if it's a tool
 				inventory[s] = new Tool(id);
 				return true;
-			} else {
-//				inventory[s] = new Item(id);
-				return false;
 			}
+			return false;
 		} else {
 			find.add();
 			return true;
