@@ -9,6 +9,8 @@ import com.pile.image.Resources;
 import com.pile.state.PlayState;
 
 import java.awt.*;
+import java.util.Map;
+
 //Todo think of drawling health, idea: Row of hearts drawn, opacity changes & length to shown health
 //Basically a standard health bar except with heart graphics replacing a solid bar
 //Todo add selected item box? Pretty pointless --> Add selection indicator on hotBar <-- better idea
@@ -68,7 +70,7 @@ public class HUD {
 		Graphics2D g2 = (Graphics2D)g;
 		RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
-		g2.setRenderingHints( qualityHints );
+		g2.setRenderingHints(qualityHints);
 		for (int i = 0; i < player.getHealth()/2; i++) {
 			int hw = Resources.heart2.getWidth();
 			g2.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 50, null);
