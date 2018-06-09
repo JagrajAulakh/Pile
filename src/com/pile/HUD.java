@@ -20,10 +20,16 @@ public class HUD {
 	public static final int SPACING = 5;
 
 	private static Item inHand = null;
+	private static int scrollamount;
 
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 
-	private static boolean inInventoryArea(int mx, int my) { return 0 <= mx && mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= my && my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT; }
+	private static boolean inInventoryArea(int mx, int my) {
+		boolean area;
+		area = 0 <= mx && mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH && 0 <= my && my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT;
+		area = area || 0 <= mx && mx <= INV_BOX_WIDTH;
+		return area;
+	}
 
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
@@ -59,44 +65,47 @@ public class HUD {
 	}
 
 	public static void render(Graphics g, Player player) {
+		Graphics2D g2 = (Graphics2D)g;
+		RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
+		g2.setRenderingHints( qualityHints );
 		for (int i = 0; i < player.getHealth()/2; i++) {
 			int hw = Resources.heart2.getWidth();
-			g.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 50, null);
+			g2.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 50, null);
 		}
 
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getInventory();
 		int y = -1;
-		g.setFont(Resources.getFont(32));
+		g2.setFont(Resources.getFont(32));
 		for (int i = 0; i < (player.inventoryState()?items.length:Inventory.WIDTH); i++) {
 			if (i % Inventory.WIDTH == 0) y++;
 			int bx = (i % Inventory.WIDTH) * (INV_BOX_WIDTH+SPACING);
 			int by = y * (INV_BOX_HEIGHT+SPACING);
 			int alpha = inInventoryArea(Input.mx, Input.my) ? 255 : 100;
-			g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
-			g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
+			g2.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
+			g2.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 			if (i == inventory.getSpot()) {
-				Graphics2D g2 = (Graphics2D)g;
 				g2.setColor(Color.WHITE);
 				g2.setStroke(new BasicStroke(5));
 				g2.drawRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 			}
-			g.setColor(Color.BLACK);
-			g.setFont(Resources.getFont(32));
+			g2.setColor(Color.BLACK);
+			g2.setFont(Resources.getFont(32));
 			if (items[i] != null) {
 				//Todo also draw images for block
-				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
-				g.drawString(amountToString(items[i]), bx, by+INV_BOX_HEIGHT);
+				g2.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
+				g2.drawString(amountToString(items[i]), bx, by+INV_BOX_HEIGHT);
 			}
 		}
 		if (inHand != null) {
-			g.setColor(Color.BLACK);
-			g.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
-			g.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
+			g2.setColor(Color.BLACK);
+			g2.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
+			g2.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
 		}
 
 		if (player.inventoryState()) {
-			g.setColor(new Color(0,0,255,100));
+			g2.setColor(new Color(0,0,255,100));
 		}
 	}
 }
