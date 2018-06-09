@@ -29,7 +29,7 @@ public class HUD {
 		boolean area;
 		int posX = inv.getInvX();
 		int posY = inv.getInvY();
-		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*Inventory.WIDTH + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*Inventory.HEIGHT + posY;
+		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*inv.width() + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*inv.height()+ posY;
 		return area;
 	}
 	private static void pickUpItem(Inventory inv){
@@ -38,7 +38,7 @@ public class HUD {
 		int posY = inv.getInvY();
 		int ix = (Input.mx - posX) / (INV_BOX_WIDTH+SPACING);
 		int iy = (Input.my - posY) / (INV_BOX_HEIGHT+SPACING);
-		int spot = iy*Inventory.WIDTH + ix;
+		int spot = iy*inv.width()+ ix;
 		if (Input.mouseUp(0)) {
 			Item tmp = items[spot];
 			items[spot] = inHand;
@@ -58,6 +58,7 @@ public class HUD {
 		}
 		else{
 			player.toggleInventory();
+			player.setChest(null);
 		}
 	}
 
@@ -124,12 +125,12 @@ public class HUD {
 		int y = -1;
 		g.setFont(Resources.getFont(32));
 		if(type == Inventory.P_INV){
-			inventorySquares = player.inventoryState() ? items.length:Inventory.WIDTH;
+			inventorySquares = player.inventoryState() ? items.length:inv.width();
 		}
-//		for (int i = 0; i < (player.inventoryState()?items.length:Inventory.WIDTH); i++) {
+//		for (int i = 0; i < (player.inventoryState()?items.length:inv.width()); i++) {
 		for (int i = 0; i < inventorySquares; i++) {
-			if (i % Inventory.WIDTH == 0) y++;
-			int bx = posX + (i % Inventory.WIDTH) * (INV_BOX_WIDTH+SPACING);
+			if (i % inv.width() == 0) y++;
+			int bx = posX + (i % inv.width()) * (INV_BOX_WIDTH+SPACING);
 			int by = posY + y * (INV_BOX_HEIGHT+SPACING);
 			if(type == Inventory.P_INV){
 				int alpha = inInventoryArea(Input.mx, Input.my,inv) ? 255 : 100;

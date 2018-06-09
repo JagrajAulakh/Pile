@@ -37,6 +37,8 @@ public class Inventory {
 	public void moveSpotRight() { spot = spot-1 < 0 ? invW-1 : spot-1; }
 	public int getInvX() { return invX; }
 	public int getInvY() { return invY; }
+	public int width() { return invW; }
+	public int height() { return invH; }
 
 	public Item findItem(int id) {
 		for (int i = 0; i < inventory.length; i++) {

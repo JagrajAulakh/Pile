@@ -62,6 +62,7 @@ public class Player extends Entity {
 	public void toggleInventory() { inventoryState = !inventoryState; }
 
 	public Chest getChest() { return currentChest; }
+	public void setChest(Chest c) { currentChest = c; }
 	public boolean chestState() { return chestState; }
 	public void toggleChest() { chestState = !chestState; }
 
