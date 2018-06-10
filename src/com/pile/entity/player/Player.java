@@ -82,7 +82,7 @@ public class Player extends Entity {
 
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
-		int hi = (int)(200*Resources.SCALE * 2);
+		int hi = (int)(220*Resources.SCALE * 2);
 		BufferedImage img = new BufferedImage(w, hi, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
 		int headHeight = (int)(64 * Resources.SCALE * 2);

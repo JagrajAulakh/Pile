@@ -73,9 +73,7 @@ public class Game extends Canvas {
 		}
 	}
 	// Tick is running at exactly 60 times a second
-	public void tick() {
-		gameLogic.refresh();
-	}
+	public void tick() { gameLogic.refresh(); }
 	// Render runs as many times as it can
 	public void render() {
 		BufferStrategy bs = getBufferStrategy();

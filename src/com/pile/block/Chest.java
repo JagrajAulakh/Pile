@@ -1,6 +1,5 @@
 package com.pile.block;
 
-
 import com.pile.entity.player.inv.Inventory;
 
 public class Chest extends Block {

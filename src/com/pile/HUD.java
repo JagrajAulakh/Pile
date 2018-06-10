@@ -21,7 +21,6 @@ public class HUD {
 	public static final int SPACING = 5;
 
 	private static Item inHand = null;
-	private static int scrollamount;
 
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 
@@ -29,60 +28,56 @@ public class HUD {
 		int mx = Input.mx;
 		int my = Input.my;
 		boolean area;
-		int posX = inv.getInvX();
-		int posY = inv.getInvY();
-		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*inv.width() + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*inv.height()+ posY;
+		int posX = inv.getX();
+		int posY = inv.getY();
+		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*inv.getWidth() + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*inv.getHeight()+ posY;
 		return area;
 	}
 	private static void swapItems(Inventory inv) {
 		Item[] items = inv.getItems();
-		int posX = inv.getInvX();
-		int posY = inv.getInvY();
+		int posX = inv.getX();
+		int posY = inv.getY();
 		int ix = (Input.mx - posX) / (INV_BOX_WIDTH+SPACING);
 		int iy = (Input.my - posY) / (INV_BOX_HEIGHT+SPACING);
-		int spot = iy*inv.width()+ ix;
+		int spot = iy*inv.getWidth()+ ix;
 		Item tmp = items[spot];
 		items[spot] = inHand;
 		inHand = tmp;
 	}
-	private static void dropInHand(Player player){
+	private static void dropInHand(Player player) {
 		if (inHand != null) {
-			assert inHand != null;
 			for (int i = 0; i < inHand.getAmount(); i++) {
 				double x = player.getVelX() > 0 ? player.getX() + player.getWidth() : player.getX() - Block.WIDTH;
 				double y = player.getY() - player.getHealth() / 2;
 				PlayState.world.addEntity(new Drop(x, y, inHand.getId(), player, (Math.random()*5 + 1) * (player.getVelX()>0 ? 1 : -1), -5, 60));
-				inHand = null;
 			}
+			inHand = null;
 		}
-		else{
-			if(!inInventoryArea(player.getInventory()) || !inInventoryArea(player.getChest().getStorage())){
-//				player.toggleInventory();
-				System.out.println("toggle test");
-			}
-//			player.setChest(null);
+		else {
+			player.toggleInventory();
+			player.setChest(null);
 		}
 	}
 
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
-		Item[] items = inventory.getItems();
 
 		if (player.inventoryState()) {
-			boolean inArea = inInventoryArea(inventory);
-			if (player.getChest() != null) inArea = inArea || inInventoryArea(Input.mx, Input.my, player.getChest().getStorage());
-			if (inArea) {
-				if (inInventoryArea(inventory)) {
-					if (Input.mouseUp(0)) swapItems(inventory);
-				} else {
-					if (Input.mouseUp(0)) dropInHand(player);
+			if (player.getChest() == null) {
+				if (Input.mouseUp(0)) {
+					if (inInventoryArea(inventory)) {
+						swapItems(inventory);
+					} else {
+						dropInHand(player);
+					}
 				}
-			}
-			if(player.getChest() != null){
-				if (inInventoryArea(player.getChest().getStorage())) {
-					if (Input.mouseUp(0)) swapItems(player.getChest().getStorage());
-				} else {
-					if (Input.mouseUp(0)){
+			} else {
+				if (Input.mouseUp(0)) {
+					if (inInventoryArea(inventory)) {
+						swapItems(inventory);
+					} else if (inInventoryArea(player.getChest().getStorage())) {
+						swapItems(player.getChest().getStorage());
+					} else {
 						dropInHand(player);
 					}
 				}
@@ -119,20 +114,20 @@ public class HUD {
 	private static void drawInventory(Graphics2D g, Player player, Inventory inv, int type){
 		Item[] items = inv.getItems();
 		int inventorySquares = items.length;
-		int posX = inv.getInvX();
-		int posY = inv.getInvY();
+		int posX = inv.getX();
+		int posY = inv.getY();
 		int y = -1;
 		g.setFont(Resources.getFont(32));
 		if (type == Inventory.P_INV) {
-			inventorySquares = player.inventoryState() ? items.length:inv.width();
+			inventorySquares = player.inventoryState() ? items.length:inv.getWidth();
 		}
 		for (int i = 0; i < inventorySquares; i++) {
-			if (i % inv.width() == 0) y++;
-			int bx = posX + (i % inv.width()) * (INV_BOX_WIDTH+SPACING);
+			if (i % inv.getWidth() == 0) y++;
+			int bx = posX + (i % inv.getWidth()) * (INV_BOX_WIDTH+SPACING);
 			int by = posY + y * (INV_BOX_HEIGHT+SPACING);
 			if(type == Inventory.P_INV){
-				int alpha = inInventoryArea(inv) ? 255 : 100;
-				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
+				int alpha = player.inventoryState() ? inInventoryArea(inv) ? 150 : 100 : 100;
+				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255, alpha));
 				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 				//Hotbar selection (Player Inv only)
 				if (i == inv.getSpot()) {

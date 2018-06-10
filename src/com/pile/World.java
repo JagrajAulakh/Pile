@@ -74,9 +74,7 @@ public class World {
 		return false;
 	}
 
-	public void removeBlockPermanent(Block b) {
-		blockGrid[b.getGridX()][b.getGridY()] = null;
-	}
+	public void removeBlockPermanent(Block b) { blockGrid[b.getGridX()][b.getGridY()] = null; }
 	public void removeBlock(Block b) { removeBlock(b, 1); }
 	public void removeBlock(Block b, int destroyAmount) {
 		b.destroy(destroyAmount);
@@ -168,6 +166,7 @@ public class World {
 	private synchronized void makeTree(double wx, double wy) {
 		int size = (int)((Math.random() * 6) + 4);
 		for (double i = wy; i >= wy-size*Block.HEIGHT; i-=Block.HEIGHT) {
+			if (getBlockAtSpot(wx, i) != null) removeBlockPermanent(getBlockAtSpot(wx, i));
 			addBlock(new Block(wx, i, 8));
 		}
 		double rad = 2*Block.WIDTH;

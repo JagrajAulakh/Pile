@@ -9,7 +9,7 @@ public class Inventory {
 
 	private int spot; //Holds selection in hotBar
 	private Item[] inventory;
-	private int invX, invY, invW, invH;
+	private int x, y, width, height;
 
 	//Todo use items to search for it's crafting recipes. Remember each recipe calls for a number of items
 	//Have different types of items, stackable, material,
@@ -21,10 +21,10 @@ public class Inventory {
 		this(x, y, 10, 5);
 	}
 	public Inventory(int x, int y, int w, int h){
-		invX = x;
-		invY = y;
-		invW = w;
-		invH = h;
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
 		inventory = new Item[w*h];
 		spot = 0;
 	}
@@ -33,12 +33,12 @@ public class Inventory {
 	public void setSpot(int spot) { this.spot = spot; }
 	public Item getCurrentItem() { return inventory[spot]; }
 	public Item[] getItems() { return inventory; }
-	public void moveSpotLeft() { spot = (spot+1) % invW; }
-	public void moveSpotRight() { spot = spot-1 < 0 ? invW-1 : spot-1; }
-	public int getInvX() { return invX; }
-	public int getInvY() { return invY; }
-	public int width() { return invW; }
-	public int height() { return invH; }
+	public void moveSpotLeft() { spot = (spot+1) % width; }
+	public void moveSpotRight() { spot = spot-1 < 0 ? width-1 : spot-1; }
+	public int getX() { return x; }
+	public int getY() { return y; }
+	public int getWidth() { return width; }
+	public int getHeight() { return height; }
 
 	public Item findItem(int id) {
 		for (int i = 0; i < inventory.length; i++) {
