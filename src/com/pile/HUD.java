@@ -15,36 +15,42 @@ import java.awt.*;
 //Todo add selected item box? Pretty pointless --> Add selection indicator on hotBar <-- better idea
 //Keep track of drawing player's information
 public class HUD {
-	//Todo look at these 2 variables
+	//Constants used to size inventories
 	public static final int INV_BOX_WIDTH = 40;
 	public static final int INV_BOX_HEIGHT = 40;
 	public static final int SPACING = 5;
 
+	//Allows player to pickup and move items from their inventory
 	private static Item inHand = null;
+
+	public static Item getInHand(){
+		return inHand;
+	}
 
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 
+	//Checking if player's mouse is colliding with an inventory
 	private static boolean inInventoryArea(Inventory inv) {
 		int mx = Input.mx;
 		int my = Input.my;
 		boolean area;
-		int posX = inv.getX();
-		int posY = inv.getY();
+		double posX = inv.getX();
+		double posY = inv.getY();
 		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*inv.getWidth() + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*inv.getHeight()+ posY;
 		return area;
 	}
 	private static void swapItems(Inventory inv) {
 		Item[] items = inv.getItems();
-		int posX = inv.getX();
-		int posY = inv.getY();
-		int ix = (Input.mx - posX) / (INV_BOX_WIDTH+SPACING);
-		int iy = (Input.my - posY) / (INV_BOX_HEIGHT+SPACING);
+		double posX = inv.getX();
+		double posY = inv.getY();
+		int ix = (int) ((Input.mx - posX) / (INV_BOX_WIDTH+SPACING));
+		int iy = (int) ((Input.my - posY) / (INV_BOX_HEIGHT+SPACING));
 		int spot = iy*inv.getWidth()+ ix;
 		Item tmp = items[spot];
 		items[spot] = inHand;
 		inHand = tmp;
 	}
-	private static void dropInHand(Player player) {
+	public static void dropInHand(Player player) {
 		if (inHand != null) {
 			for (int i = 0; i < inHand.getAmount(); i++) {
 				double x = player.getVelX() > 0 ? player.getX() + player.getWidth() : player.getX() - Block.WIDTH;
@@ -92,7 +98,7 @@ public class HUD {
 		g2.setRenderingHints(qualityHints);
 		for (int i = 0; i < player.getHealth()/2; i++) {
 			int hw = Resources.heart2.getWidth();
-			g2.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 50, null);
+			g2.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 10, null);
 		}
 
 		drawInventory(g2,player,player.getInventory(),Inventory.P_INV);
@@ -114,8 +120,8 @@ public class HUD {
 	private static void drawInventory(Graphics2D g, Player player, Inventory inv, int type){
 		Item[] items = inv.getItems();
 		int inventorySquares = items.length;
-		int posX = inv.getX();
-		int posY = inv.getY();
+		double posX = inv.getX();
+		double posY = inv.getY();
 		int y = -1;
 		g.setFont(Resources.getFont(32));
 		if (type == Inventory.P_INV) {
@@ -123,8 +129,8 @@ public class HUD {
 		}
 		for (int i = 0; i < inventorySquares; i++) {
 			if (i % inv.getWidth() == 0) y++;
-			int bx = posX + (i % inv.getWidth()) * (INV_BOX_WIDTH+SPACING);
-			int by = posY + y * (INV_BOX_HEIGHT+SPACING);
+			int bx = (int) (posX + (i % inv.getWidth()) * (INV_BOX_WIDTH+SPACING));
+			int by = (int) (posY + y * (INV_BOX_HEIGHT+SPACING));
 			if(type == Inventory.P_INV){
 				int alpha = player.inventoryState() ? inInventoryArea(inv) ? 150 : 100 : 100;
 				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255, alpha));
