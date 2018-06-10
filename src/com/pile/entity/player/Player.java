@@ -1,5 +1,6 @@
 package com.pile.entity.player;
 
+import com.pile.HUD;
 import com.pile.Input;
 import com.pile.World;
 import com.pile.block.Block;
@@ -17,7 +18,6 @@ import com.pile.state.PlayState;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Player extends Entity {
@@ -28,7 +28,7 @@ public class Player extends Entity {
 	private int health, maxHealth;
 	private double counter;
 	private World world;
-	private boolean inventoryState, mining, godMode, ruler, invinsible;
+	private boolean inventoryState, mining, godMode, ruler, invincible;
 	private Inventory inventory;
 
 	private Chest currentChest;
@@ -48,14 +48,14 @@ public class Player extends Entity {
 		width = 56 * Resources.SCALE*2;
 		height = 180 * Resources.SCALE * 2;
 		maxHealth = health = 10;
-		onGround = inventoryState = godMode = ruler = invinsible = false;
+		onGround = inventoryState = godMode = ruler = invincible = false;
 		flipped = true;
 		currentChest = null;
 		updateHitBox();
 	}
 
 	public boolean ruler() { return ruler; }
-	public boolean isInvinsible() { return invinsible; }
+	public boolean isInvincible() { return invincible; }
 
 	public Inventory getInventory() { return inventory; }
 	public boolean inventoryState() { return inventoryState; }
@@ -239,8 +239,13 @@ public class Player extends Entity {
 		}
 		//Inventory
 		if (Input.keyUpOnce(KeyEvent.VK_E)) {
+			//Closing inventory with an item in hand will cause it to drop
+			if(HUD.getInHand() != null){
+				HUD.dropInHand(this);
+			}
 			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
+			//Only have a chest open when player is in full inventory
 			currentChest = inventoryState == false ? null : currentChest;
 		}
 		//godMode
