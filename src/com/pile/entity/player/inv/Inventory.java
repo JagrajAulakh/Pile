@@ -9,7 +9,8 @@ public class Inventory {
 
 	private int spot; //Holds selection in hotBar
 	private Item[] inventory;
-	private int x, y, width, height;
+	private int width, height;
+	private double x,y;
 
 	//Todo use items to search for it's crafting recipes. Remember each recipe calls for a number of items
 	//Have different types of items, stackable, material,
@@ -17,10 +18,10 @@ public class Inventory {
 	//Inventory should be able to check free slots, find
 	//https://softwareengineering.stackexchange.com/questions/246454/structuring-a-storage-system-for-a-game
 
-	public Inventory(int x, int y) {
+	public Inventory(double x, double y) {
 		this(x, y, 10, 5);
 	}
-	public Inventory(int x, int y, int w, int h){
+	public Inventory(double x, double y, int w, int h){
 		this.x = x;
 		this.y = y;
 		this.width = w;
@@ -35,8 +36,8 @@ public class Inventory {
 	public Item[] getItems() { return inventory; }
 	public void moveSpotLeft() { spot = (spot+1) % width; }
 	public void moveSpotRight() { spot = spot-1 < 0 ? width-1 : spot-1; }
-	public int getX() { return x; }
-	public int getY() { return y; }
+	public double getX() { return x; }
+	public double getY() { return y; }
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
 
