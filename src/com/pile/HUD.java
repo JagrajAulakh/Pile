@@ -1,7 +1,6 @@
 package com.pile;
 
 import com.pile.block.Block;
-import com.pile.block.Chest;
 import com.pile.entity.Drop;
 import com.pile.entity.player.Player;
 import com.pile.entity.player.inv.Inventory;
@@ -26,7 +25,9 @@ public class HUD {
 
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 
-	private static boolean inInventoryArea(int mx, int my, Inventory inv) {
+	private static boolean inInventoryArea(Inventory inv) {
+		int mx = Input.mx;
+		int my = Input.my;
 		boolean area;
 		int posX = inv.getInvX();
 		int posY = inv.getInvY();
@@ -39,7 +40,6 @@ public class HUD {
 		int posY = inv.getInvY();
 		int ix = (Input.mx - posX) / (INV_BOX_WIDTH+SPACING);
 		int iy = (Input.my - posY) / (INV_BOX_HEIGHT+SPACING);
-		System.out.println(ix + " " + iy);
 		int spot = iy*inv.width()+ ix;
 		Item tmp = items[spot];
 		items[spot] = inHand;
@@ -56,8 +56,11 @@ public class HUD {
 			}
 		}
 		else{
-			player.toggleInventory();
-			player.setChest(null);
+			if(!inInventoryArea(player.getInventory()) || !inInventoryArea(player.getChest().getStorage())){
+//				player.toggleInventory();
+				System.out.println("toggle test");
+			}
+//			player.setChest(null);
 		}
 	}
 
@@ -66,17 +69,17 @@ public class HUD {
 		Item[] items = inventory.getItems();
 
 		if (player.inventoryState()) {
-			boolean inArea = inInventoryArea(Input.mx, Input.my, inventory);
+			boolean inArea = inInventoryArea(inventory);
 			if (player.getChest() != null) inArea = inArea || inInventoryArea(Input.mx, Input.my, player.getChest().getStorage());
 			if (inArea) {
-				if (inInventoryArea(Input.mx, Input.my,inventory)) {
+				if (inInventoryArea(inventory)) {
 					if (Input.mouseUp(0)) swapItems(inventory);
 				} else {
 					if (Input.mouseUp(0)) dropInHand(player);
 				}
 			}
 			if(player.getChest() != null){
-				if (inInventoryArea(Input.mx, Input.my, player.getChest().getStorage())) {
+				if (inInventoryArea(player.getChest().getStorage())) {
 					if (Input.mouseUp(0)) swapItems(player.getChest().getStorage());
 				} else {
 					if (Input.mouseUp(0)){
@@ -127,8 +130,8 @@ public class HUD {
 			if (i % inv.width() == 0) y++;
 			int bx = posX + (i % inv.width()) * (INV_BOX_WIDTH+SPACING);
 			int by = posY + y * (INV_BOX_HEIGHT+SPACING);
-			if (type == Inventory.P_INV) {
-				int alpha = inInventoryArea(Input.mx, Input.my,inv) ? 255 : 100;
+			if(type == Inventory.P_INV){
+				int alpha = inInventoryArea(inv) ? 255 : 100;
 				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
 				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 				//Hotbar selection (Player Inv only)
