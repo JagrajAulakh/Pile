@@ -80,7 +80,7 @@ public class World {
 	public void removeBlock(Block b) { removeBlock(b, 1); }
 	public void removeBlock(Block b, int destroyAmount) {
 		b.destroy(destroyAmount);
-		particles.add(new Particle(b.getX(), b.getY()));
+		if (frame % 3 == 0) particles.add(new Particle(Math.random()* Block.WIDTH + b.getX(), Math.random()*Block.HEIGHT + b.getY()));
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
 			if (Resources.blockDrop[b.getId()] != -1) addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));

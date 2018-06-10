@@ -28,7 +28,7 @@ public class Player extends Entity {
 	private int health, maxHealth;
 	private double counter;
 	private World world;
-	private boolean inventoryState, chestState, mining, godMode, ruler, invinsible;
+	private boolean inventoryState, mining, godMode, ruler, invinsible;
 	private Inventory inventory;
 
 	private Chest currentChest;
@@ -48,7 +48,7 @@ public class Player extends Entity {
 		width = 56 * Resources.SCALE*2;
 		height = 180 * Resources.SCALE * 2;
 		maxHealth = health = 10;
-		onGround = inventoryState = chestState = godMode = ruler = invinsible = false;
+		onGround = inventoryState = godMode = ruler = invinsible = false;
 		flipped = true;
 		currentChest = null;
 		updateHitBox();
@@ -63,8 +63,6 @@ public class Player extends Entity {
 
 	public Chest getChest() { return currentChest; }
 	public void setChest(Chest c) { currentChest = c; }
-	public boolean chestState() { return chestState; }
-	public void toggleChest() { chestState = !chestState; }
 
 	public int getHealth() { return health; }
 	public int getMaxHealth() { return maxHealth; }
@@ -243,6 +241,7 @@ public class Player extends Entity {
 		if (Input.keyUpOnce(KeyEvent.VK_E)) {
 			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
+			currentChest = inventoryState == false ? null : currentChest;
 		}
 		//godMode
 		if (Input.keyUpOnce(KeyEvent.VK_G)) {
@@ -267,14 +266,13 @@ public class Player extends Entity {
 			}
 		}
 
-		if (!inventoryState && !chestState) {
+		if (!inventoryState) {
 			int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
 			if (Input.mouseDown(2)) {
 				Block b = getSelectedBlock();
 				if (b != null && b instanceof Chest) {
 					inventoryState = !inventoryState;
-					chestState = !chestState;
 					currentChest = (Chest)b;
 					System.out.println("OPEN SESAME!");
 				}

@@ -1,6 +1,7 @@
 package com.pile;
 
 import com.pile.block.Block;
+import com.pile.block.Chest;
 import com.pile.entity.Drop;
 import com.pile.entity.player.Player;
 import com.pile.entity.player.inv.Inventory;
@@ -32,27 +33,25 @@ public class HUD {
 		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*inv.width() + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*inv.height()+ posY;
 		return area;
 	}
-	private static void pickUpItem(Inventory inv){
+	private static void swapItems(Inventory inv) {
 		Item[] items = inv.getItems();
 		int posX = inv.getInvX();
 		int posY = inv.getInvY();
 		int ix = (Input.mx - posX) / (INV_BOX_WIDTH+SPACING);
 		int iy = (Input.my - posY) / (INV_BOX_HEIGHT+SPACING);
+		System.out.println(ix + " " + iy);
 		int spot = iy*inv.width()+ ix;
-		if (Input.mouseUp(0)) {
-			Item tmp = items[spot];
-			items[spot] = inHand;
-			inHand = tmp;
-		}
+		Item tmp = items[spot];
+		items[spot] = inHand;
+		inHand = tmp;
 	}
 	private static void dropInHand(Player player){
 		if (inHand != null) {
-			int a = inHand.getAmount();
-			int id = inHand.getId();
-			for (int i = 0; i < a; i++) {
+			assert inHand != null;
+			for (int i = 0; i < inHand.getAmount(); i++) {
 				double x = player.getVelX() > 0 ? player.getX() + player.getWidth() : player.getX() - Block.WIDTH;
 				double y = player.getY() - player.getHealth() / 2;
-				PlayState.world.addEntity(new Drop(x, y, id, player, (Math.random()*5 + 1) * (player.getVelX()>0 ? 1 : -1), -5, 60));
+				PlayState.world.addEntity(new Drop(x, y, inHand.getId(), player, (Math.random()*5 + 1) * (player.getVelX()>0 ? 1 : -1), -5, 60));
 				inHand = null;
 			}
 		}
@@ -65,27 +64,24 @@ public class HUD {
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
 		Item[] items = inventory.getItems();
-		Inventory chest = null;
-		if(player.getChest() != null){
-			chest = player.getChest().getStorage();
-			Item[] chest_items = chest.getItems();
-		}
 
 		if (player.inventoryState()) {
-			if (inInventoryArea(Input.mx, Input.my,inventory)) {
-				pickUpItem(inventory);
-			} else {
-				if (Input.mouseUp(0)) {
-					dropInHand(player);
+			boolean inArea = inInventoryArea(Input.mx, Input.my, inventory);
+			if (player.getChest() != null) inArea = inArea || inInventoryArea(Input.mx, Input.my, player.getChest().getStorage());
+			if (inArea) {
+				if (inInventoryArea(Input.mx, Input.my,inventory)) {
+					if (Input.mouseUp(0)) swapItems(inventory);
+				} else {
+					if (Input.mouseUp(0)) dropInHand(player);
 				}
 			}
-		}
-		if(player.chestState()){
-			if(inInventoryArea(Input.mx, Input.my, chest)){
-				pickUpItem(chest);
-			} else {
-				if (Input.mouseUp(0)){
-					dropInHand(player);
+			if(player.getChest() != null){
+				if (inInventoryArea(Input.mx, Input.my, player.getChest().getStorage())) {
+					if (Input.mouseUp(0)) swapItems(player.getChest().getStorage());
+				} else {
+					if (Input.mouseUp(0)){
+						dropInHand(player);
+					}
 				}
 			}
 		}
@@ -124,15 +120,14 @@ public class HUD {
 		int posY = inv.getInvY();
 		int y = -1;
 		g.setFont(Resources.getFont(32));
-		if(type == Inventory.P_INV){
+		if (type == Inventory.P_INV) {
 			inventorySquares = player.inventoryState() ? items.length:inv.width();
 		}
-//		for (int i = 0; i < (player.inventoryState()?items.length:inv.width()); i++) {
 		for (int i = 0; i < inventorySquares; i++) {
 			if (i % inv.width() == 0) y++;
 			int bx = posX + (i % inv.width()) * (INV_BOX_WIDTH+SPACING);
 			int by = posY + y * (INV_BOX_HEIGHT+SPACING);
-			if(type == Inventory.P_INV){
+			if (type == Inventory.P_INV) {
 				int alpha = inInventoryArea(Input.mx, Input.my,inv) ? 255 : 100;
 				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255,100));
 				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
