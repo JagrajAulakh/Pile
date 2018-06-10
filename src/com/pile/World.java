@@ -81,6 +81,10 @@ public class World {
 		if (frame % 3 == 0) particles.add(new Particle(Math.random()* Block.WIDTH + b.getX(), Math.random()*Block.HEIGHT + b.getY()));
 		if (b.destroyed()) {
 			blockGrid[b.getGridX()][b.getGridY()] = null;
+			if(b instanceof Chest) {
+				Chest c = (Chest)b;
+				c.emptyChest();
+			}
 			if (Resources.blockDrop[b.getId()] != -1) addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
 		}
 	}

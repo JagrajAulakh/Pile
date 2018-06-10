@@ -80,7 +80,8 @@ public class Resources {
 			int id = Integer.parseInt(parts[0]);
 			String path = "assets/images/REAL/" + parts[1] + ".png";
 			itemImages[id] = new SingleImage(scale(ImageIO.read(new File(path)), 0.4));
-			toolSpeeds[id] = Integer.parseInt(parts[2]);
+			blockDrop[id] = Integer.parseInt(parts[2]);
+			toolSpeeds[id] = Integer.parseInt(parts[3]);
 			for (int i = 3; i < parts.length; i++) {
 				if (toolBlocks[id] == null) {
 					toolBlocks[id] = new LinkedList<Integer>();

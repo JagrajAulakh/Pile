@@ -16,13 +16,9 @@ public class Drop extends Entity {
 	private Player player;
 	private int pickDelayMax;
 
-	public Drop(double x, double y, int id, Player player, double velX, double velY) {
-		this(x, y, id, player, velX, velY, 10);
-	}
-	public Drop(double x, double y, int id, Player player, double velX, double velY, int pickDelay) {
+	public Drop(double x, double y, int id, double velX, double velY, int pickDelay) {
 		super(x, y);
 		this.id = id;
-		this.player = player;
 		double sc = 0.7;
 		this.image = new SingleImage(Resources.scale(Resources.itemImages[id].getImage(), sc));
 		this.width = Block.WIDTH * sc;
@@ -32,6 +28,22 @@ public class Drop extends Entity {
 		this.pickDelayMax = pickDelay;
 		canPick = false;
 	}
+	public Drop(double x, double y, int id, Player player, double velX, double velY) {
+		this(x, y, id, player, velX, velY, 10);
+	}
+	public Drop(double x, double y, int id, Player player, double velX, double velY, int pickDelay) {
+			super(x, y);
+			this.id = id;
+			this.player = player;
+			double sc = 0.7;
+			this.image = new SingleImage(Resources.scale(Resources.itemImages[id].getImage(), sc));
+			this.width = Block.WIDTH * sc;
+			this.height = Block.HEIGHT * sc;
+			this.velX = velX;
+			this.velY = velY;
+			this.pickDelayMax = pickDelay;
+			canPick = false;
+		}
 	public int getId() { return id; }
 	public boolean canPick() { return canPick; }
 	public void collisionX(LinkedList<Block> blocks) {
