@@ -16,6 +16,10 @@ public class Chest extends Block {
 		storage.add(12);
 		storage.add(13);
 		storage.add(15);
+		storage.add(27);
+		storage.add(27);
+		storage.add(27);
+		storage.add(27);
 	}
 
 	public Inventory getStorage() { return storage; }

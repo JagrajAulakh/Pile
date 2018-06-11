@@ -25,7 +25,6 @@ public class World {
 	private LinkedList<Entity>[][] entityGrid;
 	private Block[][] blockGrid;
 
-	private ArrayList<Chest> chests = new ArrayList<Chest>();
 	private ArrayList<Particle> particles = new ArrayList<Particle>();
 	private ArrayList<Particle> particlesToRemove = new ArrayList<Particle>();
 
@@ -92,11 +91,7 @@ public class World {
 		if (entityGrid[e.getGridX()][e.getGridY()] == null) {
 			int px = (int)((e.getX() - e.getVelX()) / GRID_SIZE);
 			int py = (int)((e.getY() - e.getVelY()) / GRID_SIZE);
-			try {
-				entityGrid[px][py].remove(e);
-			} catch (NullPointerException error) {
-				System.out.println("ERROR");
-			}
+			entityGrid[px][py].remove(e);
 		} else {
 			entityGrid[e.getGridX()][e.getGridY()].remove(e);
 		}
@@ -197,7 +192,7 @@ public class World {
 				addBlock(new Block(x, height - i*Block.HEIGHT, 2));
 			}
 		}
-		addBlock(new Block(width / 2, 0, 28));
+		addBlock(new Block(width / 2 - Block.WIDTH*10, Block.HEIGHT*10, 28));
 		addPlayer(new Player(width/2, y*Block.HEIGHT - 200, this));
 //		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
 //		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));

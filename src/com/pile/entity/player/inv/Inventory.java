@@ -41,6 +41,21 @@ public class Inventory {
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
 
+	public boolean has(int id, int amount) {
+		// todo find multiple items
+		int count = 0;
+		for (int i = 0; i < inventory.length; i++) {
+			Item item = inventory[i];
+			if (item != null && item.getId() == id) {
+				count += item.getAmount();
+			}
+			if (count >= amount) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public Item findItem(int id) {
 		for (int i = 0; i < inventory.length; i++) {
 			Item item = inventory[i];

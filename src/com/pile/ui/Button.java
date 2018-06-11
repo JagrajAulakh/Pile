@@ -10,14 +10,12 @@ import com.pile.state.PlayState;
 import java.awt.*;
 
 public class Button {
-	//Todo add button colors
 	public static final int WIDTH = 150;
 	public static final int HEIGHT = 50;
 	private String text;
 	private float size;
 	private int x, y, width, height;
 	private Color curColor, normColor, clickColor, hoverColor;
-	//Todo remove this VVV it's the play button
 	public Button(String text, int x, int y, float size, Color col) { this(text, x, y, 96f, col, col, col); }
 
 	public Button(String text, int x, int y, float size, Color normColor, Color clickColor, Color hoverColor) {

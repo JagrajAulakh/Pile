@@ -5,9 +5,10 @@ import com.pile.entity.player.inv.Item;
 import java.util.LinkedList;
 
 public class Recipe {
-    private int id;
+    private int id, amount;
     private LinkedList<Item> items;
-    public Recipe(int id) {
+	public Recipe(int id) { this(id, 1); }
+    public Recipe(int id, int amount) {
         this.id = id;
         items = new LinkedList<Item>();
     }
@@ -15,6 +16,9 @@ public class Recipe {
     public void addItem(int amount, int id) {
     	items.add(new Item(id, amount));
     }
+    public LinkedList<Item> getItems() {
+    	return  items;
+	}
 
 	@Override
 	public String toString() {

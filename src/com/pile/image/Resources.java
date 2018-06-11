@@ -92,8 +92,15 @@ public class Resources {
 
 		for (String line:rFile) {
 			String[] parts = line.split(" ");
-			int id = Integer.parseInt(parts[0]);
-			Recipe r = new Recipe(id);
+			int amount, id;
+			if (parts[0].indexOf(':') == -1) {
+				amount = 0;
+				id = Integer.parseInt(parts[0]);
+			} else {
+				amount = Integer.parseInt(parts[0].split(":")[0]);
+				id = Integer.parseInt(parts[0].split(":")[1]);
+			}
+			Recipe r = new Recipe(id, amount);
 			for (int i = 1; i < parts.length; i++) {
 				String[] ingredients = parts[i].split(":");
 				r.addItem(Integer.parseInt(ingredients[0]), Integer.parseInt(ingredients[1]));

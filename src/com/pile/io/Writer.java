@@ -22,7 +22,6 @@ public class Writer {
 		}
 		ObjectOutputStream ous;
 		try {
-			// Todo write data file
 			ous = new ObjectOutputStream(new FileOutputStream("data/" + worldname + "/data.dat"));
 			for (Block b:world.getBlocksAround(new Enemy(world.getWidth()/2, world.getHeight()), 50)) {
 				ous.writeObject(b);

@@ -1,7 +1,6 @@
 package com.pile.state;
 
 import com.pile.Game;
-import com.pile.HUD;
 import com.pile.World;
 import com.pile.image.Resources;
 

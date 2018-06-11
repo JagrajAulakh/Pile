@@ -3,6 +3,7 @@ package com.pile;
 import com.pile.block.Block;
 import com.pile.entity.Drop;
 import com.pile.entity.player.Player;
+import com.pile.entity.player.inv.Crafting;
 import com.pile.entity.player.inv.Inventory;
 import com.pile.entity.player.inv.Item;
 import com.pile.image.Resources;
@@ -10,10 +11,6 @@ import com.pile.state.PlayState;
 
 import java.awt.*;
 
-//Todo think of drawling health, idea: Row of hearts drawn, opacity changes & length to shown health
-//Basically a standard health bar except with heart graphics replacing a solid bar
-//Todo add selected item box? Pretty pointless --> Add selection indicator on hotBar <-- better idea
-//Keep track of drawing player's information
 public class HUD {
 	//Constants used to size inventories
 	public static final int INV_BOX_WIDTH = 40;
@@ -46,6 +43,12 @@ public class HUD {
 		int ix = (int) ((Input.mx - posX) / (INV_BOX_WIDTH+SPACING));
 		int iy = (int) ((Input.my - posY) / (INV_BOX_HEIGHT+SPACING));
 		int spot = iy*inv.getWidth()+ ix;
+		if (items[spot] != null && inHand != null) {
+			if (items[spot].getId() == inHand.getId()) {
+				// Todo combine same items
+				return;
+			}
+		}
 		Item tmp = items[spot];
 		items[spot] = inHand;
 		inHand = tmp;
@@ -67,7 +70,7 @@ public class HUD {
 
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
-
+		System.out.println(Crafting.getRecipes(inventory));
 		if (player.inventoryState()) {
 			if (player.getChest() == null) {
 				if (Input.mouseUp(0)) {
@@ -132,7 +135,7 @@ public class HUD {
 			int bx = (int) (posX + (i % inv.getWidth()) * (INV_BOX_WIDTH+SPACING));
 			int by = (int) (posY + y * (INV_BOX_HEIGHT+SPACING));
 			if(type == Inventory.P_INV){
-				int alpha = player.inventoryState() ? inInventoryArea(inv) ? 150 : 100 : 100;
+				int alpha = player.inventoryState() ? inInventoryArea(inv) ? 120 : 100 : 100;
 				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255, alpha));
 				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 				//Hotbar selection (Player Inv only)
@@ -150,7 +153,7 @@ public class HUD {
 			g.setColor(Color.BLACK);
 			g.setFont(Resources.getFont(32));
 			if (items[i] != null) {
-				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - (int)(items[i].getWidth()/2), by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
+				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - items[i].getWidth()/2, by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
 				g.drawString(amountToString(items[i]), bx, by+INV_BOX_HEIGHT);
 			}
 		}
