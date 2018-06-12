@@ -79,14 +79,15 @@ public class Inventory {
 	}
 
 	// Adds item with id to inventory. Returns true if successful, false otherwise.
-	public boolean add(int id) {
+	public boolean add(int id) { return add(id, 1); }
+	public boolean add(int id, int amount) {
 		Item find = findItem(id);
 		if (find == null) {
 			int s = firstEmpty();
 			if (s == -1) return false;
 
 			if (Resources.blockSpeeds[id] != 0) { // Check if it's a block
-				inventory[s] = new Block(id);
+				inventory[s] = new Block(id, amount);
 				return true;
 			} else if (Resources.toolSpeeds[id] != 0) { // Check if it's a tool
 				inventory[s] = new Tool(id);
@@ -94,9 +95,31 @@ public class Inventory {
 			}
 			return false;
 		} else {
-			find.add();
+			for (int i = 1; i < amount+1; i++) {
+				find.add();
+				find = findItem(id);
+				if (find == null) {
+					int leftOver = amount - i;
+					if (leftOver >= 1) {
+						add(id, leftOver);
+						return true;
+					}
+				}
+			}
 			return true;
 		}
+	}
+
+	public boolean remove(int id) {
+		for (int i = 0; i < inventory.length; i++) {
+			Item item = inventory[i];
+			if (item != null) {
+				if (item.getId() == id) {
+					decrease(i);
+				}
+			}
+		}
+		return false;
 	}
 
 	public void decrease() { decrease(spot); }

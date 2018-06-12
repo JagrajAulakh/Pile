@@ -2,6 +2,7 @@ package com.pile.image;
 
 import com.pile.block.Block;
 import com.pile.crafting.Recipe;
+import com.pile.entity.player.inv.Item;
 import com.pile.io.Reader;
 
 import javax.imageio.ImageIO;
@@ -94,13 +95,13 @@ public class Resources {
 			String[] parts = line.split(" ");
 			int amount, id;
 			if (parts[0].indexOf(':') == -1) {
-				amount = 0;
+				amount = 1;
 				id = Integer.parseInt(parts[0]);
 			} else {
 				amount = Integer.parseInt(parts[0].split(":")[0]);
 				id = Integer.parseInt(parts[0].split(":")[1]);
 			}
-			Recipe r = new Recipe(id, amount);
+			Recipe r = new Recipe(new Item(id, amount));
 			for (int i = 1; i < parts.length; i++) {
 				String[] ingredients = parts[i].split(":");
 				r.addItem(Integer.parseInt(ingredients[0]), Integer.parseInt(ingredients[1]));

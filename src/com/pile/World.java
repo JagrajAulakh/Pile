@@ -270,17 +270,11 @@ public class World {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setColor(new Color(255,255,255,50));
 			g2.setStroke(new BasicStroke(1));
-//			for(int x = 0; x <= Game.WIDTH; x += Block.WIDTH){
-//				g.drawLine((int) (x - camera.getOffsetX() % Block.WIDTH),0,(int) (x - camera.getOffsetX() % Block.WIDTH),Game.HEIGHT);
-//			}
-//			for(int y = 0; y <= Game.HEIGHT; y += Block.HEIGHT){
-//				g.drawLine(0,(int) (y - camera.getOffsetY() % Block.HEIGHT),Game.WIDTH,(int) (y - camera.getOffsetY() % Block.HEIGHT));
-//			}
-			for(int x = 0; x <= Game.WIDTH; x += GRID_SIZE){
-				g.drawLine((int) (x - camera.getOffsetX() % GRID_SIZE),0,(int) (x - camera.getOffsetX() % GRID_SIZE),Game.HEIGHT);
+			for(int x = 0; x <= Game.WIDTH; x += Block.WIDTH){
+				g.drawLine((int) (x - camera.getOffsetX() % Block.WIDTH),0,(int) (x - camera.getOffsetX() % Block.WIDTH),Game.HEIGHT);
 			}
-			for(int y = 0; y <= Game.HEIGHT; y += GRID_SIZE){
-				g.drawLine(0,(int) (y - camera.getOffsetY() % GRID_SIZE),Game.WIDTH,(int) (y - camera.getOffsetY() % GRID_SIZE));
+			for(int y = 0; y <= Game.HEIGHT; y += Block.HEIGHT){
+				g.drawLine(0,(int) (y - camera.getOffsetY() % Block.HEIGHT),Game.WIDTH,(int) (y - camera.getOffsetY() % Block.HEIGHT));
 			}
 		}
 

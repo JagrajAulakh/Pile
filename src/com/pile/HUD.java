@@ -1,6 +1,7 @@
 package com.pile;
 
 import com.pile.block.Block;
+import com.pile.crafting.Recipe;
 import com.pile.entity.Drop;
 import com.pile.entity.player.Player;
 import com.pile.entity.player.inv.Crafting;
@@ -10,6 +11,7 @@ import com.pile.image.Resources;
 import com.pile.state.PlayState;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class HUD {
 	//Constants used to size inventories
@@ -19,14 +21,17 @@ public class HUD {
 
 	//Allows player to pickup and move items from their inventory
 	private static Item inHand = null;
+	private static ArrayList<Recipe> craftable = new ArrayList<Recipe>();
+	public static Recipe[] craftingArray = new Recipe[5];
+	public static int craftingScrollAmount = 0;
 
 	public static Item getInHand(){
 		return inHand;
 	}
-
 	private static String amountToString(Item item) { return "" + (item.getAmount() == 1 ? "" : item.getAmount()); }
 
 	//Checking if player's mouse is colliding with an inventory
+
 	private static boolean inInventoryArea(Inventory inv) {
 		int mx = Input.mx;
 		int my = Input.my;
@@ -67,10 +72,8 @@ public class HUD {
 			player.setChest(null);
 		}
 	}
-
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
-		System.out.println(Crafting.getRecipes(inventory));
 		if (player.inventoryState()) {
 			if (player.getChest() == null) {
 				if (Input.mouseUp(0)) {
@@ -91,6 +94,29 @@ public class HUD {
 					}
 				}
 			}
+
+			if (inventory.getX() <= Input.mx && Input.mx <= inventory.getX() + INV_BOX_WIDTH+SPACING && inventory.getY() + (INV_BOX_HEIGHT+SPACING)*7 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*12) {
+				if (Input.wheelUp()) {
+					craftingScrollAmount--;
+				} else if (Input.wheelDown()) {
+					craftingScrollAmount++;
+				}
+			}
+		}
+		craftable = Crafting.getRecipes(inventory);
+		for (int i = 0; i < 5; i++) {
+			craftingArray[i] = null;
+			int index = i + craftingScrollAmount;
+			if (0 <= index && index < craftable.size()) {
+				craftingArray[i] = craftable.get(index);
+			}
+		}
+		int bx = Input.mx / INV_BOX_WIDTH;
+		int by = Input.my/(INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
+		if (bx == 0 && 0 <= by && by <= 5) {
+			if (Input.mouseUp(0) && craftingArray[by] != null) {
+				Crafting.giveItems(player, craftingArray[by]);
+			}
 		}
 	}
 
@@ -99,6 +125,7 @@ public class HUD {
 		RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 		qualityHints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
 		g2.setRenderingHints(qualityHints);
+
 		for (int i = 0; i < player.getHealth()/2; i++) {
 			int hw = Resources.heart2.getWidth();
 			g2.drawImage(Resources.heart2, (int)(Game.WIDTH - hw*2 - i*hw*1.2), 10, null);
@@ -109,17 +136,27 @@ public class HUD {
 			drawInventory(g2,player,player.getChest().getStorage(),Inventory.INV);
 		}
 
+		// Crafting
+		for (int i = 0; i < 5; i++) {
+			g.setColor(new Color(0,0,255,100 - Math.abs(2-i)*50 + 50));
+			g.fillRoundRect((int)(player.getInventory().getX()), (int)(player.getInventory().getY() + (INV_BOX_HEIGHT+SPACING)*7 + (INV_BOX_HEIGHT+SPACING)*i), INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
+			try {
+				drawItem(g, craftingArray[i].getCrafting(), (int)player.getInventory().getX(), (int)(player.getInventory().getY() + (INV_BOX_HEIGHT + SPACING) * 7 + (INV_BOX_HEIGHT + SPACING) * i));
+			} catch (NullPointerException e) {}
+		}
+
 		if (inHand != null) {
 			g2.setColor(Color.BLACK);
 			g2.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
 			g2.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
-			g2.setStroke(new BasicStroke(5));
-		}
-
-		if (player.inventoryState()) {
-			g2.setColor(new Color(0,0,255,100));
 		}
 	}
+
+	private static void drawItem(Graphics g, Item item, int x, int y) {
+		g.drawImage(item.getImage(), x + INV_BOX_WIDTH/2 - item.getWidth()/2, y + INV_BOX_HEIGHT/2 - item.getHeight()/2, null);
+		g.drawString(amountToString(item), x, y+INV_BOX_HEIGHT);
+	}
+
 	private static void drawInventory(Graphics2D g, Player player, Inventory inv, int type){
 		Item[] items = inv.getItems();
 		int inventorySquares = items.length;
@@ -153,8 +190,7 @@ public class HUD {
 			g.setColor(Color.BLACK);
 			g.setFont(Resources.getFont(32));
 			if (items[i] != null) {
-				g.drawImage(items[i].getImage(), bx + INV_BOX_WIDTH/2 - items[i].getWidth()/2, by + INV_BOX_HEIGHT/2 - (int)(items[i].getHeight()/2), null);
-				g.drawString(amountToString(items[i]), bx, by+INV_BOX_HEIGHT);
+				drawItem(g, items[i], bx, by);
 			}
 		}
 

@@ -5,20 +5,17 @@ import com.pile.entity.player.inv.Item;
 import java.util.LinkedList;
 
 public class Recipe {
-    private int id, amount;
+    private Item crafting;
     private LinkedList<Item> items;
-	public Recipe(int id) { this(id, 1); }
-    public Recipe(int id, int amount) {
-        this.id = id;
+    public Recipe(Item crafting) {
+        this.crafting = crafting;
         items = new LinkedList<Item>();
     }
 
-    public void addItem(int amount, int id) {
-    	items.add(new Item(id, amount));
-    }
-    public LinkedList<Item> getItems() {
-    	return  items;
-	}
+    public void addItem(int amount, int id) { addItem(new Item(id, amount)); }
+	public void addItem(Item item) { items.add(item); }
+	public LinkedList<Item> getItems() { return  items; }
+	public Item getCrafting() { return crafting; }
 
 	@Override
 	public String toString() {

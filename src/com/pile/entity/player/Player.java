@@ -40,6 +40,10 @@ public class Player extends Entity {
 		inventory.add(15);
 		inventory.add(20);
 		inventory.add(25);
+
+		inventory.add(27, 50);
+		inventory.add(9, 96);
+
 		head = new Head(Resources.partsMale.get("head"));
 		body = new Body(Resources.partsMale.get("body"));
 		arm = new Arm(Resources.partsMale.get("arm"));
@@ -61,6 +65,12 @@ public class Player extends Entity {
 	public boolean inventoryState() { return inventoryState; }
 	public void toggleInventory() { inventoryState = !inventoryState; }
 
+	public void addItem(Item item) {
+		inventory.add(item.getId(), item.getAmount());
+	}
+	public void removeItem(Item item) {
+		for (int i = 0; i < item.getAmount(); i++) inventory.remove(item.getId());
+	}
 	public Chest getChest() { return currentChest; }
 	public void setChest(Chest c) { currentChest = c; }
 
@@ -327,10 +337,12 @@ public class Player extends Entity {
 		}
 
 		// Hotbar Inventory Selection
-		if (Input.wheelUp()) {
-			inventory.moveSpotLeft();
-		} else if (Input.wheelDown()) {
-			inventory.moveSpotRight();
+		if (!inventoryState) {
+			if (Input.wheelUp()) {
+				inventory.moveSpotLeft();
+			} else if (Input.wheelDown()) {
+				inventory.moveSpotRight();
+			}
 		}
 		for (int i = 0; i <= 8; i++) {
 			if (Input.keyDown('1'+i)) {

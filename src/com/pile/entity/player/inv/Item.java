@@ -11,9 +11,7 @@ public class Item {
 	private ImageType image;
 	private int stack;
 
-	public Item(int id) {
-		this(id, 1);
-	}
+	public Item(int id) { this(id, 1); }
 
 	public Item(int id, int amount) {
 		this.id = id;
