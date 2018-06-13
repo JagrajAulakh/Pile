@@ -85,32 +85,37 @@ public class HUD {
 	}
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
-		if (player.inventoryState() || !inCraftingArea(player)) {
-			// todo clean this up
-//			if (Input.mouseUp(0)) {
-//				if (inInventoryArea(inventory)) {
-//					swapItems(inventory);
-//				}
-//			}
-			if (player.getChest() == null) {
-				if (Input.mouseUp(0)) {
-					if (inInventoryArea(inventory)) {
-						swapItems(inventory);
-					} else {
-						dropInHand(player);
-					}
-				}
-			} else {
-				if (Input.mouseUp(0)) {
-					if (inInventoryArea(inventory)) {
-						swapItems(inventory);
-					} else if (inInventoryArea(player.getChest().getStorage())) {
-						swapItems(player.getChest().getStorage());
-					} else {
-						dropInHand(player);
-					}
+		if (player.inventoryState()) {
+			if (Input.mouseUp(0)) {
+				if (inInventoryArea(inventory)) {
+					swapItems(inventory);
+				} else if (player.getChest() != null && inInventoryArea(player.getChest().getStorage())) {
+					swapItems(player.getChest().getStorage());
+				} else if (inCraftingArea(player)) {
+
+				} else {
+					dropInHand(player);
 				}
 			}
+//			if (player.getChest() == null) {
+//				if (Input.mouseUp(0)) {
+//					if (inInventoryArea(inventory)) {
+//						swapItems(inventory);
+//					} else {
+//						dropInHand(player);
+//					}
+//				}
+//			} else {
+//				if (Input.mouseUp(0)) {
+//					if (inInventoryArea(inventory)) {
+//						swapItems(inventory);
+//					} else if (inInventoryArea(player.getChest().getStorage())) {
+//						swapItems(player.getChest().getStorage());
+//					} else {
+//						dropInHand(player);
+//					}
+//				}
+//			}
 
 		}
 		if (player.inventoryState()) {
@@ -175,13 +180,15 @@ public class HUD {
 					drawItem(g, items.get(i), x, y);
 				}
 				if (inCraftingArea(player)) {
-					int by = (int)(Input.my / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2);
-					Recipe hover = craftingArray[by];
-					if (hover != null) drawName(g, hover.getCrafting(), true);
+					int by = (Input.my) / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
+					if (0 <= by && by < craftingArray.length) {
+						Recipe hover = craftingArray[by];
+						if (hover != null) drawName(g, hover.getCrafting(), true);
+					}
 				} else {
 					int bx = (int)((Input.mx-player.getInventory().getX()) / (INV_BOX_HEIGHT+SPACING) - 1);
 					int by = (int)(Input.my / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2);
-					if (0 <= bx && bx < craftingArray[2].getItems().size()) drawName(g, craftingArray[2].getItems().get(bx), true);
+					if (0 <= bx && bx < craftingArray[2].getItems().size() && by == 2) drawName(g, craftingArray[2].getItems().get(bx), true);
 				}
 			}
 

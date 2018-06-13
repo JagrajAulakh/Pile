@@ -5,6 +5,7 @@ import com.pile.Input;
 import com.pile.World;
 import com.pile.block.Block;
 import com.pile.block.Chest;
+import com.pile.block.Furnace;
 import com.pile.entity.Drop;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
@@ -28,7 +29,7 @@ public class Player extends Entity {
 	private int health, maxHealth;
 	private double counter;
 	private World world;
-	private boolean inventoryState, mining, godMode, ruler, invincible;
+	private boolean inventoryState, mining, godMode, ruler, invincible, slow;
 	private Inventory inventory;
 
 	private Chest currentChest;
@@ -50,7 +51,7 @@ public class Player extends Entity {
 		width = 56 * Resources.SCALE*2;
 		height = 180 * Resources.SCALE * 2;
 		maxHealth = health = 10;
-		onGround = inventoryState = godMode = ruler = invincible = false;
+		onGround = inventoryState = godMode = ruler = invincible = slow = false;
 		flipped = true;
 		currentChest = null;
 		updateHitBox();
@@ -151,12 +152,12 @@ public class Player extends Entity {
 	private void determineImage() {
 		if (onGround) {
 			if (Math.abs(velX) > 0.8) {
-				counter = (counter + 10) % 360;
+				counter = (counter + (slow?3:10)) % 360;
 				double angle = 30*Math.sin(Math.toRadians(counter));
 				if (flipped) image = drawImage(mining ? -counter%180 + 180: -angle, angle, -angle, angle);
 				else image = drawImage(angle, mining ? -counter%180 + 180: -angle, -angle, angle);
 			} else {
-				counter = (counter + 10) % 360;
+				counter = (counter + (slow?3:10)) % 360;
 				if (flipped) image = drawImage(mining ? -counter%180 + 180 : 0, 0, 0, 0);
 				else image = drawImage(0, mining ? -counter%180 + 180 : 0, 0, 0);
 			}
@@ -175,9 +176,7 @@ public class Player extends Entity {
 		}
 	}
 
-	private void collisionY(LinkedList<Block> blocks) {
-		if (!godMode) blockCollisionY(blocks);
-	}
+	private void collisionY(LinkedList<Block> blocks) { if (!godMode) blockCollisionY(blocks); }
 	private void collisionX(LinkedList<Block> blocks) {
 		if (!godMode) blockCollisionX(blocks);
 		LinkedList<Entity> l = PlayState.world.getEntitiesAround(this, 1);
@@ -231,19 +230,24 @@ public class Player extends Entity {
 				velY = 5;
 			}
 		}
+		double speed = slow?1:3;
 		if (Input.keyDown(KeyEvent.VK_D)) {
 			accX = SPEED;
-			velX = Math.min(velX, 3);
+			velX = Math.min(velX, speed);
 			flipped = true;
 		} if (Input.keyDown(KeyEvent.VK_A)) {
 			accX = -SPEED;
-			velX = Math.max(velX, -3);
+			velX = Math.max(velX, -speed);
 			flipped = false;
 		} if (Input.keyDown(KeyEvent.VK_SPACE) || Input.keyDown(KeyEvent.VK_W)) {
 			if (onGround) {
 				onGround = false;
 				velY = -JUMP_HEIGHT;
 			}
+		}
+		slow = false;
+		if (Input.keyDown(KeyEvent.VK_SHIFT)) {
+			if (onGround) slow = true;
 		}
 		//Inventory
 		if (Input.keyUpOnce(KeyEvent.VK_E)) {
@@ -297,6 +301,8 @@ public class Player extends Entity {
 					Block b;
 					if (item.getId() == 10) {
 						b = new Chest(wx, wy);
+					} else if (item.getId() == 3) {
+						b = new Furnace(wx, wy);
 					} else {
 						b = new Block(wx, wy, item.getId());
 					}

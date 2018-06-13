@@ -1,4 +1,19 @@
-id_to_craft [amount:id]
-4:9 1:27
-10 10:9
-2:34 1:9
+id_to_craft [amount:id] requires_crafting_bench
+4:9 1:27 false
+10 10:9 false
+2:34 1:9 false
+11 2:34 3:9 false
+12 2:34 3:2 false
+13 2:34 3:30 false
+14 2:34 3:31 false
+15 2:34 3:32 false
+16 2:34 3:9 false
+17 2:34 3:2 false
+18 2:34 3:30 false
+19 2:34 3:31 false
+20 2:34 3:32 false
+21 2:34 3:9 false
+22 2:34 3:2 false
+23 2:34 3:30 false
+24 2:34 3:31 false
+25 2:34 3:32 false

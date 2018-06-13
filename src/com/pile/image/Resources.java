@@ -130,8 +130,8 @@ public class Resources {
 				amount = Integer.parseInt(parts[0].split(":")[0]);
 				id = Integer.parseInt(parts[0].split(":")[1]);
 			}
-			Recipe r = new Recipe(new Item(id, amount));
-			for (int i = 1; i < parts.length; i++) {
+			Recipe r = new Recipe(new Item(id, amount), Boolean.parseBoolean(parts[parts.length-1]));
+			for (int i = 1; i < parts.length-1; i++) {
 				String[] ingredients = parts[i].split(":");
 				r.addItem(Integer.parseInt(ingredients[0]), Integer.parseInt(ingredients[1]));
 			}

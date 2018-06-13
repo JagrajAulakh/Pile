@@ -201,11 +201,11 @@ public class World {
 			}
 		}
 		addBlock(new Block(width / 2 - Block.WIDTH*10, Block.HEIGHT*10, 28));
-//		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
-//		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
-//		addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
-//		addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
-//		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
+		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
 
 		for (int i = 0; i < 2000; i++) {
 			boolean found = false;

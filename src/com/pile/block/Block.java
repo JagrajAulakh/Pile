@@ -23,7 +23,7 @@ public class Block extends GameObject {
 	public Block(double x, double y, int id) { this(x, y, true, id); }
 
 	public Block(double x, double y, boolean canCollide, int id) {
-		super(x, y);
+		super(Math.round(x/WIDTH)*WIDTH, Math.round(y/HEIGHT)*HEIGHT);
 		this.id = id;
 		this.image = Resources.itemImages[id];
 		this.canCollide = Resources.blockCanCollide[id];

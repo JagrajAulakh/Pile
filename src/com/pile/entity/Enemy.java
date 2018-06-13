@@ -1,6 +1,5 @@
 package com.pile.entity;
 
-import com.pile.GameObject;
 import com.pile.World;
 import com.pile.block.Block;
 import com.pile.image.Resources;
@@ -103,22 +102,6 @@ public class Enemy extends Entity {
 			accY = velY = 0;
 		}
 		blockCollisionY(blocks);
-		//		LinkedList<GameObject> l = PlayState.world.getBlocksAround(this, 1);
-//		for (GameObject e:l) {
-//			if (e instanceof Block) {
-//				if (collides(e)) {
-//					if (velY >= 0) {
-//						y = e.getY() - height;
-//						velY = accY = 0;
-//						onGround = true;
-//					}
-//					else {
-//						y = e.getY() + Block.HEIGHT;
-//						velY = 0;
-//					}
-//				}
-//			}
-//		}
 	}
 	private void collisionX(LinkedList<Block> blocks) {
 		if (x < 0) {
