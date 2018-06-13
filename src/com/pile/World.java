@@ -15,8 +15,8 @@ public class World {
 	// Used for detecting collisions within 1 Grid Space of Entities
 	public static final int GRID_SIZE = (int)(256 * Resources.SCALE*2);
 	// Todo Change W & H
-	private int width = 2048*10; // World Width
-	private int height = 1024*2; // World Height
+	private int width = Block.WIDTH*500; // World Width
+	private int height = Block.HEIGHT*300; // World Height
 
 	// Counter that resets every second
 	private int frame;
@@ -75,7 +75,7 @@ public class World {
 
 	public void removeBlockPermanent(Block b) { blockGrid[b.getGridX()][b.getGridY()] = null; }
 	public void removeBlock(Block b) { removeBlock(b, 1); }
-	public void removeBlock(Block b, int destroyAmount) {
+	public void removeBlock(Block b, double destroyAmount) {
 		b.destroy(destroyAmount);
 		if (frame % 3 == 0) particles.add(new Particle(Math.random()* Block.WIDTH + b.getX(), Math.random()*Block.HEIGHT + b.getY()));
 		if (b.destroyed()) {
@@ -182,44 +182,93 @@ public class World {
 		for (int x = 0; x < width; x += Block.WIDTH) {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
 			y = Math.max(30, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
+
+			// GRASS
 			addBlock(new Block(x, height - y*Block.HEIGHT, 0));
+			// TREE
 			if (Math.random()*100 < 10) makeTree(x, height - y*Block.HEIGHT - Block.HEIGHT);
+			// DIRT
 			int dirtUnder = 5;
 			for (int rd = 0; rd < dirtUnder; rd++) {
 				addBlock(new Block(x, height - y*Block.HEIGHT + Block.HEIGHT * (rd+1), 1));
 			}
+			// STONE
 			for (int i = 0; i <= y - dirtUnder; i++) {
 				addBlock(new Block(x, height - i*Block.HEIGHT, 2));
 			}
+			if (x == width/2) {
+				addPlayer(new Player(width/2, height - y*Block.HEIGHT - 200, this));
+			}
 		}
 		addBlock(new Block(width / 2 - Block.WIDTH*10, Block.HEIGHT*10, 28));
-		addPlayer(new Player(width/2, y*Block.HEIGHT - 200, this));
 //		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
 //		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
 //		addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
 //		addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
 //		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
 
-		final int rad = 100;
-		for (int i = 0; i < (int)(Math.random()*1000); i++) {
-			int randX = (int)(Math.random()*width);
-			int randY = (int)(Math.random()*height);
-			for (int bx = randX - rad; bx < randX + rad; bx += Block.WIDTH) {
-				for (int by = randY - rad; by < randY + rad; by += Block.HEIGHT) {
-					if (0 <= bx && bx < blockGrid.length && 0 <= by && by < blockGrid[0].length) {
-						Block b = getBlockAtSpot(bx, by);
-						if (b != null && b.getId() == 2) removeBlockPermanent(b);
+		for (int i = 0; i < 2000; i++) {
+			boolean found = false;
+			int randX, randY;
+			randX = randY = 0;
+			while (!found) {
+				randX = (int)(Math.random()*width/Block.WIDTH);
+				randY = (int)(Math.random()*height/Block.HEIGHT);
+				Block block = blockGrid[randX][randY];
+				if (block != null && (block.getId() == 2)) found = true;
+			}
+//			for (int bx = randX - rad; bx < randX + rad; bx++) {
+//				for (int by = randY - rad; by < randY + rad; by++) {
+//					if (0 <= bx && bx < blockGrid.length && 0 <= by && by < blockGrid[0].length) {
+//						Block b = blockGrid[bx][by];
+//						if (b != null && b.getId() == 2) removeBlockPermanent(b);
+//					}
+//				}
+//			}
+//			boolean goodToPlace = oreAround(randX, randY, 4);
+			blockGrid[randX][randY].changeBlockTo(4);
+		}
+	}
+
+	private boolean oreAround(int bx, int by, int id) {
+		final int rad = 6;
+		boolean stone = false;
+		boolean newVein = false;
+		for (int x = bx - rad; x <= bx + rad; x++) {
+			for (int y = by - rad; y <= by + rad; y++) {
+				Block block = blockGrid[bx][by];
+				if (block != null) {
+					if (block.getId() == 2) {
+						stone = true;
+						break;
+					} else if (block.getId() == id) {
+						newVein = true;
 					}
 				}
 			}
 		}
-
-		// Todo get rid of this
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if (stone) {
+			boolean found = false;
+			int randX = 0;
+			int randY = 0;
+			while (!found) {
+				randX = (int)(bx - rad + Math.random()*rad*2);
+				randY = (int)(by - rad + Math.random()*rad*2);
+				if (blockGrid[randX][randY] != null && blockGrid[randX][randY].getId() == 2) {
+					if (newVein) return true;
+					else {
+						for (int x = randX - 1; x <= randX + 1; x++) {
+							for (int y = randY - 1; y <= randY + 1; y++) {
+								if (blockGrid[x][y] != null && blockGrid[x][y].getId() == id) {
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
 		}
+		return false;
 	}
 
 	public void update() {

@@ -12,6 +12,7 @@ import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class HUD {
 	//Constants used to size inventories
@@ -23,7 +24,7 @@ public class HUD {
 	private static Item inHand = null;
 	private static ArrayList<Recipe> craftable = new ArrayList<Recipe>();
 	public static Recipe[] craftingArray = new Recipe[5];
-	public static int craftingScrollAmount = 0;
+	public static int craftingScrollAmount = -2;
 
 	public static Item getInHand(){
 		return inHand;
@@ -40,6 +41,9 @@ public class HUD {
 		double posY = inv.getY();
 		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*inv.getWidth() + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*inv.getHeight()+ posY;
 		return area;
+	}
+	private static boolean inCraftingArea(Player player) {
+		return player.getInventory().getX() <= Input.mx && Input.mx <= player.getInventory().getX() + INV_BOX_WIDTH+SPACING && player.getInventory().getY() + (INV_BOX_HEIGHT+SPACING)*7 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*12;
 	}
 	private static void swapItems(Inventory inv) {
 		Item[] items = inv.getItems();
@@ -74,7 +78,7 @@ public class HUD {
 	}
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
-		if (player.inventoryState()) {
+		if (player.inventoryState() && !inCraftingArea(player)) {
 			if (player.getChest() == null) {
 				if (Input.mouseUp(0)) {
 					if (inInventoryArea(inventory)) {
@@ -95,27 +99,32 @@ public class HUD {
 				}
 			}
 
-			if (inventory.getX() <= Input.mx && Input.mx <= inventory.getX() + INV_BOX_WIDTH+SPACING && inventory.getY() + (INV_BOX_HEIGHT+SPACING)*7 <= Input.my && Input.my <= (INV_BOX_HEIGHT+SPACING)*12) {
+		}
+		if (player.inventoryState()) {
+			if (inCraftingArea(player)) {
+				System.out.println(craftingScrollAmount);
 				if (Input.wheelUp()) {
 					craftingScrollAmount--;
+					if (craftingScrollAmount < -2) craftingScrollAmount = -2;
 				} else if (Input.wheelDown()) {
 					craftingScrollAmount++;
+					if (craftingScrollAmount > craftable.size()-3) craftingScrollAmount = craftable.size()-3;
 				}
 			}
-		}
-		craftable = Crafting.getRecipes(inventory);
-		for (int i = 0; i < 5; i++) {
-			craftingArray[i] = null;
-			int index = i + craftingScrollAmount;
-			if (0 <= index && index < craftable.size()) {
-				craftingArray[i] = craftable.get(index);
+			craftable = Crafting.getRecipes(inventory);
+			for (int i = 0; i < 5; i++) {
+				craftingArray[i] = null;
+				int index = i + craftingScrollAmount;
+				if (0 <= index && index < craftable.size()) {
+					craftingArray[i] = craftable.get(index);
+				}
 			}
-		}
-		int bx = Input.mx / INV_BOX_WIDTH;
-		int by = Input.my/(INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
-		if (bx == 0 && 0 <= by && by <= 5) {
-			if (Input.mouseUp(0) && craftingArray[by] != null) {
-				Crafting.giveItems(player, craftingArray[by]);
+			int bx = Input.mx / INV_BOX_WIDTH;
+			int by = Input.my/(INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
+			if (bx == 0 && 0 <= by && by <= 5) {
+				if (Input.mouseUp(0) && craftingArray[by] != null) {
+					Crafting.giveItems(player, craftingArray[by]);
+				}
 			}
 		}
 	}
@@ -137,22 +146,36 @@ public class HUD {
 		}
 
 		// Crafting
-		for (int i = 0; i < 5; i++) {
-			g.setColor(new Color(0,0,255,100 - Math.abs(2-i)*50 + 50));
-			g.fillRoundRect((int)(player.getInventory().getX()), (int)(player.getInventory().getY() + (INV_BOX_HEIGHT+SPACING)*7 + (INV_BOX_HEIGHT+SPACING)*i), INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
-			try {
-				drawItem(g, craftingArray[i].getCrafting(), (int)player.getInventory().getX(), (int)(player.getInventory().getY() + (INV_BOX_HEIGHT + SPACING) * 7 + (INV_BOX_HEIGHT + SPACING) * i));
-			} catch (NullPointerException e) {}
+		if (player.inventoryState()) {
+			for (int i = 0; i < 5; i++) {
+				g.setColor(new Color(0,0,255,100 - Math.abs(2-i)*50 + 50));
+				g.fillRoundRect((int)(player.getInventory().getX()), (int)(player.getInventory().getY() + (INV_BOX_HEIGHT+SPACING)*7 + (INV_BOX_HEIGHT+SPACING)*i), INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
+				try {
+					drawItem(g, craftingArray[i].getCrafting(), (int)player.getInventory().getX(), (int)(player.getInventory().getY() + (INV_BOX_HEIGHT + SPACING) * 7 + (INV_BOX_HEIGHT + SPACING) * i));
+				} catch (NullPointerException e) {}
+			}
+			if (craftingArray[2] != null) {
+				ArrayList<Item> items = craftingArray[2].getItems();
+				for (int i = 0; i < items.size(); i++) {
+					int x = (int)(player.getInventory().getX() + (INV_BOX_WIDTH+SPACING)*(1+i));
+					int y = (INV_BOX_HEIGHT+SPACING)*(player.getInventory().getHeight()+4);
+					g.fillRoundRect(x, y, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
+					drawItem(g, items.get(i), x, y);
+				}
+			}
 		}
 
 		if (inHand != null) {
-			g2.setColor(Color.BLACK);
-			g2.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
-			g2.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
+//			g2.setColor(Color.BLACK);
+//			g2.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
+//			g2.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
+			drawItem(g, inHand, Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2);
 		}
 	}
 
 	private static void drawItem(Graphics g, Item item, int x, int y) {
+		g.setColor(Color.BLACK);
+		g.setFont(Resources.getFont(32));
 		g.drawImage(item.getImage(), x + INV_BOX_WIDTH/2 - item.getWidth()/2, y + INV_BOX_HEIGHT/2 - item.getHeight()/2, null);
 		g.drawString(amountToString(item), x, y+INV_BOX_HEIGHT);
 	}
@@ -173,7 +196,7 @@ public class HUD {
 			int by = (int) (posY + y * (INV_BOX_HEIGHT+SPACING));
 			if(type == Inventory.P_INV){
 				int alpha = player.inventoryState() ? inInventoryArea(inv) ? 120 : 100 : 100;
-				g.setColor(y==0 ? new Color(255,0,0,alpha) : new Color(0,50,255, alpha));
+				g.setColor(y==0 ? new Color(0,0,255,alpha) : new Color(100,100,255, alpha));
 				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 				//Hotbar selection (Player Inv only)
 				if (i == inv.getSpot()) {
@@ -186,9 +209,6 @@ public class HUD {
 				g.setColor(new Color(0,50,255,100));
 				g.fillRoundRect(bx, by, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 			}
-
-			g.setColor(Color.BLACK);
-			g.setFont(Resources.getFont(32));
 			if (items[i] != null) {
 				drawItem(g, items[i], bx, by);
 			}

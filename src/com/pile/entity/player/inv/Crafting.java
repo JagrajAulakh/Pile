@@ -5,7 +5,6 @@ import com.pile.entity.player.Player;
 import com.pile.image.Resources;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Crafting {
 
@@ -27,7 +26,7 @@ public class Crafting {
 	}
 
 	public static void giveItems(Player player, Recipe recipe) {
-		LinkedList<Item> items = recipe.getItems();
+		ArrayList<Item> items = recipe.getItems();
 		for (Item item:items) {
 			player.removeItem(item);
 		}

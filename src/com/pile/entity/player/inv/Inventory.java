@@ -86,11 +86,14 @@ public class Inventory {
 			int s = firstEmpty();
 			if (s == -1) return false;
 
-			if (Resources.blockSpeeds[id] != 0) { // Check if it's a block
+			if (Resources.itemTypes[id] == Resources.ItemType.BLOCK) { // Check if it's a block
 				inventory[s] = new Block(id, amount);
 				return true;
-			} else if (Resources.toolSpeeds[id] != 0) { // Check if it's a tool
+			} else if (Resources.itemTypes[id] == Resources.ItemType.TOOL) { // Check if it's a tool
 				inventory[s] = new Tool(id);
+				return true;
+			} else if (Resources.itemTypes[id] == Resources.ItemType.ITEM) {
+				inventory[s] = new Item(id, amount);
 				return true;
 			}
 			return false;

@@ -2,19 +2,19 @@ package com.pile.crafting;
 
 import com.pile.entity.player.inv.Item;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Recipe {
     private Item crafting;
-    private LinkedList<Item> items;
+    private ArrayList<Item> items;
     public Recipe(Item crafting) {
         this.crafting = crafting;
-        items = new LinkedList<Item>();
+        items = new ArrayList<Item>();
     }
 
     public void addItem(int amount, int id) { addItem(new Item(id, amount)); }
 	public void addItem(Item item) { items.add(item); }
-	public LinkedList<Item> getItems() { return  items; }
+	public ArrayList<Item> getItems() { return items; }
 	public Item getCrafting() { return crafting; }
 
 	@Override

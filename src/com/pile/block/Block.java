@@ -36,7 +36,7 @@ public class Block extends GameObject {
 	public int getId() { return id; }
 	public boolean canCollide() { return canCollide; }
 
-	private void changeBlockTo(int id) {
+	public void changeBlockTo(int id) {
 		this.id = id;
 		image = Resources.itemImages[id];
 	}

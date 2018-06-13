@@ -1,5 +1,5 @@
 //todo Finish this todo list
-1. Get rid of player out of bounds bug (Max Height, Min Height)
+1. [DONE] Get rid of player out of bounds bug (Max Height, Min Height)
 2. Get Ores to randomly spawn inside stone
 3. Finish up crafting, workbench, furnace
 4. Mobs, and random generate mobs
@@ -7,7 +7,7 @@
 6. Block breaking - Item has random chance to fall, such as leaves have chance to drop seeds
 7. Tree planting
 
-***Maybes
+***Maybes (probably not)
 Random Biome Generation
 Times, Day/Night
 Beds, only sleep at night, sets spawn point

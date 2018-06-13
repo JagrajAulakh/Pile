@@ -25,10 +25,8 @@ public class Chest extends Block {
 	public Inventory getStorage() { return storage; }
 
 	public void emptyChest() {
-		for(Item item : storage.getItems()){
-			if(item != null){
-				System.out.println(item.getId());
-				System.out.println(Resources.blockDrop[item.getId()]);
+		for (Item item:storage.getItems()) {
+			if (item != null){
 				for (int i = 0; i < item.getAmount(); i++) {
 					world.addEntity(new Drop(x, y, Resources.blockDrop[item.getId()], Math.random() * 16 - 8, -5, 10));
 				}

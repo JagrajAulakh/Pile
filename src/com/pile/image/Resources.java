@@ -11,7 +11,6 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -22,10 +21,18 @@ public class Resources {
 	public static BufferedImage[] blockStages;
 	public static BufferedImage heart0, heart1, heart2;
 	public static SingleImage[] itemImages;
-	public static int[] blockSpeeds, blockStack, blockDrop, toolSpeeds;
+	public static int[] blockSpeeds, blockStack, blockDrop;
+	public static double[] toolSpeeds;
 	public static LinkedList[] toolBlocks;
 	public static boolean[] blockCanCollide;
 	public static Recipe[] recipes;
+	public static ItemType[] itemTypes;
+
+	public enum ItemType {
+		ITEM,
+		BLOCK,
+		TOOL
+	}
 
 	public static void load() throws IOException,FontFormatException {
 		mainFont = Font.createFont(Font.TRUETYPE_FONT, new File("assets/fonts/Andy Bold.ttf"));
@@ -51,6 +58,7 @@ public class Resources {
 		String[] bFile = Reader.readDataFile("assets/data/blocks.txt").split("\n");
 		final int TOTAL_BLOCKS = 50;
 		// All blocks, sorted by ID numbers
+		itemTypes = new ItemType[TOTAL_BLOCKS];
 		itemImages = new SingleImage[TOTAL_BLOCKS];
 		blockSpeeds = new int[TOTAL_BLOCKS];
 		blockStack = new int[TOTAL_BLOCKS];
@@ -58,11 +66,13 @@ public class Resources {
 		blockCanCollide = new boolean[TOTAL_BLOCKS];
 
 		String[] tFile = Reader.readDataFile("assets/data/tools.txt").split("\n");
-		toolSpeeds = new int[TOTAL_BLOCKS];
+		toolSpeeds = new double[TOTAL_BLOCKS];
 		toolBlocks = new LinkedList[TOTAL_BLOCKS];
 
 		String[] rFile = Reader.readDataFile("assets/data/crafting.txt").split("\n");
 		recipes = new Recipe[TOTAL_BLOCKS];
+
+		String[] iFile = Reader.readDataFile("assets/data/items.txt").split("\n");
 
 		for (String line:bFile) {
 			String[] parts = line.split(" ");
@@ -73,8 +83,8 @@ public class Resources {
 			blockCanCollide[id] = !parts[3].equals("false");
 			blockSpeeds[id] = Integer.parseInt(parts[4]);
 			blockStack[id] = Integer.parseInt(parts[5]);
+			itemTypes[id] = ItemType.BLOCK;
 		}
-
 
 		for (String line:tFile) {
 			String[] parts = line.split(" ");
@@ -82,13 +92,23 @@ public class Resources {
 			String path = "assets/images/REAL/" + parts[1] + ".png";
 			itemImages[id] = new SingleImage(scale(ImageIO.read(new File(path)), 0.4));
 			blockDrop[id] = Integer.parseInt(parts[2]);
-			toolSpeeds[id] = Integer.parseInt(parts[3]);
+			toolSpeeds[id] = Double.parseDouble(parts[3]);
 			for (int i = 3; i < parts.length; i++) {
 				if (toolBlocks[id] == null) {
 					toolBlocks[id] = new LinkedList<Integer>();
 				}
 				toolBlocks[id].add(Integer.parseInt(parts[i]));
 			}
+			itemTypes[id] = ItemType.TOOL;
+		}
+
+		for (String line:iFile) {
+			String[] parts = line.split(" ");
+			int id = Integer.parseInt(parts[0]);
+			String path = "assets/images/REAL/" + parts[1] + ".png";
+			itemImages[id] = new SingleImage(scale(ImageIO.read(new File(path)), 0.4));
+			blockStack[id] = Integer.parseInt(parts[2]);
+			itemTypes[id] = ItemType.ITEM;
 		}
 
 		for (String line:rFile) {
