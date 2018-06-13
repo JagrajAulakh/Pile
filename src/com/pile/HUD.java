@@ -39,7 +39,7 @@ public class HUD {
 		boolean area;
 		double posX = inv.getX();
 		double posY = inv.getY();
-		area = posX <= mx && mx <= (INV_BOX_WIDTH+SPACING)*inv.getWidth() + posX && posY <= my && my <= (INV_BOX_HEIGHT+SPACING)*inv.getHeight()+ posY;
+		area = posX <= mx && mx < (INV_BOX_WIDTH+SPACING)*inv.getWidth() + posX && posY <= my && my < (INV_BOX_HEIGHT+SPACING)*inv.getHeight()+ posY;
 		return area;
 	}
 	private static boolean inCraftingArea(Player player) {
@@ -54,7 +54,14 @@ public class HUD {
 		int spot = iy*inv.getWidth()+ ix;
 		if (items[spot] != null && inHand != null) {
 			if (items[spot].getId() == inHand.getId()) {
-				// Todo combine same items
+				int leftOver = items[spot].getAmount() + inHand.getAmount() - inHand.getStackMax();
+				System.out.println(leftOver);
+				items[spot].setAmount(Math.min(inHand.getAmount()+items[spot].getAmount(), inHand.getStackMax()));
+				if (leftOver >= 1) {
+					inHand = new Item(inHand.getId(), leftOver);
+				} else {
+					inHand = null;
+				}
 				return;
 			}
 		}
@@ -78,7 +85,13 @@ public class HUD {
 	}
 	public static void update(Player player) {
 		Inventory inventory = player.getInventory();
-		if (player.inventoryState() && !inCraftingArea(player)) {
+		if (player.inventoryState() || !inCraftingArea(player)) {
+			// todo clean this up
+//			if (Input.mouseUp(0)) {
+//				if (inInventoryArea(inventory)) {
+//					swapItems(inventory);
+//				}
+//			}
 			if (player.getChest() == null) {
 				if (Input.mouseUp(0)) {
 					if (inInventoryArea(inventory)) {
@@ -102,11 +115,10 @@ public class HUD {
 		}
 		if (player.inventoryState()) {
 			if (inCraftingArea(player)) {
-				System.out.println(craftingScrollAmount);
-				if (Input.wheelUp()) {
+				if (Input.wheelDown()) {
 					craftingScrollAmount--;
 					if (craftingScrollAmount < -2) craftingScrollAmount = -2;
-				} else if (Input.wheelDown()) {
+				} else if (Input.wheelUp()) {
 					craftingScrollAmount++;
 					if (craftingScrollAmount > craftable.size()-3) craftingScrollAmount = craftable.size()-3;
 				}
@@ -162,13 +174,27 @@ public class HUD {
 					g.fillRoundRect(x, y, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 					drawItem(g, items.get(i), x, y);
 				}
+				if (inCraftingArea(player)) {
+					int by = (int)(Input.my / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2);
+					Recipe hover = craftingArray[by];
+					if (hover != null) drawName(g, hover.getCrafting(), true);
+				} else {
+					int bx = (int)((Input.mx-player.getInventory().getX()) / (INV_BOX_HEIGHT+SPACING) - 1);
+					int by = (int)(Input.my / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2);
+					if (0 <= bx && bx < craftingArray[2].getItems().size()) drawName(g, craftingArray[2].getItems().get(bx), true);
+				}
+			}
+
+			if (inHand == null && inInventoryArea(player.getInventory())) {
+				int bx = (int)((Input.mx-player.getInventory().getX()) / (INV_BOX_WIDTH+SPACING));
+				int by = (int)((Input.my-player.getInventory().getY()) / (INV_BOX_HEIGHT+SPACING));
+				int spot = (by)*player.getInventory().getWidth()+ bx;
+				Item hover = player.getInventory().getItems()[spot];
+				if (hover != null) drawName(g, hover);
 			}
 		}
 
 		if (inHand != null) {
-//			g2.setColor(Color.BLACK);
-//			g2.drawImage(inHand.getImage(), Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2, null);
-//			g2.drawString(amountToString(inHand), Input.mx - INV_BOX_WIDTH/2, Input.my + INV_BOX_HEIGHT/2);
 			drawItem(g, inHand, Input.mx - inHand.getImage().getWidth()/2, Input.my - inHand.getImage().getHeight()/2);
 		}
 	}
@@ -178,6 +204,15 @@ public class HUD {
 		g.setFont(Resources.getFont(32));
 		g.drawImage(item.getImage(), x + INV_BOX_WIDTH/2 - item.getWidth()/2, y + INV_BOX_HEIGHT/2 - item.getHeight()/2, null);
 		g.drawString(amountToString(item), x, y+INV_BOX_HEIGHT);
+	}
+
+	private static void drawName(Graphics g, Item item) { drawName(g, item, false); }
+	private static void drawName(Graphics g, Item item, boolean showAmount) {
+		g.setFont(Resources.getFont(32));
+		g.setColor(Color.BLACK);
+		String name = showAmount ? item.getAmount() + " x " : "";
+		name += Resources.itemNames[item.getId()];
+		g.drawString(name, Input.mx, Input.my);
 	}
 
 	private static void drawInventory(Graphics2D g, Player player, Inventory inv, int type){

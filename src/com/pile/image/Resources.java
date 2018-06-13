@@ -23,6 +23,7 @@ public class Resources {
 	public static SingleImage[] itemImages;
 	public static int[] blockSpeeds, blockStack, blockDrop;
 	public static double[] toolSpeeds;
+	public static String[] itemNames;
 	public static LinkedList[] toolBlocks;
 	public static boolean[] blockCanCollide;
 	public static Recipe[] recipes;
@@ -59,6 +60,7 @@ public class Resources {
 		final int TOTAL_BLOCKS = 50;
 		// All blocks, sorted by ID numbers
 		itemTypes = new ItemType[TOTAL_BLOCKS];
+		itemNames = new String[TOTAL_BLOCKS];
 		itemImages = new SingleImage[TOTAL_BLOCKS];
 		blockSpeeds = new int[TOTAL_BLOCKS];
 		blockStack = new int[TOTAL_BLOCKS];
@@ -73,6 +75,13 @@ public class Resources {
 		recipes = new Recipe[TOTAL_BLOCKS];
 
 		String[] iFile = Reader.readDataFile("assets/data/items.txt").split("\n");
+		String[] nFile = Reader.readDataFile("assets/data/names.txt").split("\n");
+
+		for (String line:nFile) {
+			String[] parts = line.split("  ");
+			int id = Integer.parseInt(parts[0]);
+			itemNames[id] = parts[1];
+		}
 
 		for (String line:bFile) {
 			String[] parts = line.split(" ");

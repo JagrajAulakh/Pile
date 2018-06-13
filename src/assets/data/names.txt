@@ -1,0 +1,36 @@
+id (TWO SPACES) name_of_item
+0  Grass Block
+1  Dirt Block
+2  Stone Block
+3  Stone Block
+4  Oven
+5  Coal Ore
+6  Iron Ore
+7  Gold Ore
+8  You should't have this item!
+9  Wooden Plank
+10  Chest
+11  Wooden Pickaxe
+12  Stone Pickaxe
+13  Iron Pickaxe
+14  Gold Pickaxe
+15  Diamond Pickaxe
+16  Wooden Shovel
+17  Stone Shovel
+18  Iron Shovel
+19  Gold Shovel
+20  Diamond Shovel
+21  Wooden Axe
+22  Stone Axe
+23  Iron Axe
+24  Gold Axe
+25  Diamond Axe
+26  Leaves
+27  Wood Log
+28  Sand
+29  Coal
+30  Iron
+31  Gold
+32  Emerald
+33  Diamond
+34  Stick

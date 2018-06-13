@@ -2,6 +2,6 @@ id pic_name stack_amount
 29 coal 99
 30 iron 99
 31 gold 99
-32 gold 99
-33 emerald 99
-34 diamond 99
+32 emerald 99
+33 diamond 99
+34 stick 99

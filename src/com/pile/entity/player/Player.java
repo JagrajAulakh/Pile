@@ -40,6 +40,7 @@ public class Player extends Entity {
 		inventory.add(15);
 		inventory.add(20);
 		inventory.add(25);
+		inventory.add(30);
 
 		head = new Head(Resources.partsMale.get("head"));
 		body = new Body(Resources.partsMale.get("body"));
