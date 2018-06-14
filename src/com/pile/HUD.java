@@ -12,7 +12,6 @@ import com.pile.state.PlayState;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class HUD {
 	//Constants used to size inventories
@@ -69,6 +68,20 @@ public class HUD {
 		items[spot] = inHand;
 		inHand = tmp;
 	}
+	private static void splitItems(Inventory inv) {
+		Item[] items = inv.getItems();
+		int ix = (int) ((Input.mx - inv.getX()) / (INV_BOX_WIDTH+SPACING));
+		int iy = (int) ((Input.my - inv.getY()) / (INV_BOX_HEIGHT+SPACING));
+		int spot = iy*inv.getWidth()+ ix;
+		if (items[spot] != null) {
+			if (inHand == null) {
+				int half = items[spot].getAmount()/2 + 1;
+				if (items[spot].getAmount() - half >= 1) items[spot].setAmount(items[spot].getAmount() - half);
+				else items[spot] = null;
+				inHand = new Item(items[spot].getId(), half);
+			}
+		}
+	}
 	public static void dropInHand(Player player) {
 		if (inHand != null) {
 			for (int i = 0; i < inHand.getAmount(); i++) {
@@ -96,38 +109,20 @@ public class HUD {
 				} else {
 					dropInHand(player);
 				}
-			}
-//			if (player.getChest() == null) {
-//				if (Input.mouseUp(0)) {
-//					if (inInventoryArea(inventory)) {
-//						swapItems(inventory);
-//					} else {
-//						dropInHand(player);
-//					}
-//				}
-//			} else {
-//				if (Input.mouseUp(0)) {
-//					if (inInventoryArea(inventory)) {
-//						swapItems(inventory);
-//					} else if (inInventoryArea(player.getChest().getStorage())) {
-//						swapItems(player.getChest().getStorage());
-//					} else {
-//						dropInHand(player);
-//					}
-//				}
-//			}
-
-		}
-		if (player.inventoryState()) {
-			if (inCraftingArea(player)) {
-				if (Input.wheelDown()) {
-					craftingScrollAmount--;
-					if (craftingScrollAmount < -2) craftingScrollAmount = -2;
-				} else if (Input.wheelUp()) {
-					craftingScrollAmount++;
-					if (craftingScrollAmount > craftable.size()-3) craftingScrollAmount = craftable.size()-3;
+			} else if (Input.mouseDown(2)) {
+				if (inInventoryArea(inventory)) {
+					splitItems(inventory);
 				}
 			}
+		}
+		if (player.inventoryState()) {
+			if (Input.wheelDown()) {
+				craftingScrollAmount--;
+			} else if (Input.wheelUp()) {
+				craftingScrollAmount++;
+			}
+			if (craftingScrollAmount < -2) craftingScrollAmount = -2;
+			else if (craftingScrollAmount > craftable.size()-3) craftingScrollAmount = craftable.size()-3;
 			craftable = Crafting.getRecipes(inventory);
 			for (int i = 0; i < 5; i++) {
 				craftingArray[i] = null;
@@ -176,9 +171,12 @@ public class HUD {
 				for (int i = 0; i < items.size(); i++) {
 					int x = (int)(player.getInventory().getX() + (INV_BOX_WIDTH+SPACING)*(1+i));
 					int y = (INV_BOX_HEIGHT+SPACING)*(player.getInventory().getHeight()+4);
+					g.setColor(new Color(0,0,255,150));
 					g.fillRoundRect(x, y, INV_BOX_WIDTH, INV_BOX_HEIGHT, 20, 20);
 					drawItem(g, items.get(i), x, y);
 				}
+				g.setColor(Color.BLACK);
+				g.drawString(Resources.itemNames[craftingArray[2].getCrafting().getId()], (int)player.getInventory().getX(), (INV_BOX_HEIGHT+SPACING) * (player.getInventory().getHeight()+8));
 				if (inCraftingArea(player)) {
 					int by = (Input.my) / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
 					if (0 <= by && by < craftingArray.length) {
@@ -187,7 +185,7 @@ public class HUD {
 					}
 				} else {
 					int bx = (int)((Input.mx-player.getInventory().getX()) / (INV_BOX_HEIGHT+SPACING) - 1);
-					int by = (int)(Input.my / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2);
+					int by = Input.my / (INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
 					if (0 <= bx && bx < craftingArray[2].getItems().size() && by == 2) drawName(g, craftingArray[2].getItems().get(bx), true);
 				}
 			}

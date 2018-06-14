@@ -14,7 +14,6 @@ public class PlayState implements GameState {
 	private int counter;
 
 	public PlayState() {
-		world = new World();
 		loadWorld();
 	}
 
@@ -22,6 +21,7 @@ public class PlayState implements GameState {
 		lw = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				world = new World();
 				world.generateWorld();
 			}
 		});

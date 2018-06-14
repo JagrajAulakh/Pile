@@ -117,7 +117,7 @@ public class Enemy extends Entity {
 		accY = World.GRAVITY;
 		accX = 0;
 
-		if ((int)(Math.random()*100) <= 2) {
+		if ((int)(Math.random()*1000) <= 2) {
 			if (state == MovingState.WALKING) state = MovingState.STILL;
 			else state = MovingState.WALKING;
 		}

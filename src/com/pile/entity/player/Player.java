@@ -33,6 +33,7 @@ public class Player extends Entity {
 	private Inventory inventory;
 
 	private Chest currentChest;
+	private Furnace currentFurnace;
 
 	public Player(double x, double y, World world) {
 		super(x, y);
@@ -54,6 +55,7 @@ public class Player extends Entity {
 		onGround = inventoryState = godMode = ruler = invincible = slow = false;
 		flipped = true;
 		currentChest = null;
+		currentFurnace = null;
 		updateHitBox();
 	}
 
@@ -72,6 +74,8 @@ public class Player extends Entity {
 	}
 	public Chest getChest() { return currentChest; }
 	public void setChest(Chest c) { currentChest = c; }
+	public Furnace getCurrentFurnace() { return currentFurnace; }
+	public void setCurrentFurnace(Furnace currentFurnace) { this.currentFurnace = currentFurnace; }
 
 	public int getHealth() { return health; }
 	public int getMaxHealth() { return maxHealth; }
@@ -258,7 +262,7 @@ public class Player extends Entity {
 			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
 			//Only have a chest open when player is in full inventory
-			currentChest = inventoryState == false ? null : currentChest;
+			currentChest = inventoryState ? currentChest : null;
 		}
 		//godMode
 		if (Input.keyUpOnce(KeyEvent.VK_G)) {
