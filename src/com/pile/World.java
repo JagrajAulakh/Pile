@@ -15,14 +15,14 @@ public class World {
 	// Used for detecting collisions within 1 Grid Space of Entities
 	public static final int GRID_SIZE = (int)(256 * Resources.SCALE*2);
 	// Todo Change W & H
-	private int width = Block.WIDTH*500; // World Width
+	private int width = Block.WIDTH*1000; // World Width
 	private int height = Block.HEIGHT*300; // World Height
 
 	// Counter that resets every second
 	private int frame;
 
 	// Grid of the World, used to determine where every GameObjects are
-	private LinkedList<Entity>[][] entityGrid;
+	private ArrayList<Entity>[][] entityGrid;
 	private Block[][] blockGrid;
 
 	private ArrayList<Particle> particles = new ArrayList<Particle>();
@@ -37,7 +37,7 @@ public class World {
 		camera = new GameCamera(this);
 		entities = new EntityManager(camera);
 		blocks = new BlockManager(camera);
-		entityGrid = new LinkedList[width][height];
+		entityGrid = new ArrayList[width][height];
 		blockGrid = new Block[width/Block.WIDTH + 1][height/Block.HEIGHT + 1];
 	}
 	private void addPlayer(Player p) {
@@ -56,7 +56,7 @@ public class World {
 
 	public void addEntity(Entity e) {
 		if (entityGrid[e.getGridX()][e.getGridY()] == null) {
-			entityGrid[e.getGridX()][e.getGridY()] = new LinkedList<Entity>();
+			entityGrid[e.getGridX()][e.getGridY()] = new ArrayList<Entity>();
 		}
 		entityGrid[e.getGridX()][e.getGridY()].add(e);
 	}
@@ -91,7 +91,9 @@ public class World {
 		if (entityGrid[e.getGridX()][e.getGridY()] == null) {
 			int px = (int)((e.getX() - e.getVelX()) / GRID_SIZE);
 			int py = (int)((e.getY() - e.getVelY()) / GRID_SIZE);
-			entityGrid[px][py].remove(e);
+			try {
+				entityGrid[px][py].remove(e);
+			} catch (NullPointerException error) {}
 		} else {
 			entityGrid[e.getGridX()][e.getGridY()].remove(e);
 		}
@@ -103,9 +105,9 @@ public class World {
 		for (int x = px - range; x <= px + range; x++) {
 			for (int y = py - range; y <= py + range; y++) {
 				if (0 <= x && x < entityGrid.length && 0 <= y && y < entityGrid[0].length) {
-					LinkedList<Entity> l = entityGrid[x][y];
+					ArrayList<Entity> l = entityGrid[x][y];
 					if (l != null) {
-						LinkedList<Entity> toMove = new LinkedList<Entity>();
+						ArrayList<Entity> toMove = new ArrayList<Entity>();
 						for (Entity e:l) {
 							if (e.getGridX() != x || e.getGridY() != y) {
 								toMove.add(e);
@@ -114,7 +116,7 @@ public class World {
 						for (Entity e:toMove) {
 							entityGrid[x][y].remove(e);
 							if (entityGrid[e.getGridX()][e.getGridY()] == null) {
-								entityGrid[e.getGridX()][e.getGridY()] = new LinkedList<Entity>();
+								entityGrid[e.getGridX()][e.getGridY()] = new ArrayList<Entity>();
 							}
 							entityGrid[e.getGridX()][e.getGridY()].add(e);
 						}
@@ -164,21 +166,29 @@ public class World {
 
 	private synchronized void makeTree(double wx, double wy) {
 		int size = (int)((Math.random() * 6) + 4);
-		for (double i = wy; i >= wy-size*Block.HEIGHT; i-=Block.HEIGHT) {
+		Block[] trunks = new Block[size];
+		int index = 0;
+		for (double i = wy; i > wy-size*Block.HEIGHT; i-=Block.HEIGHT) {
 			if (getBlockAtSpot(wx, i) != null) removeBlockPermanent(getBlockAtSpot(wx, i));
-			addBlock(new Block(wx, i, 8));
+			Block b = new Block(wx, i, 8);
+			addBlock(b);
+			trunks[index] = b;
+			index++;
 		}
-		double rad = 2*Block.WIDTH;
+		double rad = size*Block.WIDTH/2;
 		double top = (int)(wy - size*Block.HEIGHT);
-		for (double x = wx - rad; x <= wx + rad; x++) {
-			for (double y = top - rad; y <= top + rad; y++) {
-				addBlock(new Block(x, y, 26));
+		for (double x = wx - rad; x <= wx + rad; x += Block.WIDTH) {
+			for (double y = top - rad; y <= top + rad; y += Block.HEIGHT) {
+				double dist = Math.hypot(x - wx + Block.WIDTH/2, y - top + Block.HEIGHT/2);
+				if (dist <= rad) {
+					addBlock(new Leaves(x, y, trunks));
+				}
 			}
 		}
 	}
 	public synchronized void generateWorld() {
-		int dir = (int)(Math.random()*2) == 0?-1:1;
-		int y = height/Block.HEIGHT/2;
+		int dir = (int)(Math.random()*2) == 0 ? -1 : 1;
+		int y = (int)(Math.random()*height - Block.HEIGHT*40) / Block.HEIGHT + 20;
 		for (int x = 0; x < width; x += Block.WIDTH) {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
 			y = Math.max(30, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
@@ -207,70 +217,62 @@ public class World {
 		addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
 		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
 
-		for (int i = 0; i < 2000; i++) {
-			boolean found = false;
-			int randX, randY;
-			randX = randY = 0;
-			while (!found) {
-				randX = (int)(Math.random()*width/Block.WIDTH);
-				randY = (int)(Math.random()*height/Block.HEIGHT);
-				Block block = blockGrid[randX][randY];
-				if (block != null && (block.getId() == 2)) found = true;
-			}
-//			for (int bx = randX - rad; bx < randX + rad; bx++) {
-//				for (int by = randY - rad; by < randY + rad; by++) {
-//					if (0 <= bx && bx < blockGrid.length && 0 <= by && by < blockGrid[0].length) {
-//						Block b = blockGrid[bx][by];
-//						if (b != null && b.getId() == 2) removeBlockPermanent(b);
-//					}
-//				}
-//			}
-//			boolean goodToPlace = oreAround(randX, randY, 4);
-			blockGrid[randX][randY].changeBlockTo(4);
+
+		for (int i = 0; i < width / Block.WIDTH; i++) {
+			Point randPoint = randomSpot();
+			makeVein((int)randPoint.getX(), (int)randPoint.getY(), 4, (int)(Math.random()*4)+5);
+			System.out.println(i);
 		}
 	}
 
-	private boolean oreAround(int bx, int by, int id) {
+	private Point randomSpot() {
+		while (true) {
+			int randX = (int)(Math.random() * width/Block.WIDTH);
+			int randY = (int)(Math.random() * height/Block.HEIGHT);
+			if (blockGrid[randX][randY] != null && blockGrid[randX][randY].getId() == 2) {
+				return new Point(randX, randY);
+			}
+		}
+	}
+
+	private void makeVein(int bx, int by, int id, int amount) {
 		final int rad = 6;
-		boolean stone = false;
-		boolean newVein = false;
-		for (int x = bx - rad; x <= bx + rad; x++) {
-			for (int y = by - rad; y <= by + rad; y++) {
-				Block block = blockGrid[bx][by];
-				if (block != null) {
-					if (block.getId() == 2) {
-						stone = true;
+		blockGrid[bx][by].changeBlockTo(id);
+		for (int i = 0; i < amount; i++) {
+			while (true) {
+				boolean stone = false;
+				for (int x = bx - rad; x <= bx + rad; x++) {
+					for (int y = by - rad; y <= by + rad; y++) {
+						if (0 <= x && x < blockGrid.length && 0 <= y && y < blockGrid[0].length) {
+							if (blockGrid[x][y] != null && blockGrid[x][y].getId() == 2) {
+								stone = true;
+							}
+						}
+					}
+				}
+				if (!stone) return;
+				int randX = (int)(Math.random()*rad) + bx;
+				int randY = (int)(Math.random()*rad) + by;
+				if (0 <= randX && randX < blockGrid.length && 0 <= randY && randY < blockGrid[0].length) {
+					if (blockGrid[randX][randY] != null && blockGrid[randX][randY].getId() == 2 && oreAround(randX, randY, id)) {
+						blockGrid[randX][randY].changeBlockTo(id);
 						break;
-					} else if (block.getId() == id) {
-						newVein = true;
 					}
 				}
 			}
 		}
-		if (stone) {
-			boolean found = false;
-			int randX = 0;
-			int randY = 0;
-			while (!found) {
-				randX = (int)(bx - rad + Math.random()*rad*2);
-				randY = (int)(by - rad + Math.random()*rad*2);
-				if (blockGrid[randX][randY] != null && blockGrid[randX][randY].getId() == 2) {
-					if (newVein) return true;
-					else {
-						for (int x = randX - 1; x <= randX + 1; x++) {
-							for (int y = randY - 1; y <= randY + 1; y++) {
-								if (blockGrid[x][y] != null && blockGrid[x][y].getId() == id) {
-									return true;
-								}
-							}
-						}
-					}
+	}
+
+	private boolean oreAround(int bx, int by, int id) {
+		for (int x = bx - 1; x <= bx + 1; x++) {
+			for (int y = by - 1; y <= by + 1; y++) {
+				if (0 <= x && x < blockGrid.length && 0 <= y && y < blockGrid[0].length) {
+					if (blockGrid[x][y] != null && blockGrid[x][y].getId() == id) return true;
 				}
 			}
 		}
 		return false;
 	}
-
 	public void update() {
 		sortEntities(5);
 		LinkedList<GameObject> l = new LinkedList<GameObject>();

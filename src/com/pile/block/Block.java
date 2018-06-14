@@ -42,9 +42,7 @@ public class Block extends GameObject {
 	}
 
 	@Override
-	public void updateHitBox() {
-		hitBox.setRect(x, y, WIDTH, HEIGHT);
-	}
+	public void updateHitBox() { hitBox.setRect(x, y, WIDTH, HEIGHT); }
 
 	@Override
 	public void update() {
