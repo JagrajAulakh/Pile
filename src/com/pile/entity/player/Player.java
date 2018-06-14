@@ -248,6 +248,9 @@ public class Player extends Entity {
 				onGround = false;
 				velY = -JUMP_HEIGHT;
 			}
+		} if (Input.keyDownOnce(KeyEvent.VK_V)) {
+			Point p = PlayState.world.randomSpot(4);
+			if (p != null) PlayState.world.makeVein((int)p.getX(), (int)p.getY(), 4, (int)(Math.random()*3)+4);
 		}
 		slow = false;
 		if (Input.keyDown(KeyEvent.VK_SHIFT)) {

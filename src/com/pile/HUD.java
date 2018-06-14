@@ -54,7 +54,6 @@ public class HUD {
 		if (items[spot] != null && inHand != null) {
 			if (items[spot].getId() == inHand.getId()) {
 				int leftOver = items[spot].getAmount() + inHand.getAmount() - inHand.getStackMax();
-				System.out.println(leftOver);
 				items[spot].setAmount(Math.min(inHand.getAmount()+items[spot].getAmount(), inHand.getStackMax()));
 				if (leftOver >= 1) {
 					inHand = new Item(inHand.getId(), leftOver);
@@ -75,10 +74,10 @@ public class HUD {
 		int spot = iy*inv.getWidth()+ ix;
 		if (items[spot] != null) {
 			if (inHand == null) {
-				int half = items[spot].getAmount()/2 + 1;
-				if (items[spot].getAmount() - half >= 1) items[spot].setAmount(items[spot].getAmount() - half);
-				else items[spot] = null;
+				int half = items[spot].getAmount()/2;
 				inHand = new Item(items[spot].getId(), half);
+				if (inHand.getAmount() - half >= 1) items[spot].setAmount(inHand.getAmount() - half);
+				else items[spot] = null;
 			}
 		}
 	}

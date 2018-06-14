@@ -15,8 +15,8 @@ public class World {
 	// Used for detecting collisions within 1 Grid Space of Entities
 	public static final int GRID_SIZE = (int)(256 * Resources.SCALE*2);
 	// Todo Change W & H
-	private int width = Block.WIDTH*1000; // World Width
-	private int height = Block.HEIGHT*300; // World Height
+	private int width = Block.WIDTH*500; // World Width
+	private int height = Block.HEIGHT*100; // World Height
 
 	// Counter that resets every second
 	private int frame;
@@ -188,10 +188,10 @@ public class World {
 	}
 	public synchronized void generateWorld() {
 		int dir = (int)(Math.random()*2) == 0 ? -1 : 1;
-		int y = (int)(Math.random()*height - Block.HEIGHT*40) / Block.HEIGHT + 20;
+		int y = (int)(Math.random()*height - Block.HEIGHT*20) / Block.HEIGHT + 20;
 		for (int x = 0; x < width; x += Block.WIDTH) {
 			if ((int)(Math.random()*100) < 20) dir *= -1;
-			y = Math.max(30, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-15));
+			y = Math.max(20, Math.min(y + (int)(Math.random()*3)*dir, height/Block.HEIGHT-20));
 
 			// GRASS
 			addBlock(new Block(x, height - y*Block.HEIGHT, 0));
@@ -218,45 +218,61 @@ public class World {
 		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
 
 
-		for (int i = 0; i < width / Block.WIDTH; i++) {
-			Point randPoint = randomSpot();
-			makeVein((int)randPoint.getX(), (int)randPoint.getY(), 4, (int)(Math.random()*4)+5);
-			System.out.println(i);
-		}
-	}
-
-	private Point randomSpot() {
-		while (true) {
-			int randX = (int)(Math.random() * width/Block.WIDTH);
-			int randY = (int)(Math.random() * height/Block.HEIGHT);
-			if (blockGrid[randX][randY] != null && blockGrid[randX][randY].getId() == 2) {
-				return new Point(randX, randY);
+		int times = width/Block.WIDTH/5;
+		System.out.println(times);
+		for (int i = 0; i < times; i++) {
+			Point randPoint = randomSpot(4);
+			if (randPoint != null) {
+				makeVein((int)randPoint.getX(), (int)randPoint.getY(), 4, (int)(Math.random()*2)+4);
 			}
 		}
 	}
 
-	private void makeVein(int bx, int by, int id, int amount) {
-		final int rad = 6;
-		blockGrid[bx][by].changeBlockTo(id);
-		for (int i = 0; i < amount; i++) {
-			while (true) {
-				boolean stone = false;
-				for (int x = bx - rad; x <= bx + rad; x++) {
-					for (int y = by - rad; y <= by + rad; y++) {
+	public Point randomSpot(int id) {
+		int attempts = 0;
+		while (true) {
+			int randX = (int)(Math.random() * width/Block.WIDTH);
+			int randY = (int)(Math.random() * height/Block.HEIGHT);
+			if (blockGrid[randX][randY] != null && blockGrid[randX][randY].getId() == 2) {
+				boolean alreadyThere = false;
+				for (int x = randX - 6; x <= randX + 6; x++) {
+					for (int y = randY - 6; y <= randY + 6; y++) {
 						if (0 <= x && x < blockGrid.length && 0 <= y && y < blockGrid[0].length) {
-							if (blockGrid[x][y] != null && blockGrid[x][y].getId() == 2) {
-								stone = true;
-							}
+							if (blockGrid[x][y] != null && blockGrid[x][y].getId() == id) alreadyThere = true;
 						}
 					}
 				}
-				if (!stone) return;
+				if (!alreadyThere) return new Point(randX, randY);
+			}
+			attempts++;
+			if (attempts >= 50) return null;
+		}
+	}
+
+	public void makeVein(int bx, int by, int id, int amount) {
+		final int rad = 6;
+		blockGrid[bx][by].changeBlockTo(id);
+		amount--;
+		int stoneCount = 0;
+		for (int x = bx - rad; x <= bx + rad; x++) {
+			for (int y = by - rad; y <= by + rad; y++) {
+				if (0 <= x && x < blockGrid.length && 0 <= y && y < blockGrid[0].length) {
+					if (blockGrid[x][y] != null && blockGrid[x][y].getId() == 2) {
+						stoneCount++;
+					}
+				}
+			}
+		}
+		amount = Math.min(stoneCount, amount);
+		for (int i = 0; i < amount-1; i++) {
+			boolean placed = false;
+			while (!placed) {
 				int randX = (int)(Math.random()*rad) + bx;
 				int randY = (int)(Math.random()*rad) + by;
 				if (0 <= randX && randX < blockGrid.length && 0 <= randY && randY < blockGrid[0].length) {
 					if (blockGrid[randX][randY] != null && blockGrid[randX][randY].getId() == 2 && oreAround(randX, randY, id)) {
 						blockGrid[randX][randY].changeBlockTo(id);
-						break;
+						placed = true;
 					}
 				}
 			}

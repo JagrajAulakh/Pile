@@ -76,6 +76,21 @@ public class Block extends GameObject {
 				PlayState.world.removeBlockPermanent(this);
 			}
 		}
+//		else if (id == 26) { // LEAVES
+//			Leaves b = (Leaves)this;
+//			if (!b.isDecaying()) {
+//				for (Block t:b.getTrunk()) {
+//					if (t == null) {
+//						b.setDecaying(true);
+//					}
+//				}
+//			} else {
+//				decayCounter++;
+//				if (decayCounter >= decayCounterMax) {
+//					PlayState.world.removeBlockPermanent(this);
+//				}
+//			}
+//		}
 	}
 
 	public void destroy(double amount) {

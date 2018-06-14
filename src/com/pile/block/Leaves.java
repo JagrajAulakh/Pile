@@ -13,6 +13,12 @@ public class Leaves extends Block {
 		decayCounterMax = (int)(Math.random() * 110) + 10;
 	}
 
+	public boolean isDecaying() { return decaying; }
+	public void setDecaying(boolean decaying) { this.decaying = decaying; }
+	public int getDecayCounter() { return decayCounter; }
+	public int getDecayCounterMax() { return decayCounterMax; }
+	public Block[] getTrunk() { return trunk; }
+
 	@Override
 	public void update() {
 		if (!decaying) {
