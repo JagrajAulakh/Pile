@@ -39,10 +39,10 @@ public class Enemy extends Entity {
 		BufferedImage img = new BufferedImage(w, hi, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
 		int headHeight = (int)(64 * Resources.SCALE*2);
-		BufferedImage h = Resources.partsZombie.get("head");
-		BufferedImage b = Resources.partsZombie.get("body");
-		BufferedImage a = Resources.partsZombie.get("arm");
-		BufferedImage l = Resources.partsZombie.get("leg");
+		BufferedImage h = Resources.partsFemale.get("head");
+		BufferedImage b = Resources.partsFemale.get("body");
+		BufferedImage a = Resources.partsFemale.get("arm");
+		BufferedImage l = Resources.partsFemale.get("leg");
 
 		g.rotate(Math.toRadians(armFront), img.getWidth()/2, headHeight + 4);
 		g.drawImage(a, img.getWidth()/2 - a.getWidth()/2, headHeight + 4, null);

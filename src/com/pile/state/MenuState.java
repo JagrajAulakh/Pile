@@ -25,7 +25,7 @@ public class MenuState implements GameState {
 		try{
 			background = ImageIO.read(new File("assets/images/REAL/MenuBG.png"));
 			piles = ImageIO.read(new File("assets/images/REAL/PilesFontLogo.png"));
-		}catch (IOException e) {}
+		} catch (IOException e) {}
 	}
 
 	@Override
