@@ -67,20 +67,20 @@ public class HUD {
 		items[spot] = inHand;
 		inHand = tmp;
 	}
-	private static void splitItems(Inventory inv) {
-		Item[] items = inv.getItems();
-		int ix = (int) ((Input.mx - inv.getX()) / (INV_BOX_WIDTH+SPACING));
-		int iy = (int) ((Input.my - inv.getY()) / (INV_BOX_HEIGHT+SPACING));
-		int spot = iy*inv.getWidth()+ ix;
-		if (items[spot] != null) {
-			if (inHand == null) {
-				int half = items[spot].getAmount()/2;
-				inHand = new Item(items[spot].getId(), half);
-				if (inHand.getAmount() - half >= 1) items[spot].setAmount(inHand.getAmount() - half);
-				else items[spot] = null;
-			}
-		}
-	}
+//	private static void splitItems(Inventory inv) {
+//		Item[] items = inv.getItems();
+//		int ix = (int) ((Input.mx - inv.getX()) / (INV_BOX_WIDTH+SPACING));
+//		int iy = (int) ((Input.my - inv.getY()) / (INV_BOX_HEIGHT+SPACING));
+//		int spot = iy*inv.getWidth()+ ix;
+//		if (items[spot] != null) {
+//			if (inHand == null) {
+//				int half = items[spot].getAmount()/2 + 1;
+//				if (items[spot].getAmount() - half >= 1) items[spot].setAmount(items[spot].getAmount() - half);
+//				else items[spot] = null;
+//				inHand = new Item(items[spot].getId(), half);
+//			}
+//		}
+//	}
 	public static void dropInHand(Player player) {
 		if (inHand != null) {
 			for (int i = 0; i < inHand.getAmount(); i++) {
@@ -93,6 +93,41 @@ public class HUD {
 		else {
 			player.toggleInventory();
 			player.setChest(null);
+		}
+	}
+	public static void interactItems(Inventory inv){
+		Item[] items = inv.getItems();
+		double posX = inv.getX();
+		double posY = inv.getY();
+		int ix = (int) ((Input.mx - posX) / (INV_BOX_WIDTH+SPACING));
+		int iy = (int) ((Input.my - posY) / (INV_BOX_HEIGHT+SPACING));
+		int spot = iy*inv.getWidth()+ ix;
+		//On an item with nothing in your hand
+		if (items[spot] != null && inHand == null) {
+			//Picks up half of the items (or higher if amount is odd), leaves half in inventory
+			int pickedUp = (items[spot].getAmount() > 1 ? items[spot].getAmount() / 2 + items[spot].getAmount() % 2 : 1);
+			inHand = new Item(items[spot].getId(), pickedUp);
+			items[spot].subtractAmount(pickedUp);
+			//Prevents item amounts of <= 0
+			inv.updateItem(items[spot]);
+		}
+		//Holding item, drops 1 unit
+		else if (inHand != null) {
+			int itemId = inHand.getId();
+			//Flag to determine if we should subtract items from hand
+			boolean drop = false;
+			if(items[spot] == null){
+				items[spot] = new Item(itemId,1);
+				drop = true;
+			} else if(items[spot].getId() == itemId){
+				items[spot].add();
+				drop = true;
+			}
+			if(drop){
+				if(inHand.subtractAmount(1) <= 0){
+					inHand = null;
+				}
+			}
 		}
 	}
 	public static void update(Player player) {
@@ -108,11 +143,35 @@ public class HUD {
 				} else {
 					dropInHand(player);
 				}
-			} else if (Input.mouseDown(2)) {
-				if (inInventoryArea(inventory)) {
-					splitItems(inventory);
+			}
+			else if (Input.mouseUp(2)){
+				if(inInventoryArea(inventory)){
+					interactItems(inventory);
+				} else if (player.getChest() != null && inInventoryArea(player.getChest().getStorage())){
+					interactItems(player.getChest().getStorage());
 				}
 			}
+
+//			if (player.getChest() == null) {
+//				if (Input.mouseUp(0)) {
+//					if (inInventoryArea(inventory)) {
+//						swapItems(inventory);
+//					} else {
+//						dropInHand(player);
+//					}
+//				}
+//			} else {
+//				if (Input.mouseUp(0)) {
+//					if (inInventoryArea(inventory)) {
+//						swapItems(inventory);
+//					} else if (inInventoryArea(player.getChest().getStorage())) {
+//						swapItems(player.getChest().getStorage());
+//					} else {
+//						dropInHand(player);
+//					}
+//				}
+//			}
+
 		}
 		if (player.inventoryState()) {
 			if (Input.wheelDown()) {

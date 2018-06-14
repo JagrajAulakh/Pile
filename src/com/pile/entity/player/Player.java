@@ -265,7 +265,9 @@ public class Player extends Entity {
 			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
 			//Only have a chest open when player is in full inventory
-			currentChest = inventoryState ? currentChest : null;
+			//Todo remove VVV Doesn't actually work
+//			currentChest = inventoryState ? currentChest : null;
+			currentChest = inventoryState == false ? null : currentChest;
 		}
 		//godMode
 		if (Input.keyUpOnce(KeyEvent.VK_G)) {
@@ -298,7 +300,6 @@ public class Player extends Entity {
 				if (b != null && b instanceof Chest) {
 					inventoryState = !inventoryState;
 					currentChest = (Chest)b;
-					System.out.println("OPEN SESAME!");
 				}
 			}
 			if (Input.mousePressed(2)) {

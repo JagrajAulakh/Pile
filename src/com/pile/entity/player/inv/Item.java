@@ -25,6 +25,10 @@ public class Item {
 	public int getId() { return id; }
 	public int getAmount() { return amount; }
 	public void setAmount(int amount) { this.amount = amount; }
+	public int subtractAmount(int amount) {
+		this.amount -= amount;
+		return this.amount;
+	}
 
 	public void add() { amount++; }
 	public void decrease() { amount--; }
