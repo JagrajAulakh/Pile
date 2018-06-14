@@ -210,18 +210,18 @@ public class World {
 				addPlayer(new Player(width/2, height - y*Block.HEIGHT - 200, this));
 			}
 		}
-		addBlock(new Block(width / 2 - Block.WIDTH*10, Block.HEIGHT*10, 28));
-		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
-		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
-		addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
-		addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
-		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
+//		addBlock(new Block(width / 2 - Block.WIDTH*10, Block.HEIGHT*10, 28));
+//		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
+//		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
+//		addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));
+//		addEntity(new Enemy(width/2 + 100, y*Block.HEIGHT - 200));
+//		addEntity(new Enemy(width/2 + 200, y*Block.HEIGHT - 200));
 
 
 		for (int i = 0; i < width / Block.WIDTH; i++) {
 			Point randPoint = randomSpot();
 			makeVein((int)randPoint.getX(), (int)randPoint.getY(), 4, (int)(Math.random()*4)+5);
-			System.out.println(i);
+//			System.out.println(i);
 		}
 	}
 

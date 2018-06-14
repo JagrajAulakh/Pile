@@ -2,6 +2,9 @@ package com.pile.entity.player.inv;
 
 import com.pile.image.Resources;
 
+
+import java.util.Arrays;
+
 public class Inventory {
 
 	public static final int P_INV = 0;
@@ -11,7 +14,6 @@ public class Inventory {
 	private Item[] inventory;
 	private int width, height;
 	private double x,y;
-
 	//Todo use items to search for it's crafting recipes. Remember each recipe calls for a number of items
 	//Have different types of items, stackable, material,
 
@@ -133,6 +135,14 @@ public class Inventory {
 			if (inventory[spot].getAmount() == 0) {
 				inventory[spot] = null;
 			}
+		}
+	}
+
+	//THIS UPDATES THE ITEMS, NO ITEMS <0 ALLOWED - SETS TO NULL
+	public void updateItem(Item i){
+		int spot = Arrays.asList(inventory).indexOf(i);
+		if(inventory[spot].getAmount() <= 0){
+			inventory[spot] = null;
 		}
 	}
 
