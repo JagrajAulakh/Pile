@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class World {
 	public static final double GRAVITY = 0.4;
 	public static final double FRICTION = 0.2;
-	// Used for detecting collisions within 1 Grid Space of Entities
+	// Used for detecting collisions within x Grid Space of Entities
 	public static final int GRID_SIZE = (int)(256 * Resources.SCALE*2);
 	// Todo Change W & H
 	private int width = Block.WIDTH*500; // World Width
@@ -21,7 +21,7 @@ public class World {
 	// Counter that resets every second
 	private int frame;
 
-	// Grid of the World, used to determine where every GameObjects are
+	// Grid of the World, used to determine where every GameObjects is
 	private ArrayList<Entity>[][] entityGrid;
 	private Block[][] blockGrid;
 

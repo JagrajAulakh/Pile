@@ -322,6 +322,7 @@ public class Player extends Entity {
 						}
 					}
 					if (withinReach(b) && !hitting && !collides(b)) {
+						if (world.addBlock(b)) inventory.decrease();
 						// Checks surrounding blocks to place next to (can't place floating blocks)
 						if (world.getBlockAtSpot(b.getX() - Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX() + Block.WIDTH, b.getY()) != null || world.getBlockAtSpot(b.getX(), b.getY() - Block.HEIGHT) != null || world.getBlockAtSpot(b.getX(), b.getY() + Block.HEIGHT) != null) {
 							if (world.addBlock(b)) inventory.decrease();

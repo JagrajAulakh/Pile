@@ -1,13 +1,11 @@
 package com.pile.state;
 
 import com.pile.Game;
-import com.pile.Input;
 import com.pile.ui.Button;
 import com.pile.ui.ButtonManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

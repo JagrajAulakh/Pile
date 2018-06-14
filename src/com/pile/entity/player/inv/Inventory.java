@@ -14,11 +14,6 @@ public class Inventory {
 	private Item[] inventory;
 	private int width, height;
 	private double x,y;
-	//Todo use items to search for it's crafting recipes. Remember each recipe calls for a number of items
-	//Have different types of items, stackable, material,
-
-	//Inventory should be able to check free slots, find
-	//https://softwareengineering.stackexchange.com/questions/246454/structuring-a-storage-system-for-a-game
 
 	public Inventory(double x, double y) {
 		this(x, y, 10, 5);
