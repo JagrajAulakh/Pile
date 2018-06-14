@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.util.Arrays;
 
 public class Input implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener {
+	//todo NOT an array? Change this comment
 	// Arrays to keep track of Keys and Mouse
 	private enum KeyState {
 		RELEASED,
