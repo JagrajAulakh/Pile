@@ -4,6 +4,7 @@ import com.pile.entity.player.inv.Item;
 
 import java.util.ArrayList;
 
+// Stores the required materials for crafting an item
 public class Recipe {
 	private Item crafting;
 	private ArrayList<Item> items;

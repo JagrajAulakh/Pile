@@ -231,7 +231,7 @@ public class World {
 		for (int i = 0; i < times; i++) {
 			Point randPoint = randomSpot(5);
 			if (randPoint != null) {
-				makeVein((int)randPoint.getX(), (int)randPoint.getY(), 4, (int)(Math.random()*2)+4);
+				makeVein((int)randPoint.getX(), (int)randPoint.getY(), 5, (int)(Math.random()*2)+4);
 			}
 		}
 	}

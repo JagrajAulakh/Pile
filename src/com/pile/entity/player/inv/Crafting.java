@@ -2,13 +2,17 @@ package com.pile.entity.player.inv;
 
 import com.pile.crafting.Recipe;
 import com.pile.entity.player.Player;
+import com.pile.block.Block;
 import com.pile.image.Resources;
+import com.pile.state.PlayState;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Crafting {
 
-	public static ArrayList<Recipe> getRecipes(Inventory inventory) {
+	public static ArrayList<Recipe> getRecipes(Player player) {
+		Inventory inventory = player.getInventory();
 		ArrayList<Recipe> recipes = new ArrayList<Recipe>();
 		for (Recipe r:Resources.recipes) {
 			boolean canCraft = true;
@@ -19,7 +23,19 @@ public class Crafting {
 						break;
 					}
 				}
-				if (canCraft) recipes.add(r);
+				if (canCraft) {
+					LinkedList<Block> blocks = PlayState.world.getBlocksAround(player, 10);
+					if (r.requiresBench()) {
+						canCraft = false;
+						for (Block b:blocks) {
+							if (b.getId() == 35) {
+								canCraft = true;
+								break;
+							}
+						}
+					}
+					if (canCraft) recipes.add(r);
+				}
 			}
 		}
 		return recipes;

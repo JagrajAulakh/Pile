@@ -9,8 +9,7 @@ public class Leaves extends Block {
 	public Leaves(double x, double y, int[][] trunk) {
 		super(x, y, 26);
 		this.trunk = trunk;
-		decayCounterMax = (int)(Math.random() * 110) + 10;
-		decayCounterMax *= 60;
+		decayCounterMax = (int)(Math.random() * 110*60) + 600;
 	}
 
 	public int[][] getTrunk() { return trunk; }

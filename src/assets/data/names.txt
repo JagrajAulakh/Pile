@@ -34,3 +34,4 @@ id (TWO SPACES) name_of_item
 32  Emerald
 33  Diamond
 34  Stick
+35  Crafting Bench

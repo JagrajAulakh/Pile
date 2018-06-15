@@ -11,6 +11,7 @@ import com.pile.image.Resources;
 import com.pile.state.PlayState;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class HUD {
@@ -67,20 +68,6 @@ public class HUD {
 		items[spot] = inHand;
 		inHand = tmp;
 	}
-//	private static void splitItems(Inventory inv) {
-//		Item[] items = inv.getItems();
-//		int ix = (int) ((Input.mx - inv.getX()) / (INV_BOX_WIDTH+SPACING));
-//		int iy = (int) ((Input.my - inv.getY()) / (INV_BOX_HEIGHT+SPACING));
-//		int spot = iy*inv.getWidth()+ ix;
-//		if (items[spot] != null) {
-//			if (inHand == null) {
-//				int half = items[spot].getAmount()/2 + 1;
-//				if (items[spot].getAmount() - half >= 1) items[spot].setAmount(items[spot].getAmount() - half);
-//				else items[spot] = null;
-//				inHand = new Item(items[spot].getId(), half);
-//			}
-//		}
-//	}
 	public static void dropInHand(Player player) {
 		if (inHand != null) {
 			for (int i = 0; i < inHand.getAmount(); i++) {
@@ -152,36 +139,16 @@ public class HUD {
 				}
 			}
 
-//			if (player.getChest() == null) {
-//				if (Input.mouseUp(0)) {
-//					if (inInventoryArea(inventory)) {
-//						swapItems(inventory);
-//					} else {
-//						dropInHand(player);
-//					}
-//				}
-//			} else {
-//				if (Input.mouseUp(0)) {
-//					if (inInventoryArea(inventory)) {
-//						swapItems(inventory);
-//					} else if (inInventoryArea(player.getChest().getStorage())) {
-//						swapItems(player.getChest().getStorage());
-//					} else {
-//						dropInHand(player);
-//					}
-//				}
-//			}
-
 		}
 		if (player.inventoryState()) {
-			if (Input.wheelDown()) {
+			if (Input.wheelDown() || Input.keyDownOnce(KeyEvent.VK_UP)) {
 				craftingScrollAmount--;
-			} else if (Input.wheelUp()) {
+			} else if (Input.wheelUp() || Input.keyDownOnce(KeyEvent.VK_DOWN)) {
 				craftingScrollAmount++;
 			}
 			if (craftingScrollAmount < -2) craftingScrollAmount = -2;
 			else if (craftingScrollAmount > craftable.size()-3) craftingScrollAmount = craftable.size()-3;
-			craftable = Crafting.getRecipes(inventory);
+			craftable = Crafting.getRecipes(player);
 			for (int i = 0; i < 5; i++) {
 				craftingArray[i] = null;
 				int index = i + craftingScrollAmount;
@@ -189,6 +156,7 @@ public class HUD {
 					craftingArray[i] = craftable.get(index);
 				}
 			}
+			if (Input.keyDownOnce('\n') && craftingArray[2] != null) Crafting.giveItems(player, craftingArray[2]);
 			int bx = Input.mx / INV_BOX_WIDTH;
 			int by = Input.my/(INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
 			if (bx == 0 && 0 <= by && by <= 5) {
