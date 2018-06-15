@@ -9,6 +9,7 @@ import com.pile.state.PlayState;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
+// Blocks that make up the world
 public class Block extends GameObject {
 	public static final int WIDTH = (int)(128 * Resources.SCALE);
 	public static final int HEIGHT = (int)(128 * Resources.SCALE);
@@ -76,21 +77,21 @@ public class Block extends GameObject {
 				PlayState.world.removeBlockPermanent(this);
 			}
 		}
-//		else if (id == 26) { // LEAVES
-//			Leaves b = (Leaves)this;
-//			if (!b.isDecaying()) {
-//				for (Block t:b.getTrunk()) {
-//					if (t == null) {
-//						b.setDecaying(true);
-//					}
-//				}
-//			} else {
-//				decayCounter++;
-//				if (decayCounter >= decayCounterMax) {
-//					PlayState.world.removeBlockPermanent(this);
-//				}
-//			}
-//		}
+		else if (id == 26) { // LEAVES
+			Leaves b = (Leaves)this;
+			if (!b.isDecaying()) {
+				for (int[] t:b.getTrunk()) {
+					if (PlayState.world.getBlockAtGridSpot(t[0], t[1]) == null) {
+						b.setDecaying(true);
+					}
+				}
+			} else {
+				b.setDecayCounter(b.getDecayCounter() + 1);
+				if (b.getDecayCounter() >= b.getDecayCounterMax()) {
+					PlayState.world.removeBlockPermanent(b);
+				}
+			}
+		}
 	}
 
 	public void destroy(double amount) {

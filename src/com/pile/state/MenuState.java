@@ -17,10 +17,10 @@ public class MenuState implements GameState {
 	public MenuState() {
 		this.buttons = new ButtonManager();
 		Button playButton = new Button("Play", Game.WIDTH/2, Game.HEIGHT/2, 70f, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255));
-		Button controlButton = new Button("Controls", Game.WIDTH/2, Game.HEIGHT/2 + 200, 70f, new Color(0,0,0), new Color(0,0,0), new Color(0,0,0));
+		Button controlButton = new Button("Controls", Game.WIDTH/2, Game.HEIGHT/2 + 200, 70f, Color.BLACK, Color.BLACK, Color.BLACK);
 		buttons.add(playButton);
 		buttons.add(controlButton);
-		try{
+		try {
 			background = ImageIO.read(new File("assets/images/REAL/MenuBG.png"));
 			piles = ImageIO.read(new File("assets/images/REAL/PilesFontLogo.png"));
 		} catch (IOException e) {}

@@ -126,6 +126,7 @@ public class World {
 		}
 	}
 
+	public Block getBlockAtGridSpot(int bx, int by) { return blockGrid[bx][by]; }
 	public Block getBlockAtSpot(double wx, double wy) {
 		int x = (int)(wx / Block.WIDTH);
 		int y = (int)(wy / Block.HEIGHT);
@@ -166,13 +167,13 @@ public class World {
 
 	private synchronized void makeTree(double wx, double wy) {
 		int size = (int)((Math.random() * 6) + 4);
-		Block[] trunks = new Block[size];
+		int[][] trunks = new int[size][2];
 		int index = 0;
 		for (double i = wy; i > wy-size*Block.HEIGHT; i-=Block.HEIGHT) {
 			if (getBlockAtSpot(wx, i) != null) removeBlockPermanent(getBlockAtSpot(wx, i));
-			Block b = new Block(wx, i, 8);
-			addBlock(b);
-			trunks[index] = b;
+			addBlock(new Block(wx, i, 8));
+			trunks[index][0] = (int)(wx/Block.WIDTH);
+			trunks[index][1] = (int)(i/Block.HEIGHT);
 			index++;
 		}
 		double rad = size*Block.WIDTH/2;
@@ -219,9 +220,16 @@ public class World {
 
 
 		int times = width/Block.WIDTH/5;
-		System.out.println(times);
 		for (int i = 0; i < times; i++) {
 			Point randPoint = randomSpot(4);
+			if (randPoint != null) {
+				makeVein((int)randPoint.getX(), (int)randPoint.getY(), 4, (int)(Math.random()*2)+4);
+			}
+		}
+
+		times = width/Block.WIDTH/6;
+		for (int i = 0; i < times; i++) {
+			Point randPoint = randomSpot(5);
 			if (randPoint != null) {
 				makeVein((int)randPoint.getX(), (int)randPoint.getY(), 4, (int)(Math.random()*2)+4);
 			}
