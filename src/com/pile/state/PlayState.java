@@ -17,6 +17,7 @@ public class PlayState implements GameState {
 		loadWorld();
 	}
 
+	// Loads world in new thread
 	private void loadWorld() {
 		lw = new Thread(new Runnable() {
 			@Override
@@ -39,6 +40,7 @@ public class PlayState implements GameState {
 
 	@Override
 	public void render(Graphics g) {
+		// loading screen
 		if (loading) {
 			Font f = Resources.getFont(50f);
 			g.setFont(f);
@@ -50,7 +52,7 @@ public class PlayState implements GameState {
 			Graphics2D g2 = (Graphics2D)(g);
 			g2.setStroke(new BasicStroke(10));
 			g.drawArc(Game.WIDTH/2 - 50, Game.HEIGHT - 150, 100, 100, 90, -counter%360);
-		} else {
+		} else { // Does world drawing
 			world.render(g);
 		}
 	}

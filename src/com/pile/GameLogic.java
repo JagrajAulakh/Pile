@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+// Main game logic
 public class GameLogic {
 	public static GameStateManager gsm; // Used to manage different screens
 	public GameLogic() {

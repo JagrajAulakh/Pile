@@ -4,6 +4,7 @@ import com.pile.image.ImageType;
 
 import java.awt.geom.Rectangle2D;
 
+// Parent class for all objects in-game
 // Takes care of all Entities & Blocks
 public abstract class GameObject {
 	protected double x, y, width, height; // Location & Size of Object
