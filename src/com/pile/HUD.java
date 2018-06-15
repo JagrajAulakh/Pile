@@ -159,7 +159,7 @@ public class HUD {
 			if (Input.keyDownOnce('\n') && craftingArray[2] != null) Crafting.giveItems(player, craftingArray[2]);
 			int bx = Input.mx / INV_BOX_WIDTH;
 			int by = Input.my/(INV_BOX_HEIGHT+SPACING) - player.getInventory().getHeight() - 2;
-			if (bx == 0 && 0 <= by && by <= 5) {
+			if (bx == 0 && by == 2) {
 				if (Input.mouseUp(0) && craftingArray[by] != null) {
 					Crafting.giveItems(player, craftingArray[by]);
 				}
