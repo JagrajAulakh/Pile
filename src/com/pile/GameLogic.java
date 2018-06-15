@@ -19,7 +19,6 @@ public class GameLogic {
 		Input.update();
 		if (gsm.currentState() instanceof MenuState) {
 			if (Input.keyDownOnce(KeyEvent.VK_ESCAPE)) {
-				//todo don't exit on menu
 				System.exit(0);
 			}
 		} else if (gsm.currentState() instanceof PlayState) {

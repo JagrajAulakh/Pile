@@ -15,7 +15,6 @@ public class World {
 	public static final double FRICTION = 0.2;
 	// Used for detecting collisions within x Grid Space of Entities
 	public static final int GRID_SIZE = (int)(256 * Resources.SCALE*2);
-	// Todo Change W & H
 	private int width = Block.WIDTH*500; // World Width
 	private int height = Block.HEIGHT*100; // World Height
 
