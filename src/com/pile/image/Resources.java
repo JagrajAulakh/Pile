@@ -152,10 +152,7 @@ public class Resources {
 	public static Font getFont(float size) { return mainFont.deriveFont(size); }
 	public static int getWidth(String text, Font f) { return (int)f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true)).getWidth(); }
 	public static int getHeight(String text, Font f) { return (int)f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true)).getHeight(); }
-//	public static int[] getSize(String text, Font f) {
-//		Rectangle2D s = f.getStringBounds(text, new FontRenderContext(new AffineTransform(), true, true));
-//		return new int[] {(int)s.getWidth(), (int)s.getHeight()};
-//	}
+
 	public static BufferedImage scale(BufferedImage original, int newWidth, int newHeight) {
 		BufferedImage resized = new BufferedImage(newWidth, newHeight, original.getType());
 		Graphics2D g = resized.createGraphics();

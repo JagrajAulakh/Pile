@@ -5,7 +5,6 @@ import com.pile.Input;
 import com.pile.World;
 import com.pile.block.Block;
 import com.pile.block.Chest;
-import com.pile.block.Furnace;
 import com.pile.entity.Drop;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
@@ -33,7 +32,6 @@ public class Player extends Entity {
 	private Inventory inventory;
 
 	private Chest currentChest;
-	private Furnace currentFurnace;
 
 	public Player(double x, double y, World world) {
 		super(x, y);
@@ -55,7 +53,6 @@ public class Player extends Entity {
 		onGround = inventoryState = godMode = ruler = invincible = slow = false;
 		flipped = true;
 		currentChest = null;
-		currentFurnace = null;
 		updateHitBox();
 	}
 
@@ -74,8 +71,6 @@ public class Player extends Entity {
 	}
 	public Chest getChest() { return currentChest; }
 	public void setChest(Chest c) { currentChest = c; }
-	public Furnace getCurrentFurnace() { return currentFurnace; }
-	public void setCurrentFurnace(Furnace currentFurnace) { this.currentFurnace = currentFurnace; }
 
 	public int getHealth() { return health; }
 	public int getMaxHealth() { return maxHealth; }
@@ -297,9 +292,6 @@ public class Player extends Entity {
 						inventoryState = !inventoryState;
 						currentChest = (Chest)b;
 
-					} else if (b instanceof Furnace) {
-						inventoryState = !inventoryState;
-						currentFurnace = (Furnace)b;
 					}
 				}
 			}
@@ -310,8 +302,6 @@ public class Player extends Entity {
 					Block b;
 					if (item.getId() == 10) {
 						b = new Chest(wx, wy);
-					} else if (item.getId() == 3) {
-						b = new Furnace(wx, wy);
 					} else {
 						b = new Block(wx, wy, item.getId());
 					}
