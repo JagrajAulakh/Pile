@@ -3,7 +3,6 @@ package com.pile.ui;
 import com.pile.GameLogic;
 import com.pile.Input;
 import com.pile.image.Resources;
-import com.pile.io.Writer;
 import com.pile.state.MenuState;
 import com.pile.state.PlayState;
 
@@ -49,7 +48,6 @@ public class Button {
 				if (text.toLowerCase().equals("play")) {
 					GameLogic.gsm.set(new PlayState());
 				} else if (text.toLowerCase().equals("exit")) {
-//					Writer.writeDataFile("test1", PlayState.world);
 					GameLogic.gsm.pop();
 					GameLogic.gsm.set(new MenuState());
 				} else if (text.toLowerCase().equals("resume")) {

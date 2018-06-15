@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
 
+// Main "panel"
 public class Game extends Canvas {
 	public static final int WIDTH = 1280; //Game Standard
 	public static final int HEIGHT = 720; //Window Size
@@ -16,8 +17,10 @@ public class Game extends Canvas {
 
 	public Game() {
 		frame = new JFrame("Piles");
+		// Sets window icon
 		ImageIcon icon = new ImageIcon("assets/images/REAL/pilesIcon.png");
 		frame.setIconImage(icon.getImage());
+		// loads all resources
 		try {
 			Resources.load();
 		} catch (Exception e) { e.printStackTrace(); }
@@ -27,6 +30,7 @@ public class Game extends Canvas {
 
 		setFocusable(true);		// These two lines allow
 		requestFocusInWindow();	// the key listener to work
+		// Input
 		input = new Input();
 		addKeyListener(input);
 		addMouseListener(input);
@@ -39,10 +43,10 @@ public class Game extends Canvas {
 		frame.setLocationRelativeTo(null); // Centers Game window
 
 		frame.setVisible(true);
-//		frame.setResizable(false);
 		run();
 	}
 
+	// Game loop, got it online
 	public void run() {
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;

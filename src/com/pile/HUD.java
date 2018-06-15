@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+// Updating and drawing of Heads-Up-Display: inv, chest, crafting, hearts...
 public class HUD {
 	//Constants used to size inventories
 	public static final int INV_BOX_WIDTH = 40;

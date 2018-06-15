@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+// Takes care of storing world info: world size, entity locations, blocks, player...
 public class World {
 	public static final double GRAVITY = 0.4;
 	public static final double FRICTION = 0.2;

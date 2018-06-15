@@ -3,6 +3,7 @@ package com.pile;
 import java.awt.event.*;
 import java.util.Arrays;
 
+// Handles all keyboard and mouse inputs
 public class Input implements KeyListener,MouseListener,MouseMotionListener,MouseWheelListener {
 
 	private enum KeyState {

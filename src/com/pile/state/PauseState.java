@@ -7,6 +7,7 @@ import com.pile.ui.ButtonManager;
 
 import java.awt.*;
 
+// Pause screen
 public class PauseState implements GameState {
 	private ButtonManager buttons;
 

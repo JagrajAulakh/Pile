@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+// Menu
 public class MenuState implements GameState {
 	private ButtonManager buttons;
 	BufferedImage background, piles;
