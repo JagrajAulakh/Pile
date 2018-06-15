@@ -28,15 +28,18 @@ public class Player extends Entity {
 	private int health, maxHealth;
 	private double counter;
 	private World world;
-	private boolean inventoryState, mining, godMode, ruler, invincible, slow;
+	private boolean inventoryState, mining, godMode, ruler, slow;
 	private Inventory inventory;
 
+	// If null, then no chest will draw. Else, chest interactions
 	private Chest currentChest;
 
 	public Player(double x, double y, World world) {
 		super(x, y);
 		this.world = world;
 		inventory = new Inventory(0, 0);
+
+		// Items for testing
 		inventory.add(15);
 		inventory.add(20);
 		inventory.add(25);
@@ -47,25 +50,29 @@ public class Player extends Entity {
 		arm = new Arm(Resources.partsMale.get("arm"));
 		leg = new Leg(Resources.partsMale.get("leg"));
 		image = drawImage(0, 0, 0, 0);
+		// Width and height for hitbox
 		width = 56 * Resources.SCALE*2;
 		height = 180 * Resources.SCALE * 2;
 		maxHealth = health = 10;
-		onGround = inventoryState = godMode = ruler = invincible = slow = false;
+		onGround = inventoryState = godMode = ruler = slow = false;
 		flipped = true;
 		currentChest = null;
 		updateHitBox();
 	}
 
+	// Flag for drawing block grid
 	public boolean ruler() { return ruler; }
-	public boolean isInvincible() { return invincible; }
 
 	public Inventory getInventory() { return inventory; }
 	public boolean inventoryState() { return inventoryState; }
+	// Switch between inv states
 	public void toggleInventory() { inventoryState = !inventoryState; }
 
+	// Add item to inv
 	public void addItem(Item item) {
 		inventory.add(item.getId(), item.getAmount());
 	}
+	// Remove item from inv
 	public void removeItem(Item item) {
 		for (int i = 0; i < item.getAmount(); i++) inventory.remove(item.getId());
 	}
@@ -75,6 +82,7 @@ public class Player extends Entity {
 	public int getHealth() { return health; }
 	public int getMaxHealth() { return maxHealth; }
 
+	// draws item on player so player is holding it
 	private void drawItem(Graphics2D g, int hi) {
 		Item item = inventory.getCurrentItem();
 		if (item != null) {
@@ -88,6 +96,7 @@ public class Player extends Entity {
 		}
 	}
 
+	// Pass angles for each body part and draws them
 	private SingleImage drawImage(double armBack, double armFront, double legBack, double legFront) {
 		int w = (int)(200*Resources.SCALE * 2);
 		int hi = (int)(220*Resources.SCALE * 2);
@@ -132,11 +141,14 @@ public class Player extends Entity {
 		return new SingleImage(img);
 	}
 
+	// Check if block is within reach
 	private boolean withinReach(Block b) { return withinReach(b.getX(), b.getY()); }
+	// Check if (wx, wy) is within reach
 	private boolean withinReach(double wx, double wy) {
 		return Math.hypot(wx - x - width/2, wy - y - height/2) / Block.WIDTH <= REACH;
 	}
 
+	// Get the block that (mx, my) is hovering over
 	public Block getSelectedBlock() {
 		double wx = Input.mx + world.camera.getOffsetX();
 		double wy = Input.my + world.camera.getOffsetY();
@@ -175,11 +187,13 @@ public class Player extends Entity {
 		}
 	}
 
+	// COLLISION
 	private void collisionY(LinkedList<Block> blocks) { if (!godMode) blockCollisionY(blocks); }
 	private void collisionX(LinkedList<Block> blocks) {
 		if (!godMode) blockCollisionX(blocks);
 		LinkedList<Entity> l = PlayState.world.getEntitiesAround(this, 1);
 		for (Entity e:l) {
+			// Drop collision
 			if (e instanceof Drop) {
 				Drop d = (Drop)e;
 				if (collides(d) && d.canPick()) {
@@ -192,6 +206,7 @@ public class Player extends Entity {
 
 	@Override
 	public void update() {
+		// God mode lets you go through blocks
 		if (!godMode) {
 			accY = World.GRAVITY;
 		} else {
@@ -201,6 +216,7 @@ public class Player extends Entity {
 
 		playerInput();
 
+		// Blocks around the player to check collisions
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
 
 		// Starting here is the Y movement
@@ -220,6 +236,7 @@ public class Player extends Entity {
 
 		determineImage();
 	}
+	// Key and mouse inputs
 	private void playerInput(){
 		//Movement
 		if (godMode) {
@@ -282,6 +299,7 @@ public class Player extends Entity {
 			}
 		}
 
+		// can only interact with the world if not in invState
 		if (!inventoryState) {
 			int wx = (int)((Input.mx + world.camera.getOffsetX())/Block.WIDTH) * Block.WIDTH;
 			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
@@ -305,6 +323,7 @@ public class Player extends Entity {
 					} else {
 						b = new Block(wx, wy, item.getId());
 					}
+					// Check if player is placing block on top of itself or an enemy
 					boolean hitting = false;
 					for (Entity e:world.getEntitiesAround(this, 4)) {
 						if ((e instanceof Player || e instanceof Enemy) && e.collides(b)) {
@@ -348,6 +367,7 @@ public class Player extends Entity {
 				inventory.moveSpotRight();
 			}
 		}
+		// 0-9 keys will change inv spot
 		for (int i = 0; i <= 8; i++) {
 			if (Input.keyDown('1'+i)) {
 				inventory.setSpot(i);

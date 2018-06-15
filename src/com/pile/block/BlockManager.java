@@ -16,6 +16,7 @@ public class BlockManager {
 		this.camera = camera;
 	}
 
+	// Draws all the blocks in respect to camera
 	public void draw(Graphics g, Block b) {
 		int xPos = (int)(b.getX() - camera.getOffsetX());
 		int yPos = (int)(b.getY() - camera.getOffsetY());
