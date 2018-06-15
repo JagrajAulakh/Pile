@@ -15,6 +15,7 @@ public class Block extends GameObject {
 	public static final int WIDTH = (int)(128 * Resources.SCALE);
 	public static final int HEIGHT = (int)(128 * Resources.SCALE);
 
+	//Stages of block breaking
 	public static final int STAGES = 9;
 
 	protected int id;
