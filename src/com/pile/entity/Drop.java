@@ -16,25 +16,12 @@ public class Drop extends Entity {
 	private Player player;
 	private int pickDelayMax;
 
+	public Drop(double x, double y, int id, double velX, double velY) {
+		this(x, y, id, velX, velY, 10);
+	}
 	public Drop(double x, double y, int id, double velX, double velY, int pickDelay) {
-		super(x, y);
-		this.id = id;
-		double sc = 0.7;
-		this.image = new SingleImage(Resources.scale(Resources.itemImages[id].getImage(), sc));
-		this.width = Block.WIDTH * sc;
-		this.height = Block.HEIGHT * sc;
-		this.velX = velX;
-		this.velY = velY;
-		this.pickDelayMax = pickDelay;
-		canPick = false;
-	}
-	public Drop(double x, double y, int id, Player player, double velX, double velY) {
-		this(x, y, id, player, velX, velY, 10);
-	}
-	public Drop(double x, double y, int id, Player player, double velX, double velY, int pickDelay) {
 			super(x, y);
 			this.id = id;
-			this.player = player;
 			double sc = 0.7;
 			this.image = new SingleImage(Resources.scale(Resources.itemImages[id].getImage(), sc));
 			this.width = Block.WIDTH * sc;
@@ -60,17 +47,6 @@ public class Drop extends Entity {
 		if (despawnCounter > pickDelayMax) canPick = true;
 		accX = 0;
 		accY = World.GRAVITY;
-
-//		double dx = (player.getX() + player.getWidth()/2) - (x + width/2);
-//		double dy = (player.getY() + player.getHeight()/2) - (y + height/2);
-//		double r = Math.hypot(dx, dy);
-//
-//		if (r < Block.WIDTH * 5) {
-//
-//			double angle = Math.atan2(dy, dx);
-//			velX = 100/(r * Math.cos(angle));
-//			velY = (r * Math.sin(angle)) / 50;
-//		}
 
 		LinkedList<Block> blocks = PlayState.world.getBlocksAround(this, 3);
 

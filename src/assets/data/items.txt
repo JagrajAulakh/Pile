@@ -5,3 +5,4 @@ id pic_name stack_amount
 32 emerald 99
 33 diamond 99
 34 stick 99
+36 apple 99

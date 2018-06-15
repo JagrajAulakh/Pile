@@ -1,6 +1,6 @@
 package com.pile.block;
 
-
+// Blocks that able to decay
 public class Leaves extends Block {
 	private int[][] trunk;
 	private boolean decaying;

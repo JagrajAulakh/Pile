@@ -5,7 +5,6 @@ import com.pile.Input;
 import com.pile.World;
 import com.pile.block.Block;
 import com.pile.block.Chest;
-import com.pile.block.Furnace;
 import com.pile.entity.Drop;
 import com.pile.entity.Enemy;
 import com.pile.entity.Entity;
@@ -33,7 +32,6 @@ public class Player extends Entity {
 	private Inventory inventory;
 
 	private Chest currentChest;
-	private Furnace currentFurnace;
 
 	public Player(double x, double y, World world) {
 		super(x, y);
@@ -55,7 +53,6 @@ public class Player extends Entity {
 		onGround = inventoryState = godMode = ruler = invincible = slow = false;
 		flipped = true;
 		currentChest = null;
-		currentFurnace = null;
 		updateHitBox();
 	}
 
@@ -74,8 +71,6 @@ public class Player extends Entity {
 	}
 	public Chest getChest() { return currentChest; }
 	public void setChest(Chest c) { currentChest = c; }
-	public Furnace getCurrentFurnace() { return currentFurnace; }
-	public void setCurrentFurnace(Furnace currentFurnace) { this.currentFurnace = currentFurnace; }
 
 	public int getHealth() { return health; }
 	public int getMaxHealth() { return maxHealth; }
@@ -264,30 +259,25 @@ public class Player extends Entity {
 			}
 			//Flipping between 2 states of the inventory. HotBar only & Full Inventory
 			inventoryState = !inventoryState;
-			//Only have a chest open when player is in full inventory
-			//Todo remove VVV Doesn't actually work
-//			currentChest = inventoryState ? currentChest : null;
-			currentChest = inventoryState == false ? null : currentChest;
+			// Only have a chest open when player is in full inventory
+			currentChest = inventoryState ? currentChest : null;
 		}
-		//godMode
+		// God Mode
 		if (Input.keyUpOnce(KeyEvent.VK_G)) {
 			godMode = !godMode;
 		}
-		//ruler
+		// Ruler
 		if(Input.keyDownOnce(KeyEvent.VK_R)){
 			ruler = !ruler;
 		}
 
-		if (Input.keyUpOnce(KeyEvent.VK_C)) {
-			inventory.add(10);
-		}
-
+		// Drop current item
 		if (Input.keyUpOnce(KeyEvent.VK_Q)) {
 			if (inventory.getCurrentItem() != null) {
-				double x = getVelX() > 0 ? getX() + getWidth() : getX() - Block.WIDTH;
+				double x = velX > 0 ? getX() + getWidth() : getX() - Block.WIDTH;
 				double y = getY() - getHealth() / 2;
 				Item spot = inventory.getCurrentItem();
-				world.addEntity(new Drop(x, y, spot.getId(), this, (Math.random()*2+2) * (getVelX()>0 ? 1 : -1), -5, 60));
+				world.addEntity(new Drop(x, y, spot.getId(), (Math.random()*2+2) * (getVelX()>0 ? 1 : -1), -5, 60));
 				inventory.decrease();
 			}
 		}
@@ -297,9 +287,12 @@ public class Player extends Entity {
 			int wy = (int)((Input.my + world.camera.getOffsetY())/Block.HEIGHT) * Block.HEIGHT;
 			if (Input.mouseDown(2)) {
 				Block b = getSelectedBlock();
-				if (b != null && b instanceof Chest) {
-					inventoryState = !inventoryState;
-					currentChest = (Chest)b;
+				if (b != null) {
+					if (b instanceof Chest) {
+						inventoryState = !inventoryState;
+						currentChest = (Chest)b;
+
+					}
 				}
 			}
 			if (Input.mousePressed(2)) {
@@ -309,8 +302,6 @@ public class Player extends Entity {
 					Block b;
 					if (item.getId() == 10) {
 						b = new Chest(wx, wy);
-					} else if (item.getId() == 3) {
-						b = new Furnace(wx, wy);
 					} else {
 						b = new Block(wx, wy, item.getId());
 					}
