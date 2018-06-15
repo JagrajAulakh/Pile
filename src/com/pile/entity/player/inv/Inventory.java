@@ -40,7 +40,6 @@ public class Inventory {
 	public int getHeight() { return height; }
 
 	public boolean has(int id, int amount) {
-		// todo find multiple items
 		int count = 0;
 		for (int i = 0; i < inventory.length; i++) {
 			Item item = inventory[i];
