@@ -73,7 +73,7 @@ public class HUD {
 			for (int i = 0; i < inHand.getAmount(); i++) {
 				double x = player.getVelX() > 0 ? player.getX() + player.getWidth() : player.getX() - Block.WIDTH;
 				double y = player.getY() - player.getHealth() / 2;
-				PlayState.world.addEntity(new Drop(x, y, inHand.getId(), player, (Math.random()*5 + 1) * (player.getVelX()>0 ? 1 : -1), -5, 60));
+				PlayState.world.addEntity(new Drop(x, y, inHand.getId(), (Math.random()*5 + 1) * (player.getVelX()>0 ? 1 : -1), -5, 60));
 			}
 			inHand = null;
 		}

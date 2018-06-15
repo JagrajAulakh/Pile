@@ -18,3 +18,4 @@ id_to_craft [amount:id] requires_crafting_bench
 24 2:34 3:31 true
 25 2:34 3:32 true
 35 4:9 false
+3 8:2 true

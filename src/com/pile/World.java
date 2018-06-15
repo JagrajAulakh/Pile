@@ -84,7 +84,7 @@ public class World {
 				Chest c = (Chest)b;
 				c.emptyChest();
 			}
-			if (Resources.blockDrop[b.getId()] != -1) addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], player, Math.random()*16-8, -5));
+			if (Resources.blockDrop[b.getId()] != -1) addEntity(new Drop(b.getX(), b.getY(), Resources.blockDrop[b.getId()], Math.random()*16-8, -5));
 		}
 	}
 	public void removeEntity(Entity e) {
@@ -211,7 +211,6 @@ public class World {
 				addPlayer(new Player(width/2, height - y*Block.HEIGHT - 200, this));
 			}
 		}
-		addBlock(new Block(width / 2 - Block.WIDTH*10, Block.HEIGHT*10, 28));
 		addEntity(new Enemy(width/2 - 200, y*Block.HEIGHT - 200));
 		addEntity(new Enemy(width/2 - 100, y*Block.HEIGHT - 200));
 		addEntity(new Enemy(width/2, y*Block.HEIGHT - 200));

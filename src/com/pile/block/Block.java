@@ -1,6 +1,7 @@
 package com.pile.block;
 
 import com.pile.GameObject;
+import com.pile.entity.Drop;
 import com.pile.entity.FallingSand;
 import com.pile.image.ImageType;
 import com.pile.image.Resources;
@@ -88,6 +89,10 @@ public class Block extends GameObject {
 			} else {
 				b.setDecayCounter(b.getDecayCounter() + 1);
 				if (b.getDecayCounter() >= b.getDecayCounterMax()) {
+					// Random change of dropping apple
+					if ((int)(Math.random()*100) < 10) {
+						PlayState.world.addEntity(new Drop(b.getX(), b.getY(), 36, Math.random()*8 - 4, -5));
+					}
 					PlayState.world.removeBlockPermanent(b);
 				}
 			}
