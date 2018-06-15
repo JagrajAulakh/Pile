@@ -13,18 +13,17 @@ import java.io.IOException;
 // Menu
 public class MenuState implements GameState {
 	private ButtonManager buttons;
-	BufferedImage background, piles;
+	private BufferedImage background, piles, play0, play1;
 
 	public MenuState() {
 		this.buttons = new ButtonManager();
-		Button playButton = new Button("Play", Game.WIDTH/2, Game.HEIGHT/2, 70f, new Color(0, 0, 0), new Color(0,255,0), new Color(0,0,255));
-		Button controlButton = new Button("Controls", Game.WIDTH/2, Game.HEIGHT/2 + 200, 70f, Color.BLACK, Color.BLACK, Color.BLACK);
-		buttons.add(playButton);
-		buttons.add(controlButton);
 		try {
 			background = ImageIO.read(new File("assets/images/REAL/MenuBG.png"));
 			piles = ImageIO.read(new File("assets/images/REAL/PilesFontLogo.png"));
+			play0 = ImageIO.read(new File("assets/images/REAL/play0.png"));
+			play1 = ImageIO.read(new File("assets/images/REAL/play1.png"));
 		} catch (IOException e) {}
+		buttons.add(new Button("Play", play0,Game.WIDTH/2, Game.HEIGHT/2, play1));
 	}
 
 	@Override
@@ -34,7 +33,9 @@ public class MenuState implements GameState {
 
 	@Override
 	public void render(Graphics g) {
+		//Drawling the background
 		g.drawImage(background,Game.WIDTH/2 - background.getWidth()/2, Game.HEIGHT/2 - background.getHeight()/2,null);
+		//Drawling "Piles" Logo
 		g.drawImage(piles,Game.WIDTH/2 - piles.getWidth()/2,25,null);
 		buttons.render(g);
 	}

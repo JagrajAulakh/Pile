@@ -6,44 +6,41 @@ import com.pile.image.Resources;
 import com.pile.state.MenuState;
 import com.pile.state.PlayState;
 
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Button {
-	public static final int WIDTH = 150;
-	public static final int HEIGHT = 50;
 	private String text;
-	private float size;
 	private int x, y, width, height;
-	private Color curColor, normColor, clickColor, hoverColor;
-	public Button(String text, int x, int y, float size, Color col) { this(text, x, y, 96f, col, col, col); }
-
-	public Button(String text, int x, int y, float size, Color normColor, Color clickColor, Color hoverColor) {
+	//curImg - the current button image being displayed
+	//normImg - the original button image
+	//hoverImg - the button image when hovering
+	private BufferedImage curImg, normImg, hoverImg;
+	public Button(String text, BufferedImage img, int x, int y, BufferedImage hover){
 		this.text = text;
 		this.x = x;
 		this.y = y;
-		this.normColor = normColor;
-		this.clickColor = clickColor;
-		this.hoverColor = hoverColor;
-		this.width = Resources.getWidth(text, Resources.getFont(size));
-		this.height = Resources.getHeight(text, Resources.getFont(size));
-//		this.height -= this.height/3;
-		this.size = size;
+		this.normImg = img;
+		this.hoverImg = hover;
+		this.width = img.getWidth();
+		this.height = img.getHeight();
 	}
 
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
-	public String getText() { return text; }
 	public int getX() { return x - width/2; }
 	public int getY() { return y - height/2; }
-	public Color getColor() { return curColor; }
-	public Font getFont() { return Resources.getFont(size); }
+	public BufferedImage getImage() { return curImg; }
 
 	public void update() {
+		//If Mouse is on button
 		if (getX() < Input.mx && Input.mx < getX() + width && getY() < Input.my && Input.my < getY() + height) {
-			curColor = hoverColor;
+			//Changing image to "hover"
+			curImg = hoverImg;
 			if (Input.mousePressed(0)) {
-				curColor = clickColor;
+				//Changed image to "clicked"
+				if(!text.toLowerCase().equals("pause")) curImg = Resources.scale(hoverImg,.7);
 			}
+			//When the button is pressed, goes to specific state
 			if (Input.mouseUp(0)) {
 				if (text.toLowerCase().equals("play")) {
 					GameLogic.gsm.set(new PlayState());
@@ -53,10 +50,10 @@ public class Button {
 				} else if (text.toLowerCase().equals("resume")) {
 					GameLogic.gsm.pop();
 				}
-
 			}
 		} else {
-			curColor = normColor;
+			//Sets button image back to original image
+			curImg = normImg;
 		}
 	}
 }
