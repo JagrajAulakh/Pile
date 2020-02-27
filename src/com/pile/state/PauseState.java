@@ -19,13 +19,13 @@ public class PauseState implements GameState {
 	public PauseState() {
 		buttons = new ButtonManager();
 		try {
-			background = ImageIO.read(new File("assets/images/REAL/MenuBG.png"));
-			pause0 = ImageIO.read(new File("assets/images/REAL/pause0.png"));
-			pause1 = ImageIO.read(new File("assets/images/REAL/pause1.png"));
-			exit0 = Resources.scale(ImageIO.read(new File("assets/images/REAL/exit0.png")), 0.7);
-			exit1 = Resources.scale(ImageIO.read(new File("assets/images/REAL/exit1.png")), 0.7);
-			resume0 = Resources.scale(ImageIO.read(new File("assets/images/REAL/resume0.png")), 0.7);
-			resume1 = Resources.scale(ImageIO.read(new File("assets/images/REAL/resume1.png")), 0.7);
+			background = ImageIO.read(new File("src/assets/images/REAL/MenuBG.png"));
+			pause0 = ImageIO.read(new File("src/assets/images/REAL/pause0.png"));
+			pause1 = ImageIO.read(new File("src/assets/images/REAL/pause1.png"));
+			exit0 = Resources.scale(ImageIO.read(new File("src/assets/images/REAL/exit0.png")), 0.7);
+			exit1 = Resources.scale(ImageIO.read(new File("src/assets/images/REAL/exit1.png")), 0.7);
+			resume0 = Resources.scale(ImageIO.read(new File("src/assets/images/REAL/resume0.png")), 0.7);
+			resume1 = Resources.scale(ImageIO.read(new File("src/assets/images/REAL/resume1.png")), 0.7);
 		} catch (IOException e) {}
 
 		buttons.add(new Button("Pause", pause0,Game.WIDTH/2, Game.HEIGHT/2 - 250, pause0));

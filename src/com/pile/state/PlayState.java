@@ -22,9 +22,9 @@ public class PlayState implements GameState {
 
 	public PlayState() {
 		try {
-			background = ImageIO.read(new File("assets/images/REAL/MenuBG.png"));
-			loadingImg = ImageIO.read(new File("assets/images/REAL/loading.png"));
-			worldImg = ImageIO.read(new File("assets/images/REAL/world.png"));
+			background = ImageIO.read(new File("src/assets/images/REAL/MenuBG.png"));
+			loadingImg = ImageIO.read(new File("src/assets/images/REAL/loading.png"));
+			worldImg = ImageIO.read(new File("src/assets/images/REAL/world.png"));
 		} catch (IOException e) {}
 		loadWorld();
 	}

@@ -18,7 +18,7 @@ public class Game extends Canvas {
 	public Game() {
 		frame = new JFrame("Piles");
 		// Sets window icon
-		ImageIcon icon = new ImageIcon("assets/images/REAL/pilesIcon.png");
+		ImageIcon icon = new ImageIcon("src/assets/images/REAL/pilesIcon.png");
 		frame.setIconImage(icon.getImage());
 		// loads all resources
 		try {

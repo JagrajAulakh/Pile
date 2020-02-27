@@ -18,10 +18,10 @@ public class MenuState implements GameState {
 	public MenuState() {
 		this.buttons = new ButtonManager();
 		try {
-			background = ImageIO.read(new File("assets/images/REAL/MenuBG.png"));
-			piles = ImageIO.read(new File("assets/images/REAL/PilesFontLogo.png"));
-			play0 = ImageIO.read(new File("assets/images/REAL/play0.png"));
-			play1 = ImageIO.read(new File("assets/images/REAL/play1.png"));
+			background = ImageIO.read(new File("src/assets/images/REAL/MenuBG.png"));
+			piles = ImageIO.read(new File("src/assets/images/REAL/PilesFontLogo.png"));
+			play0 = ImageIO.read(new File("src/assets/images/REAL/play0.png"));
+			play1 = ImageIO.read(new File("src/assets/images/REAL/play1.png"));
 		} catch (IOException e) {}
 		buttons.add(new Button("Play", play0,Game.WIDTH/2, Game.HEIGHT/2, play1));
 	}
